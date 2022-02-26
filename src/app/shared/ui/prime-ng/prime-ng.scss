@@ -252,3 +252,13 @@ p-slidemenu {
 .p-panelmenu .p-panelmenu-header > a {
     padding: 1rem !important;
 }
+
+.p-inputswitch {
+    height: 1.5rem !important;
+
+    .p-inputswitch-slider:before {
+        width: 1rem !important;
+        height: 1rem !important;
+        margin-top: -0.525rem !important;
+    }
+}

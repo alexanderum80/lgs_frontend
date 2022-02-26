@@ -1,3 +1,4 @@
+import { PrimeMultiSelectModule } from './../shared/ui/prime-ng/multi-select/multi-select.module';
 import { PrimeInputSwitchModule } from './../shared/ui/prime-ng/input-switch/input-switch.module';
 import { PrimeCardModule } from './../shared/ui/prime-ng/card/card.module';
 import { ListUsersComponent } from './list-users/list-users.component';
@@ -31,6 +32,7 @@ import { PrimeToastModule } from '../shared/ui/prime-ng/toast/toast.module';
     PrimeCheckboxModule,
     PrimeToastModule,
     PrimeCardModule,
+    PrimeMultiSelectModule
   ],
   declarations: [ListUsersComponent, UserFormComponent, ChangePasswordComponent],
 })

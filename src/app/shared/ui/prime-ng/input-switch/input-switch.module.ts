@@ -1,16 +1,23 @@
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { InputSwitchComponent } from './input-switch.component';
 
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    InputSwitchComponent
+  ],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     InputSwitchModule
   ],
   exports: [
-    InputSwitchModule
+    InputSwitchModule,
+    InputSwitchComponent
   ]
 })
 export class PrimeInputSwitchModule { }

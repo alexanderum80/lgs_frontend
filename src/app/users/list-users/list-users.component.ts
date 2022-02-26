@@ -12,7 +12,7 @@ import { userApi } from '../shared/graphql/userActions.gql';
 import { UsersQueryResponse } from '../shared/models/users.model';
 import { ITableColumns } from 'src/app/shared/ui/prime-ng/table/table.model';
 import { cloneDeep } from '@apollo/client/utilities';
-import { isArray } from 'lodash';
+import { isArray, join } from 'lodash';
 
 @Component({
   selector: 'app-usuarios',
@@ -110,13 +110,14 @@ export class ListUsersComponent implements OnInit, AfterViewInit, OnDestroy {
     }).subscribe({
       next: response => {
         const selectedUsuario = response.data.getUserById;
+        const roles = selectedUsuario.UserRoles?.map(r => r.IdRole) || [];
 
         const inputData = {
           id: selectedUsuario.Id,
           name: selectedUsuario.Name,
           lastName: selectedUsuario.LastName,
           enabled: selectedUsuario.Enabled,
-          roles: selectedUsuario.UserRoles![0].IdRole || null
+          roles: roles
         };
 
         this._usuarioSvc.fg.patchValue(inputData);
