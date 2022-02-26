@@ -1,0 +1,19 @@
+<div class="page-content">
+  <div class="top-menu" *ngIf="authenticated">
+    <png-button [rounded]="true" [text]="true" icon="pi pi-bars" (clicked)="switchMenu()"></png-button>
+    <!-- <p-card>
+      <i class="pi pi-bars" style="font-size: 2rem"></i>
+    </p-card> -->
+    <!-- <app-usuario-info></app-usuario-info> -->
+  </div>
+  <div>
+    <p-sidebar [(visible)]="displayMenu" [style]="{'width':'300px'}">
+      <p-panelMenu class="h-full" [model]="menu"></p-panelMenu>
+    </p-sidebar>
+  </div>
+  <div class="app-row">
+    <div class="app-container">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

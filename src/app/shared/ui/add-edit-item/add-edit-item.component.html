@@ -1,0 +1,11 @@
+<div class="item">
+  <png-card class="m-2">
+    <div>
+      <ng-content></ng-content>
+    </div>
+  </png-card>
+  <div class="flex justify-content-end">
+    <png-button class="mr-2 mb-2" label="Save" [style]="'primary'" [raised]="true" [disabled]="fg && !fg.valid" (clicked)="save()"></png-button>
+    <png-button class="mr-2 mb-2" label="Cancel" [style]="'secondary'" [raised]="true" (clicked)="cancel()"></png-button>
+  </div>
+</div>

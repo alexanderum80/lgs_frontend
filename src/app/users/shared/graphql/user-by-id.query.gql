@@ -1,0 +1,11 @@
+query GetUserById($id: Int!) {
+   getUserById(id: $id) {
+    Id
+    Name
+    LastName
+    Enabled
+    UserRoles {
+      IdRole
+    }
+  }
+}

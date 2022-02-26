@@ -1,0 +1,8 @@
+mutation UpdateUser($userInfo: UserInput!) {
+  updateUser(userInfo: $userInfo) {
+    Id
+    Name
+    LastName
+    Enabled
+  }
+}

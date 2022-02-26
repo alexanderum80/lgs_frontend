@@ -1,0 +1,11 @@
+query GetAllUsers {
+  getAllUsers {
+    Id
+    Name
+    LastName
+    Enabled
+    UserRoles {
+      IdRole
+    }
+  }
+}

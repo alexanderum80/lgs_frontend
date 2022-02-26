@@ -1,0 +1,9 @@
+query AuthenticateUser($user: String!, $passw: String!) {
+  authenticateUser(user: $user, passw: $passw) {
+    Id
+    Name
+    LastName
+    Enabled
+    Token
+  }
+}
