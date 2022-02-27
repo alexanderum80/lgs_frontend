@@ -1,0 +1,14 @@
+query GetPlayers {
+    getPlayers {
+        IdPlayer
+        Name
+        LastName
+        StartDate
+        Personal_Id
+        Passport_Number
+        Note
+        CellPhone
+        Enabled
+        IdCountry
+    }
+}

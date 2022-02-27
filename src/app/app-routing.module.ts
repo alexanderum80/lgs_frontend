@@ -8,12 +8,14 @@ const routes: Routes = [
   { path: '', component: StartComponent, canActivate: [ AuthGuard ] },
   { path: 'login', component: LoginComponent },
 
-  // Configuracion general
+  // Settings
   { path: 'users',
     loadChildren: () => import('./users/users.module').then(m => m.UsersModule),
     canActivate: [ AuthGuard ] },
-
-  // Cuando no se encuentra el path
+  { path: 'players',
+    loadChildren: () => import('./players/players.module').then(m => m.PlayersModule),
+    canActivate: [ AuthGuard ] },
+  // Another path
   { path: '**', component: StartComponent, canActivate: [ AuthGuard ] },
 ];
 

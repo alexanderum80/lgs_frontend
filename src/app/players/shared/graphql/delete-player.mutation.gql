@@ -1,0 +1,3 @@
+mutation DeletePlayer($IDs: [Int!]!) {
+    deletePlayer(IDs: $IDs)
+}

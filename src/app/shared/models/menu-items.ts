@@ -14,14 +14,14 @@ export const MenuItems: MenuItem[] = [
     {
       label: 'Table Types',
       icon: 'mdi mdi-table-settings',
-      routerLink: 'concilia-contabilidad',
+      routerLink: '',
       disabled: false,
       title: 'Manage Table Types.',
     },
     {
       label: 'Players',
       icon: 'mdi mdi-gamepad-up',
-      routerLink: 'concilia-contabilidad',
+      routerLink: 'players',
       disabled: false,
       title: 'Manage Players.',
     },

@@ -20,8 +20,6 @@ import { isArray, join } from 'lodash';
   styleUrls: ['./list-users.component.scss']
 })
 export class ListUsersComponent implements OnInit, AfterViewInit, OnDestroy {
-  listUsuarioQuery: QueryRef<UsersQueryResponse>;
-
   columns: ITableColumns[] = [
     { header: 'Name', field: 'Name', type: 'string' },
     { header: 'Last Name', field: 'LastName', type: 'string' },

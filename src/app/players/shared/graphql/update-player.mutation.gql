@@ -1,0 +1,13 @@
+mutation UpdatePlayer($playerInput: PlayerInput!) {
+    updatePlayer(playerInput: $playerInput) {
+        IdPlayer
+        Name
+        LastName
+        Personal_Id
+        Passport_Number
+        Note
+        CellPhone
+        Enabled
+        IdCountry
+    }
+}
