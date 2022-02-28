@@ -5,7 +5,7 @@ import { SweetalertService } from './../../shared/services/sweetalert.service';
 import { MessageService } from 'primeng/api';
 import { DinamicDialogService } from './../../shared/ui/prime-ng/dinamic-dialog/dinamic-dialog.service';
 import { ITableColumns } from './../../shared/ui/prime-ng/table/table.model';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { PlayersService } from '../shared/services/players.service';
 import { isArray } from 'lodash';
 
@@ -14,7 +14,7 @@ import { isArray } from 'lodash';
   templateUrl: './list-players.component.html',
   styleUrls: ['./list-players.component.scss']
 })
-export class ListPlayersComponent implements OnInit {
+export class ListPlayersComponent implements OnInit, AfterViewInit, OnDestroy {
   columns: ITableColumns[] = [
     { header: 'Name', field: 'Name', type: 'string' },
     { header: 'Last Name', field: 'LastName', type: 'string' },

@@ -18,6 +18,9 @@ const routes: Routes = [
   { path: 'countries',
     loadChildren: () => import('./countries/countries.module').then(m => m.CountriesModule),
     canActivate: [ AuthGuard ] },
+  { path: 'coins',
+    loadChildren: () => import('./coins/coins.module').then(m => m.CoinsModule),
+    canActivate: [ AuthGuard ] },
 
   // Another path
   { path: '**', component: StartComponent, canActivate: [ AuthGuard ] },

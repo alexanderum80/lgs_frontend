@@ -12,8 +12,8 @@ export const MenuItems: MenuItem[] = [
   ]},
   { label: 'Settings', icon: 'mdi mdi-settings-outline', items: [
     {
-      label: 'Table Types',
-      icon: 'mdi mdi-table-settings',
+      label: 'Table',
+      icon: 'mdi mdi-table-chair',
       routerLink: '',
       disabled: false,
       title: 'Manage Table Types.',
@@ -35,10 +35,18 @@ export const MenuItems: MenuItem[] = [
     { separator: true },
     {
       label: 'Countries',
-      icon: 'mdi mdi-account-supervisor',
+      icon: 'mdi mdi-map-marker-outline',
       routerLink: 'countries',
       disabled: false,
       title: 'Manage Countries.',
+    },
+    { separator: true },
+    {
+      label: 'Coins',
+      icon: 'mdi mdi-cash-multiple',
+      routerLink: 'coins',
+      disabled: false,
+      title: 'Manage Coins.',
     },
   ]},
 ];

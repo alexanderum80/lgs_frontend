@@ -1,26 +1,26 @@
-import { DinamicDialogService } from './../../shared/ui/prime-ng/dinamic-dialog/dinamic-dialog.service';
-import { SweetalertService } from './../../shared/services/sweetalert.service';
 import { ActionClicked } from './../../shared/models/list-items';
+import { SweetalertService } from './../../shared/services/sweetalert.service';
+import { DinamicDialogService } from './../../shared/ui/prime-ng/dinamic-dialog/dinamic-dialog.service';
+import { CoinsService } from './../shared/services/coin.service';
 import { FormGroup } from '@angular/forms';
-import { CountriesService } from './../shared/services/countries.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-countries-form',
-  templateUrl: './countries-form.component.html',
-  styleUrls: ['./countries-form.component.scss']
+  selector: 'app-coin-form',
+  templateUrl: './coin-form.component.html',
+  styleUrls: ['./coin-form.component.scss']
 })
-export class CountriesFormComponent implements OnInit {
+export class CoinFormComponent implements OnInit {
   fg: FormGroup;
 
   constructor(
-    private _countriesSvc: CountriesService,
+    private _coinsSvc: CoinsService,
     private _dinamicDialogSvc: DinamicDialogService,
     private _sweetAlterSvc: SweetalertService,
   ) { }
 
   ngOnInit(): void {
-    this.fg = this._countriesSvc.fg;
+    this.fg = this._coinsSvc.fg;
   }
   
   onActionClicked(action: ActionClicked) {
@@ -37,14 +37,14 @@ export class CountriesFormComponent implements OnInit {
   private _save(): void {
     const action = this.fg.controls['id'].value === 0 ? ActionClicked.Add : ActionClicked.Edit;
 
-    this._countriesSvc.subscription.push(this._countriesSvc.save().subscribe({
+    this._coinsSvc.subscription.push(this._coinsSvc.save().subscribe({
       next: response => {
         let txtMessage;
 
         if (action === ActionClicked.Add) {
-          txtMessage = 'The Country was created successfully.';
+          txtMessage = 'The Coin was created successfully.';
         } else {
-          txtMessage = 'The Country was updated successfully.';
+          txtMessage = 'The Coin was updated successfully.';
         }
 
         this._closeModal(txtMessage);

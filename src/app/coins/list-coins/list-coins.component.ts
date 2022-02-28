@@ -1,32 +1,32 @@
-import { CountriesFormComponent } from './../countries-form/countries-form.component';
 import { isArray } from 'lodash';
+import { CoinFormComponent } from './../coin-form/coin-form.component';
 import { IActionItemClickedArgs, ActionClicked } from './../../shared/models/list-items';
 import { cloneDeep } from '@apollo/client/utilities';
 import { SweetalertService } from './../../shared/services/sweetalert.service';
 import { MessageService } from 'primeng/api';
+import { CoinsService } from './../shared/services/coin.service';
 import { DinamicDialogService } from './../../shared/ui/prime-ng/dinamic-dialog/dinamic-dialog.service';
-import { ICountries } from './../shared/models/countries.model';
+import { ICoins } from './../shared/models/coins.model';
 import { ITableColumns } from './../../shared/ui/prime-ng/table/table.model';
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
-import { CountriesService } from '../shared/services/countries.service';
 
 @Component({
-  selector: 'app-list-countries',
-  templateUrl: './list-countries.component.html',
-  styleUrls: ['./list-countries.component.scss']
+  selector: 'app-list-coins',
+  templateUrl: './list-coins.component.html',
+  styleUrls: ['./list-coins.component.scss']
 })
-export class ListCountriesComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ListCoinsComponent implements OnInit, AfterViewInit, OnDestroy {
   columns: ITableColumns[] = [
-    { header: 'Name', field: 'Name', type: 'string' },
-    { header: 'Last Name', field: 'LastName', type: 'string' },
+    { header: 'Coin', field: 'Coin', type: 'string' },
+    { header: 'Rate', field: 'Rate', type: 'decimal' },
     { header: 'Enabled', field: 'Enabled', type: 'boolean' },
   ];
 
-  countries: ICountries[] = [];
+  coins: ICoins[] = [];
 
   constructor(
     private _dinamicDialogSvc: DinamicDialogService,
-    private _countriesSvc: CountriesService,
+    private _coinsSvc: CoinsService,
     private _msgSvc: MessageService,
     private _sweetAlertSvc: SweetalertService
   ) { }
@@ -35,18 +35,18 @@ export class ListCountriesComponent implements OnInit, AfterViewInit, OnDestroy 
   }
   
   ngAfterViewInit(): void {
-    this._getPlayers();
+    this._getCoins();
   }
 
   ngOnDestroy(): void {
-    this._countriesSvc.subscription.forEach(subs => subs.unsubscribe());
+    this._coinsSvc.subscription.forEach(subs => subs.unsubscribe());
   }
 
-  private _getPlayers(): void {
+  private _getCoins(): void {
     try {
-      this._countriesSvc.subscription.push(this._countriesSvc.getCountries().subscribe({
+      this._coinsSvc.subscription.push(this._coinsSvc.getCoins().subscribe({
           next: response => {
-            this.countries = cloneDeep(response.getCountries);
+            this.coins = cloneDeep(response.getCoins);
           },
           error: err => {
             this._sweetAlertSvc.error(err);
@@ -75,13 +75,14 @@ export class ListCountriesComponent implements OnInit, AfterViewInit, OnDestroy 
   private _add(): void {
     const inputData = {
       id: null,
-      name: '',
+      coin: '',
+      rate: 0,
       enabled: true,
     };
-    this._countriesSvc.fg.patchValue(inputData);
+    this._coinsSvc.fg.patchValue(inputData);
     
-    this._dinamicDialogSvc.open('Add Country', CountriesFormComponent);
-    this._countriesSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
+    this._dinamicDialogSvc.open('Add Coin', CoinFormComponent);
+    this._coinsSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
       if (message) {
           this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: message })
       }
@@ -89,22 +90,23 @@ export class ListCountriesComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   private _edit(data: any): void {
-    const id = data.IdCountry;
+    const id = data.IdCoin;
 
-    this._countriesSvc.subscription.push(this._countriesSvc.getCountry(id).subscribe({
+    this._coinsSvc.subscription.push(this._coinsSvc.getCoin(id).subscribe({
       next: response => {
-        const selectedUser = response.getCountry;
+        const selectedUser = response.getCoin;
 
         const inputData = {
-          id: selectedUser.IdCountry,
-          name: selectedUser.Name,
+          id: selectedUser.IdCoin,
+          coin: selectedUser.Coin,
+          rate: selectedUser.Rate,
           enabled: selectedUser.Enabled,
         };
 
-        this._countriesSvc.fg.patchValue(inputData);
+        this._coinsSvc.fg.patchValue(inputData);
 
-        this._dinamicDialogSvc.open('Edit Country', CountriesFormComponent);
-        this._countriesSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
+        this._dinamicDialogSvc.open('Edit Coin', CoinFormComponent);
+        this._coinsSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
           if (message) {
               this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: message })
           }
@@ -117,13 +119,13 @@ export class ListCountriesComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   private _delete(data: any): void {
-    this._sweetAlertSvc.question('Are you sure you want to delete selected Countries?').then(res => {
+    this._sweetAlertSvc.question('Are you sure you want to delete selected Coins?').then(res => {
       if (res === ActionClicked.Yes) {
         const IDsToRemove: number[] = !isArray(data) ? [data.IdCountry] :  data.map(d => { return d.IdCountry });
 
-        this._countriesSvc.subscription.push(this._countriesSvc.delete(IDsToRemove).subscribe({
+        this._coinsSvc.subscription.push(this._coinsSvc.delete(IDsToRemove).subscribe({
           next: response => {
-            this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: 'The Country(ies) was(were) deleted successfully.' })
+            this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: 'The Coin(s) was(were) deleted successfully.' })
           },
           error: err => {
             this._sweetAlertSvc.error(err);
