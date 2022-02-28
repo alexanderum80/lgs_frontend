@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private _route: ActivatedRoute,
-    private _usuarioSvc: UsersService,
+    private _userSvc: UsersService,
     private _navigateSvc: NavigationService,
     private _swalSvc: SweetalertService
   ) { }
@@ -40,15 +40,15 @@ export class LoginComponent implements OnInit {
         Password: this.fg.controls['password'].value
       };
 
-      this._usuarioSvc.autenticate(authVariables).subscribe({
+      this._userSvc.autenticate(authVariables).subscribe({
         next: (response) => {
           this.autenticando = false;
 
           const result = response.authenticateUser;
 
-          const usuario: User = new User(result);
+          const user: User = new User(result);
 
-          this._usuarioSvc.login(usuario);
+          this._userSvc.login(user);
 
           this._navigateSvc.navigateTo(this._navigateSvc.continueURL);
         },

@@ -15,7 +15,7 @@ import { cloneDeep } from '@apollo/client/utilities';
 import { isArray, join } from 'lodash';
 
 @Component({
-  selector: 'app-usuarios',
+  selector: 'app-users',
   templateUrl: './list-users.component.html',
   styleUrls: ['./list-users.component.scss']
 })
@@ -26,12 +26,12 @@ export class ListUsersComponent implements OnInit, AfterViewInit, OnDestroy {
     { header: 'Enabled', field: 'Enabled', type: 'boolean' },
   ];
 
-  usuarios: IUser[] = [];
+  users: IUser[] = [];
 
   constructor(
     private _apollo: Apollo,
     private _dinamicDialogSvc: DinamicDialogService,
-    private _usuarioSvc: UsersService,
+    private _userSvc: UsersService,
     private _msgSvc: MessageService,
     private _sweetAlertSvc: SweetalertService
   ) { }
@@ -40,21 +40,21 @@ export class ListUsersComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   
   ngAfterViewInit(): void {
-    this._getUsuarios();
+    this._getUsers();
   }
 
   ngOnDestroy(): void {
-    this._usuarioSvc.subscription.forEach(subs => subs.unsubscribe());
+    this._userSvc.subscription.forEach(subs => subs.unsubscribe());
   }
 
-  private _getUsuarios(): void {
+  private _getUsers(): void {
     try {
-      this._usuarioSvc.subscription.push(this._apollo.watchQuery<UsersQueryResponse>({
+      this._userSvc.subscription.push(this._apollo.watchQuery<UsersQueryResponse>({
           query: userApi.all,
           fetchPolicy: 'network-only'
         }).valueChanges.subscribe({
           next: response => {
-            this.usuarios = cloneDeep(response.data.getAllUsers);
+            this.users = cloneDeep(response.data.getAllUsers);
           },
           error: err => {
             this._sweetAlertSvc.error(err);
@@ -88,10 +88,10 @@ export class ListUsersComponent implements OnInit, AfterViewInit, OnDestroy {
       password: '',
       roles: null
     };
-    this._usuarioSvc.fg.patchValue(inputData);
+    this._userSvc.fg.patchValue(inputData);
     
     this._dinamicDialogSvc.open('Add User', UserFormComponent);
-    this._usuarioSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
+    this._userSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
       if (message) {
           this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: message })
       }
@@ -101,27 +101,27 @@ export class ListUsersComponent implements OnInit, AfterViewInit, OnDestroy {
   private _edit(data: any): void {
     const id = data.Id;
 
-    this._usuarioSvc.subscription.push(this._apollo.query<UsersQueryResponse>({
+    this._userSvc.subscription.push(this._apollo.query<UsersQueryResponse>({
       query: userApi.byId,
       variables: { id },
       fetchPolicy: 'network-only'
     }).subscribe({
       next: response => {
-        const selectedUsuario = response.data.getUserById;
-        const roles = selectedUsuario.UserRoles?.map(r => r.IdRole) || [];
+        const selectedUser = response.data.getUserById;
+        const roles = selectedUser.UserRoles?.map(r => r.IdRole) || [];
 
         const inputData = {
-          id: selectedUsuario.Id,
-          name: selectedUsuario.Name,
-          lastName: selectedUsuario.LastName,
-          enabled: selectedUsuario.Enabled,
+          id: selectedUser.Id,
+          name: selectedUser.Name,
+          lastName: selectedUser.LastName,
+          enabled: selectedUser.Enabled,
           roles: roles
         };
 
-        this._usuarioSvc.fg.patchValue(inputData);
+        this._userSvc.fg.patchValue(inputData);
 
         this._dinamicDialogSvc.open('Edit User', UserFormComponent);
-        this._usuarioSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
+        this._userSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
           if (message) {
               this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: message })
           }
@@ -138,7 +138,7 @@ export class ListUsersComponent implements OnInit, AfterViewInit, OnDestroy {
       if (res === ActionClicked.Yes) {
         const IDsToRemove: number[] = !isArray(data) ? [data.Id] :  data.map(d => { return d.Id });
 
-        this._usuarioSvc.subscription.push(this._apollo.mutate<UsersMutationResponse>({
+        this._userSvc.subscription.push(this._apollo.mutate<UsersMutationResponse>({
           mutation: userApi.delete,
           variables: { IDs: IDsToRemove },
           refetchQueries: ['GetAllUsers']

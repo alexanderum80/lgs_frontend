@@ -15,6 +15,10 @@ const routes: Routes = [
   { path: 'players',
     loadChildren: () => import('./players/players.module').then(m => m.PlayersModule),
     canActivate: [ AuthGuard ] },
+  { path: 'countries',
+    loadChildren: () => import('./countries/countries.module').then(m => m.CountriesModule),
+    canActivate: [ AuthGuard ] },
+
   // Another path
   { path: '**', component: StartComponent, canActivate: [ AuthGuard ] },
 ];

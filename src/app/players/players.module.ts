@@ -1,3 +1,4 @@
+import { CountriesModule } from './../countries/countries.module';
 import { PrimeNgModule } from './../shared/ui/prime-ng/prime-ng.module';
 import { SharedModule } from './../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -21,7 +22,8 @@ import { PlayersService } from './shared/services/players.service';
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    PrimeNgModule
+    PrimeNgModule,
+    CountriesModule
   ],
   providers: [PlayersService]
 })

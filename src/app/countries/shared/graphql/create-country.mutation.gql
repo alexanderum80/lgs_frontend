@@ -1,0 +1,7 @@
+mutation CreateCountry($countryInput: CountryInput!) {
+    createCountry(countryInput: $countryInput) {
+        IdCountry
+        Name
+        Enabled
+    }
+}

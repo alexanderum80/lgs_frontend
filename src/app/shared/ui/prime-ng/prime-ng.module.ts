@@ -1,3 +1,4 @@
+import { PrimeDataViewModule } from './data-view/data-view.module';
 import { PrimeInputSwitchModule } from './input-switch/input-switch.module';
 import { PrimeSidebarModule } from './sidebar/sidebar.module';
 import { PrimePanelMenuModule } from './panel-menu/panel-menu.module';
@@ -37,6 +38,7 @@ const modules = [
   PrimeCardModule,
   PrimeCheckboxModule,
   PrimeConfirmPopupModule,
+  PrimeDataViewModule,
   PrimeDialogModule,
   PrimeDinamicDialogModule,
   PrimeDropdownModule,

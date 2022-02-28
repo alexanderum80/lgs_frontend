@@ -32,6 +32,14 @@ export const MenuItems: MenuItem[] = [
       disabled: false,
       title: 'Manage Users.',
     },
+    { separator: true },
+    {
+      label: 'Countries',
+      icon: 'mdi mdi-account-supervisor',
+      routerLink: 'countries',
+      disabled: false,
+      title: 'Manage Countries.',
+    },
   ]},
 ];
 

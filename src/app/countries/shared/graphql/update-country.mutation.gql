@@ -1,0 +1,7 @@
+mutation UpdateCountry($countryInput: CountryInput!) {
+    updateCountry(countryInput: $countryInput) {
+        IdCountry
+        Name
+        Enabled
+    }
+}

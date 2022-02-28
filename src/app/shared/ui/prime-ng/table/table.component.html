@@ -99,8 +99,8 @@
                 </td>
             </ng-container>
             <td *ngIf="canEditDelete" class="menu-items-cell" style="padding: 0 !important;">
-                <button pButton pRipple icon="mdi mdi-18px mdi-pencil" class="p-button-rounded p-button-text p-button-warning" pTooltip="Modificar" tooltipPosition="left" (click)="onActionClicked('edit', rowData)"></button>
-                <button pButton pRipple icon="mdi mdi-18px mdi-delete" class=" p-button-rounded p-button-text p-button-danger" pTooltip="Eliminar" tooltipPosition="left" (click)="onActionClicked('delete', rowData)"></button>
+                <button pButton pRipple icon="mdi mdi-18px mdi-pencil" class="p-button-rounded p-button-text p-button-warning" pTooltip="Edit" tooltipPosition="left" (click)="onActionClicked('edit', rowData)"></button>
+                <button pButton pRipple icon="mdi mdi-18px mdi-delete" class=" p-button-rounded p-button-text p-button-danger" pTooltip="Delete" tooltipPosition="left" (click)="onActionClicked('delete', rowData)"></button>
             </td>
         </tr>
     </ng-template>

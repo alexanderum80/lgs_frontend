@@ -6,7 +6,7 @@ import { SharedModule } from '../shared/shared.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { UsuariosRoutingModule } from './users-routing.module';
+import { UsersRoutingModule } from './users-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserFormComponent } from './user-form/user-form.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
@@ -22,7 +22,7 @@ import { PrimeToastModule } from '../shared/ui/prime-ng/toast/toast.module';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    UsuariosRoutingModule,
+    UsersRoutingModule,
     SharedModule,
     PrimeTableModule,
     PrimePasswordModule,

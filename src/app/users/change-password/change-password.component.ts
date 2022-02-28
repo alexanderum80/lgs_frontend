@@ -22,14 +22,14 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
   subscription: Subscription[] = [];
 
   constructor(
-    private _usuarioSvc: UsersService,
+    private _userSvc: UsersService,
     private _apollo: Apollo,
     private _navigationSvc: NavigationService,
     private _dinamicDialogSvc: DinamicDialogService,
   ) { }
 
   ngOnInit(): void {
-    this.fg = this._usuarioSvc.fg;
+    this.fg = this._userSvc.fg;
   }
 
   ngOnDestroy(): void {
@@ -50,12 +50,12 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const _idUsuario = toNumber(this.fg.controls['idUsuario'].value);
+    const _idUser = toNumber(this.fg.controls['idUser'].value);
     const _password = this.fg.controls['contrasena'].value;
 
     this.subscription.push(this._apollo.mutate<IUser>({
       mutation: userApi.changePassword,
-      variables: { idUsuario: _idUsuario, password: _password },
+      variables: { idUser: _idUser, password: _password },
     }).subscribe({ 
       next: response => {
         this._dinamicDialogSvc.close();

@@ -23,7 +23,7 @@ export class AuthGuard implements CanActivate {
     ) {}
 
     canActivate(activatedRoute: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot): boolean {
-        if (!this._userSvc.authenticated || !this._userSvc.usuario) {
+        if (!this._userSvc.authenticated || !this._userSvc.user) {
             if (routerStateSnapshot.url === '/') {
                 this._router.navigate(['/login']);
             } else {

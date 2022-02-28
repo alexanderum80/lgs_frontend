@@ -1,0 +1,7 @@
+query GetCountry($id: Int!) {
+    getCountry(id: $id) {
+        IdCountry
+        Name
+        Enabled
+    }
+}

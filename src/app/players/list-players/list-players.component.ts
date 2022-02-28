@@ -1,12 +1,9 @@
 import { PlayersFormComponent } from './../players-form/players-form.component';
 import { cloneDeep } from '@apollo/client/utilities';
-import { playersApi } from './../shared/graphql/players-api';
-import { PlayersQueryResponse, PlayersMutationResponse } from './../shared/models/players.model';
 import { IActionItemClickedArgs, ActionClicked } from './../../shared/models/list-items';
 import { SweetalertService } from './../../shared/services/sweetalert.service';
 import { MessageService } from 'primeng/api';
 import { DinamicDialogService } from './../../shared/ui/prime-ng/dinamic-dialog/dinamic-dialog.service';
-import { Apollo } from 'apollo-angular';
 import { ITableColumns } from './../../shared/ui/prime-ng/table/table.model';
 import { Component, OnInit } from '@angular/core';
 import { PlayersService } from '../shared/services/players.service';
@@ -29,7 +26,6 @@ export class ListPlayersComponent implements OnInit {
   players: any[] = [];
 
   constructor(
-    private _apollo: Apollo,
     private _dinamicDialogSvc: DinamicDialogService,
     private _msgSvc: MessageService,
     private _sweetAlertSvc: SweetalertService,
@@ -101,13 +97,9 @@ export class ListPlayersComponent implements OnInit {
   private _edit(data: any): void {
     const id = data.IdPlayer;
 
-    this._playerSvc.subscription.push(this._apollo.query<PlayersQueryResponse>({
-      query: playersApi.byId,
-      variables: { id },
-      fetchPolicy: 'network-only'
-    }).subscribe({
+    this._playerSvc.subscription.push(this._playerSvc.getPlayer(id).subscribe({
       next: response => {
-        const selectedPlayer = response.data.getPlayer;
+        const selectedPlayer = response.getPlayer;
 
         const inputData = {
           id: selectedPlayer.IdPlayer,
@@ -141,15 +133,9 @@ export class ListPlayersComponent implements OnInit {
       if (res === ActionClicked.Yes) {
         const IDsToRemove: number[] = !isArray(data) ? [data.IdPlayer] : data.map(d => { return d.IdPlayer });
 
-        this._playerSvc.subscription.push(this._apollo.mutate<PlayersMutationResponse>({
-          mutation: playersApi.delete,
-          variables: { IDs: IDsToRemove },
-          refetchQueries: ['GetPlayers']
-        }).subscribe({
-          next: response => {
-            const result = response.data?.deletePlayer;
-
-            this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: 'The Player was deleted successfully.' })
+        this._playerSvc.subscription.push(this._playerSvc.deletePlayer(IDsToRemove).subscribe({
+          next: () => {
+            this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: 'The Player(s) was(were) deleted successfully.' })
           },
           error: err => {
             this._sweetAlertSvc.error(err);

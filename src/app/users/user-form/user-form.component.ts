@@ -24,20 +24,20 @@ export class UserFormComponent implements OnInit {
   rolesValues: SelectItem[] = [];
 
   constructor(
-    private _usuarioSvc: UsersService,
+    private _userSvc: UsersService,
     private _dinamicDialogSvc: DinamicDialogService,
     private _apollo: Apollo,
     private _sweetAlterSvc: SweetalertService
   ) { }
 
   ngOnInit(): void {
-    this.fg = this._usuarioSvc.fg;
+    this.fg = this._userSvc.fg;
 
     this._getRoles();
   }
 
   private _getRoles(): void {
-    this._usuarioSvc.subscription.push(this._apollo.query<any>({
+    this._userSvc.subscription.push(this._apollo.query<any>({
       query: gql`
         query GetRoles {
           getRoles {
@@ -83,10 +83,10 @@ export class UserFormComponent implements OnInit {
       Enabled: this.fg.controls['enabled'].value,
     };
 
-    const usuarioMutation = userInfo.Id === 0 ? userApi.create : userApi.update;
+    const userMutation = userInfo.Id === 0 ? userApi.create : userApi.update;
 
-    this._usuarioSvc.subscription.push(this._apollo.mutate<UsersMutationResponse>({
-      mutation: usuarioMutation,
+    this._userSvc.subscription.push(this._apollo.mutate<UsersMutationResponse>({
+      mutation: userMutation,
       variables: { userInfo },
       refetchQueries: ['GetAllUsers']
     }).subscribe({

@@ -1,11 +1,7 @@
-import { CountriesService } from './../../shared/services/countries.service';
+import { CountriesService } from './../../countries/shared/services/countries.service';
 import { SelectItem } from 'primeng/api';
-import { PlayersMutationResponse } from './../shared/models/players.model';
-import { playersApi } from './../shared/graphql/players-api';
-import { toNumber } from 'lodash';
 import { ActionClicked } from './../../shared/models/list-items';
 import { SweetalertService } from './../../shared/services/sweetalert.service';
-import { Apollo } from 'apollo-angular';
 import { DinamicDialogService } from './../../shared/ui/prime-ng/dinamic-dialog/dinamic-dialog.service';
 import { FormGroup } from '@angular/forms';
 import { PlayersService } from './../shared/services/players.service';
@@ -24,7 +20,6 @@ export class PlayersFormComponent implements OnInit {
   constructor(
     private _playerSvc: PlayersService,
     private _dinamicDialogSvc: DinamicDialogService,
-    private _apollo: Apollo,
     private _sweetAlterSvc: SweetalertService,
     private _countriesSvc: CountriesService
   ) { }
@@ -64,34 +59,15 @@ export class PlayersFormComponent implements OnInit {
   }
 
   private _save(): void {
-    const payload = {
-      IdPlayer: toNumber(this.fg.controls['id'].value),
-      Name: this.fg.controls['name'].value,
-      LastName: this.fg.controls['lastName'].value,
-      Personal_Id: this.fg.controls['personalId'].value,
-      Passport_Number: this.fg.controls['passportNumber'].value,
-      Note: this.fg.controls['note'].value,
-      CellPhone: this.fg.controls['cellPhone'].value,
-      Enabled: this.fg.controls['enabled'].value,
-      IdCountry: this.fg.controls['idCountry'].value,
-    };
+    const action = this.fg.controls['id'].value === 0 ? ActionClicked.Add : ActionClicked.Edit;
 
-    const playerMutation = payload.IdPlayer === 0 ? playersApi.create : playersApi.update;
-
-    this._playerSvc.subscription.push(this._apollo.mutate<PlayersMutationResponse>({
-      mutation: playerMutation,
-      variables: { playerInput: payload },
-      refetchQueries: ['GetPlayers']
-    }).subscribe({
+    this._playerSvc.subscription.push(this._playerSvc.savePlayer().subscribe({
       next: response => {
-        let result;
         let txtMessage;
 
-        if (payload.IdPlayer === 0) {
-          result = response.data?.createPlayer;
+        if (action === ActionClicked.Add) {
           txtMessage = 'The player was created successfully.';
         } else {
-          result = response.data?.createPlayer;
           txtMessage = 'The player was updated successfully.';
         }
 

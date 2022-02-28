@@ -14,15 +14,15 @@ import { Subscription } from 'rxjs';
     providedIn: 'root'
 })
 export class UsersService {
-    private _usuario: IUser;
+    private _user: IUser;
 
-    private _usuarioSubject = new BehaviorSubject<IUser | null>(null);
+    private _userSubject = new BehaviorSubject<IUser | null>(null);
 
     private _subscription: Subscription[] = [];
 
     private _authenticatedSubject = new BehaviorSubject<boolean>(false);
 
-    currentUsuarioQuery: QueryRef<any>;
+    currentUserQuery: QueryRef<any>;
 
     fg = new FormGroup({
         id: new FormControl(''),
@@ -37,17 +37,17 @@ export class UsersService {
         private _apollo: Apollo,
         private _router: Router
     ) { 
-        this._usuarioSubject.subscribe(user => {
+        this._userSubject.subscribe(user => {
             this._authenticatedSubject.next(user ? true : false);
         })
     }
 
-    get usuario(): IUser {
-        return this._usuario;
+    get user(): IUser {
+        return this._user;
     }
 
-    get usuario$(): Observable<IUser | null> {
-        return this._usuarioSubject.asObservable();
+    get user$(): Observable<IUser | null> {
+        return this._userSubject.asObservable();
     }
 
     get authenticated(): boolean {
@@ -70,17 +70,17 @@ export class UsersService {
         });
     }
 
-    login(usuarioInfo: IUser): void {
-        if (!usuarioInfo) {
-            return this._usuarioSubject.next(null);
+    login(userInfo: IUser): void {
+        if (!userInfo) {
+            return this._userSubject.next(null);
         }
 
-        this._usuario = new User(usuarioInfo);
-        this._usuarioSubject.next(this._usuario);
+        this._user = new User(userInfo);
+        this._userSubject.next(this._user);
     }
 
     logout(): void {
-        this._usuarioSubject.next(null);
+        this._userSubject.next(null);
         this._router.navigateByUrl('login');
     }
 
