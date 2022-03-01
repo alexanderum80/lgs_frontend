@@ -1,0 +1,7 @@
+query GetLender($id: Int!) {
+    getLender(id: $id) {
+        IdLender
+        Name
+        Enabled
+    }
+}

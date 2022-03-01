@@ -94,13 +94,13 @@ export class ListCoinsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this._coinsSvc.subscription.push(this._coinsSvc.getCoin(id).subscribe({
       next: response => {
-        const selectedUser = response.getCoin;
+        const selectedData = response.getCoin;
 
         const inputData = {
-          id: selectedUser.IdCoin,
-          coin: selectedUser.Coin,
-          rate: selectedUser.Rate,
-          enabled: selectedUser.Enabled,
+          id: selectedData.IdCoin,
+          coin: selectedData.Coin,
+          rate: selectedData.Rate,
+          enabled: selectedData.Enabled,
         };
 
         this._coinsSvc.fg.patchValue(inputData);
@@ -121,7 +121,7 @@ export class ListCoinsComponent implements OnInit, AfterViewInit, OnDestroy {
   private _delete(data: any): void {
     this._sweetAlertSvc.question('Are you sure you want to delete selected Coins?').then(res => {
       if (res === ActionClicked.Yes) {
-        const IDsToRemove: number[] = !isArray(data) ? [data.IdCountry] :  data.map(d => { return d.IdCountry });
+        const IDsToRemove: number[] = !isArray(data) ? [data.IdCoin] :  data.map(d => { return d.IdCoin });
 
         this._coinsSvc.subscription.push(this._coinsSvc.delete(IDsToRemove).subscribe({
           next: response => {

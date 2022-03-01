@@ -1,0 +1,7 @@
+mutation CreateLender($lenderInput: LenderInput!) {
+    createLender(lenderInput: $lenderInput) {
+        IdLender
+        Name
+        Enabled
+    }
+}

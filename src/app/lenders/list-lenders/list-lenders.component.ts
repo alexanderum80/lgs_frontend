@@ -1,32 +1,31 @@
-import { CountriesFormComponent } from './../countries-form/countries-form.component';
 import { isArray } from 'lodash';
+import { LenderFormComponent } from './../lender-form/lender-form.component';
 import { IActionItemClickedArgs, ActionClicked } from './../../shared/models/list-items';
 import { cloneDeep } from '@apollo/client/utilities';
 import { SweetalertService } from './../../shared/services/sweetalert.service';
 import { MessageService } from 'primeng/api';
+import { LendersService } from './../shared/services/lenders.service';
 import { DinamicDialogService } from './../../shared/ui/prime-ng/dinamic-dialog/dinamic-dialog.service';
-import { ICountries } from './../shared/models/countries.model';
+import { ILenders } from './../shared/models/lenders.model';
 import { ITableColumns } from './../../shared/ui/prime-ng/table/table.model';
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
-import { CountriesService } from '../shared/services/countries.service';
 
 @Component({
-  selector: 'app-list-countries',
-  templateUrl: './list-countries.component.html',
-  styleUrls: ['./list-countries.component.scss']
+  selector: 'app-list-lenders',
+  templateUrl: './list-lenders.component.html',
+  styleUrls: ['./list-lenders.component.scss']
 })
-export class ListCountriesComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ListLendersComponent implements OnInit, AfterViewInit, OnDestroy {
   columns: ITableColumns[] = [
-    { header: 'Name', field: 'Name', type: 'string' },
-    { header: 'Last Name', field: 'LastName', type: 'string' },
+    { header: 'Lender', field: 'Name', type: 'string' },
     { header: 'Enabled', field: 'Enabled', type: 'boolean' },
   ];
 
-  countries: ICountries[] = [];
+  lenders: ILenders[] = [];
 
   constructor(
     private _dinamicDialogSvc: DinamicDialogService,
-    private _countriesSvc: CountriesService,
+    private _lendersSvc: LendersService,
     private _msgSvc: MessageService,
     private _sweetAlertSvc: SweetalertService
   ) { }
@@ -35,18 +34,18 @@ export class ListCountriesComponent implements OnInit, AfterViewInit, OnDestroy 
   }
   
   ngAfterViewInit(): void {
-    this._getPlayers();
+    this._getLenders();
   }
 
   ngOnDestroy(): void {
-    this._countriesSvc.subscription.forEach(subs => subs.unsubscribe());
+    this._lendersSvc.subscription.forEach(subs => subs.unsubscribe());
   }
 
-  private _getPlayers(): void {
+  private _getLenders(): void {
     try {
-      this._countriesSvc.subscription.push(this._countriesSvc.getCountries().subscribe({
+      this._lendersSvc.subscription.push(this._lendersSvc.getLenders().subscribe({
           next: response => {
-            this.countries = cloneDeep(response.getCountries);
+            this.lenders = cloneDeep(response.getLenders);
           },
           error: err => {
             this._sweetAlertSvc.error(err);
@@ -78,10 +77,10 @@ export class ListCountriesComponent implements OnInit, AfterViewInit, OnDestroy 
       name: '',
       enabled: true,
     };
-    this._countriesSvc.fg.patchValue(inputData);
+    this._lendersSvc.fg.patchValue(inputData);
     
-    this._dinamicDialogSvc.open('Add Country', CountriesFormComponent);
-    this._countriesSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
+    this._dinamicDialogSvc.open('Add Lender', LenderFormComponent);
+    this._lendersSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
       if (message) {
           this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: message })
       }
@@ -89,22 +88,22 @@ export class ListCountriesComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   private _edit(data: any): void {
-    const id = data.IdCountry;
+    const id = data.IdLender;
 
-    this._countriesSvc.subscription.push(this._countriesSvc.getCountry(id).subscribe({
+    this._lendersSvc.subscription.push(this._lendersSvc.getLender(id).subscribe({
       next: response => {
-        const selectedData = response.getCountry;
+        const selectedData = response.getLender;
 
         const inputData = {
-          id: selectedData.IdCountry,
+          id: selectedData.IdLender,
           name: selectedData.Name,
           enabled: selectedData.Enabled,
         };
 
-        this._countriesSvc.fg.patchValue(inputData);
+        this._lendersSvc.fg.patchValue(inputData);
 
-        this._dinamicDialogSvc.open('Edit Country', CountriesFormComponent);
-        this._countriesSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
+        this._dinamicDialogSvc.open('Edit Lender', LenderFormComponent);
+        this._lendersSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
           if (message) {
               this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: message })
           }
@@ -117,13 +116,13 @@ export class ListCountriesComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   private _delete(data: any): void {
-    this._sweetAlertSvc.question('Are you sure you want to delete selected Countries?').then(res => {
+    this._sweetAlertSvc.question('Are you sure you want to delete selected Lenders?').then(res => {
       if (res === ActionClicked.Yes) {
-        const IDsToRemove: number[] = !isArray(data) ? [data.IdCountry] :  data.map(d => { return d.IdCountry });
+        const IDsToRemove: number[] = !isArray(data) ? [data.IdLender] :  data.map(d => { return d.IdLender });
 
-        this._countriesSvc.subscription.push(this._countriesSvc.delete(IDsToRemove).subscribe({
+        this._lendersSvc.subscription.push(this._lendersSvc.delete(IDsToRemove).subscribe({
           next: response => {
-            this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: 'The Country(ies) was(were) deleted successfully.' })
+            this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: 'The Lender(s) was(were) deleted successfully.' })
           },
           error: err => {
             this._sweetAlertSvc.error(err);

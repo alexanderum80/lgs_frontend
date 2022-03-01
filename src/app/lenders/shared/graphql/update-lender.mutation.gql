@@ -1,0 +1,7 @@
+mutation UpdateLender($lenderInput: LenderInput!) {
+    updateLender(lenderInput: $lenderInput) {
+        IdLender
+        Name
+        Enabled
+    }
+}

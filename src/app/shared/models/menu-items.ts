@@ -32,7 +32,6 @@ export const MenuItems: MenuItem[] = [
       disabled: false,
       title: 'Manage Users.',
     },
-    { separator: true },
     {
       label: 'Countries',
       icon: 'mdi mdi-map-marker-outline',
@@ -40,13 +39,19 @@ export const MenuItems: MenuItem[] = [
       disabled: false,
       title: 'Manage Countries.',
     },
-    { separator: true },
     {
       label: 'Coins',
       icon: 'mdi mdi-cash-multiple',
       routerLink: 'coins',
       disabled: false,
       title: 'Manage Coins.',
+    },
+    {
+      label: 'Lenders',
+      icon: 'mdi mdi-account-cash-outline',
+      routerLink: 'lenders',
+      disabled: false,
+      title: 'Manage Lenders.',
     },
   ]},
 ];
