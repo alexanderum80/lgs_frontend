@@ -1,0 +1,6 @@
+query GetTableType($id: Int!) {
+    getTableType(id: $id) {
+        IdTableType
+        Name
+    }
+}

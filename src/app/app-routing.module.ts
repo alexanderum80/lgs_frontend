@@ -30,6 +30,9 @@ const routes: Routes = [
   { path: 'lenders',
     loadChildren: () => import('./lenders/lenders.module').then(m => m.LendersModule),
     canActivate: [ AuthGuard ] },
+  { path: 'tables-type',
+    loadChildren: () => import('./tables-type/tables-type.module').then(m => m.TablesTypeModule),
+    canActivate: [ AuthGuard ] },
 
   // Another path
   { path: '**', redirectTo: '', canActivate: [ AuthGuard ] },

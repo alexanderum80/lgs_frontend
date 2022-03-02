@@ -1,0 +1,6 @@
+mutation CreateTableType($tableTypeInput: TableTypeInput!) {
+    createTableType(tableTypeInput: $tableTypeInput) {
+        IdTableType
+        Name
+    }
+}

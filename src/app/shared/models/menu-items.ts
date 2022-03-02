@@ -18,13 +18,15 @@ export const MenuItems: MenuItem[] = [
       disabled: false,
       title: 'Manage Table Types.',
     },
-    {
-      label: 'Table',
-      icon: 'mdi mdi-table-chair',
-      routerLink: '',
-      disabled: false,
-      title: 'Manage Table Types.',
-    },
+    { label: 'Tables', icon: 'mdi mdi-table-chair', items: [
+      {
+        label: 'Tables Type',
+        icon: 'mdi mdi-table-chair',
+        routerLink: 'tables-type',
+        disabled: false,
+        title: 'Manage Table Types.',
+      },
+    ]},
     {
       label: 'Players',
       icon: 'mdi mdi-gamepad-up',
