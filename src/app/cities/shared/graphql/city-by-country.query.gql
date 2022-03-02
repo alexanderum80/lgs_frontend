@@ -1,0 +1,8 @@
+query GetCitiesByCountry($idCountry: Int!) {
+    getCitiesByCountry(idCountry: $idCountry) {
+        IdCity
+        City
+        IdCountry
+        Enabled
+    }
+}

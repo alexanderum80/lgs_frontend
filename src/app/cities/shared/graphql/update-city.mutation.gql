@@ -1,0 +1,8 @@
+mutation UpdateCity($cityInput: CityInput!) {
+    updateCity(cityInput: $cityInput) {
+        IdCity
+        City
+        IdCountry
+        Enabled
+    }
+}

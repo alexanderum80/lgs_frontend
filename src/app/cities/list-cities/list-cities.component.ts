@@ -1,31 +1,32 @@
-import { CountriesFormComponent } from './../countries-form/countries-form.component';
 import { isArray } from 'lodash';
+import { CitiesFormComponent } from './../cities-form/cities-form.component';
 import { IActionItemClickedArgs, ActionClicked } from './../../shared/models/list-items';
 import { cloneDeep } from '@apollo/client/utilities';
 import { SweetalertService } from './../../shared/services/sweetalert.service';
 import { MessageService } from 'primeng/api';
+import { CitiesService } from './../shared/services/cities.service';
 import { DinamicDialogService } from './../../shared/ui/prime-ng/dinamic-dialog/dinamic-dialog.service';
-import { ICountries } from './../shared/models/countries.model';
+import { ICities } from './../shared/models/cities.model';
 import { ITableColumns } from './../../shared/ui/prime-ng/table/table.model';
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
-import { CountriesService } from '../shared/services/countries.service';
 
 @Component({
-  selector: 'app-list-countries',
-  templateUrl: './list-countries.component.html',
-  styleUrls: ['./list-countries.component.scss']
+  selector: 'app-list-cities',
+  templateUrl: './list-cities.component.html',
+  styleUrls: ['./list-cities.component.scss']
 })
-export class ListCountriesComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ListCitiesComponent implements OnInit, AfterViewInit, OnDestroy {
   columns: ITableColumns[] = [
-    { header: 'Name', field: 'Name', type: 'string' },
+    { header: 'Name', field: 'City', type: 'string' },
+    { header: 'Country', field: 'Country.Name', type: 'string' },
     { header: 'Enabled', field: 'Enabled', type: 'boolean' },
   ];
 
-  countries: ICountries[] = [];
+  cities: ICities[] = [];
 
   constructor(
+    private _citiesSvc: CitiesService,
     private _dinamicDialogSvc: DinamicDialogService,
-    private _countriesSvc: CountriesService,
     private _msgSvc: MessageService,
     private _sweetAlertSvc: SweetalertService
   ) { }
@@ -34,18 +35,18 @@ export class ListCountriesComponent implements OnInit, AfterViewInit, OnDestroy 
   }
   
   ngAfterViewInit(): void {
-    this._getCountries();
+    this._getCities();
   }
 
   ngOnDestroy(): void {
-    this._countriesSvc.subscription.forEach(subs => subs.unsubscribe());
+    this._citiesSvc.subscription.forEach(subs => subs.unsubscribe());
   }
 
-  private _getCountries(): void {
+  private _getCities(): void {
     try {
-      this._countriesSvc.subscription.push(this._countriesSvc.getCountries().subscribe({
+      this._citiesSvc.subscription.push(this._citiesSvc.getCities().subscribe({
           next: response => {
-            this.countries = cloneDeep(response.getCountries);
+            this.cities = cloneDeep(response.getCities);
           },
           error: err => {
             this._sweetAlertSvc.error(err);
@@ -75,12 +76,13 @@ export class ListCountriesComponent implements OnInit, AfterViewInit, OnDestroy 
     const inputData = {
       id: null,
       name: '',
+      idCountry: null,
       enabled: true,
     };
-    this._countriesSvc.fg.patchValue(inputData);
+    this._citiesSvc.fg.patchValue(inputData);
     
-    this._dinamicDialogSvc.open('Add Country', CountriesFormComponent);
-    this._countriesSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
+    this._dinamicDialogSvc.open('Add City', CitiesFormComponent);
+    this._citiesSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
       if (message) {
           this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: message })
       }
@@ -88,22 +90,23 @@ export class ListCountriesComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   private _edit(data: any): void {
-    const id = data.IdCountry;
+    const id = data.IdCity;
 
-    this._countriesSvc.subscription.push(this._countriesSvc.getCountry(id).subscribe({
+    this._citiesSvc.subscription.push(this._citiesSvc.getCity(id).subscribe({
       next: response => {
-        const selectedData = response.getCountry;
+        const selectedData = response.getCity;
 
         const inputData = {
-          id: selectedData.IdCountry,
-          name: selectedData.Name,
+          id: selectedData.IdCity,
+          name: selectedData.City,
+          idCountry: selectedData.IdCountry,
           enabled: selectedData.Enabled,
         };
 
-        this._countriesSvc.fg.patchValue(inputData);
+        this._citiesSvc.fg.patchValue(inputData);
 
-        this._dinamicDialogSvc.open('Edit Country', CountriesFormComponent);
-        this._countriesSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
+        this._dinamicDialogSvc.open('Edit City', CitiesFormComponent);
+        this._citiesSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
           if (message) {
               this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: message })
           }
@@ -116,13 +119,13 @@ export class ListCountriesComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   private _delete(data: any): void {
-    this._sweetAlertSvc.question('Are you sure you want to delete selected Countries?').then(res => {
+    this._sweetAlertSvc.question('Are you sure you want to delete selected Cities?').then(res => {
       if (res === ActionClicked.Yes) {
-        const IDsToRemove: number[] = !isArray(data) ? [data.IdCountry] :  data.map(d => { return d.IdCountry });
+        const IDsToRemove: number[] = !isArray(data) ? [data.IdCity] :  data.map(d => { return d.IdCity });
 
-        this._countriesSvc.subscription.push(this._countriesSvc.delete(IDsToRemove).subscribe({
+        this._citiesSvc.subscription.push(this._citiesSvc.delete(IDsToRemove).subscribe({
           next: response => {
-            this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: 'The Country(ies) was(were) deleted successfully.' })
+            this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: 'The City(ies) was(were) deleted successfully.' })
           },
           error: err => {
             this._sweetAlertSvc.error(err);
@@ -131,5 +134,6 @@ export class ListCountriesComponent implements OnInit, AfterViewInit, OnDestroy 
       }
     });
   }
+
 
 }

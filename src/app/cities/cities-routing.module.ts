@@ -1,0 +1,13 @@
+import { ListCitiesComponent } from './list-cities/list-cities.component';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+
+const routes: Routes = [
+  { path: '', component: ListCitiesComponent }
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class CitiesRoutingModule { }

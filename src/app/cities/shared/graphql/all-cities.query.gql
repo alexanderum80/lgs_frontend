@@ -1,0 +1,12 @@
+query GetCities {
+    getCities {
+        IdCity
+        City
+        IdCountry
+        Country {
+            IdCountry
+            Name
+        }
+        Enabled
+    }
+}
