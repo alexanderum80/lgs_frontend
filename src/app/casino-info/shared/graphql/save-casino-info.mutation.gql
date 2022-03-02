@@ -1,0 +1,10 @@
+mutation SaveCasinoInfo($casinoInfoInput: CasinoInfoInput!) {
+    saveCasinoInfo(casinoInfoInput: $casinoInfoInput) {
+        Id
+        Name
+        Address
+        Phone
+        IdCountry
+        IdCity
+    }
+}

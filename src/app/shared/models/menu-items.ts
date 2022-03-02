@@ -12,6 +12,13 @@ export const MenuItems: MenuItem[] = [
   ]},
   { label: 'Settings', icon: 'mdi mdi-settings-outline', items: [
     {
+      label: 'Casino Information',
+      icon: 'mdi mdi-warehouse',
+      routerLink: 'casino-info',
+      disabled: false,
+      title: 'Manage Table Types.',
+    },
+    {
       label: 'Table',
       icon: 'mdi mdi-table-chair',
       routerLink: '',
@@ -34,10 +41,17 @@ export const MenuItems: MenuItem[] = [
     },
     {
       label: 'Countries',
-      icon: 'mdi mdi-map-marker-outline',
+      icon: 'mdi mdi-map-check-outline',
       routerLink: 'countries',
       disabled: false,
       title: 'Manage Countries.',
+    },
+    {
+      label: 'Cities',
+      icon: 'mdi mdi-map-marker-outline',
+      routerLink: 'cities',
+      disabled: false,
+      title: 'Manage Cities.',
     },
     {
       label: 'Coins',

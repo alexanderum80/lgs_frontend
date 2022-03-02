@@ -1,0 +1,19 @@
+<app-add-edit-item [fg]="fg" (actionClicked)="onActionClicked($event)">
+    <form [formGroup]="fg" style="width: 350px;">
+        <div class="form__group">
+            <png-input-text class="w-full mt-1" label="Name" labelWidth="90" [fg]="fg" control="name" [required]="true" autocomplete="off"></png-input-text>
+        </div>
+        <div class="form__group mt-1">
+            <png-input-text class="w-full mt-1" label="Address" labelWidth="90" [fg]="fg" control="address" [required]="true" autocomplete="off"></png-input-text>
+        </div>
+        <div class="form__group">
+            <png-input-text class="w-full mt-1" label="Phone" labelWidth="90" [fg]="fg" control="phone" autocomplete="off"></png-input-text>
+        </div>
+        <div class="form__group mt-1">
+            <png-dropdown class="w-full mt-1" label="Country" labelWidth="90" [fg]="fg" control="idCountry" [optionsValues]="countriesValues" placeholder="&lt;Country&gt;" [required]="true" [filter]="true" [showClear]="true"></png-dropdown>
+        </div>
+        <div class="form__group mt-1">
+            <png-dropdown class="w-full mt-1" label="City" labelWidth="90" [fg]="fg" control="idCity" [optionsValues]="citiesValues" placeholder="&lt;City&gt;" [required]="true" [filter]="true" [showClear]="true"></png-dropdown>
+        </div>
+    </form>
+</app-add-edit-item>

@@ -1,0 +1,10 @@
+query GetCasinoInfo {
+    getCasinoInfo {
+        Id
+        Name
+        Address
+        Phone
+        IdCountry
+        IdCity
+    }
+}

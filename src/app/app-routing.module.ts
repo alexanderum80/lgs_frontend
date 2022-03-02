@@ -9,6 +9,9 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
 
   // Settings
+  { path: 'casino-info',
+    loadChildren: () => import('./casino-info/casino-info.module').then(m => m.CasinoInfoModule),
+    canActivate: [ AuthGuard ] },
   { path: 'users',
     loadChildren: () => import('./users/users.module').then(m => m.UsersModule),
     canActivate: [ AuthGuard ] },
@@ -18,15 +21,18 @@ const routes: Routes = [
   { path: 'countries',
     loadChildren: () => import('./countries/countries.module').then(m => m.CountriesModule),
     canActivate: [ AuthGuard ] },
+  { path: 'cities',
+    loadChildren: () => import('./cities/cities.module').then(m => m.CitiesModule),
+    canActivate: [ AuthGuard ] },
   { path: 'coins',
     loadChildren: () => import('./coins/coins.module').then(m => m.CoinsModule),
     canActivate: [ AuthGuard ] },
   { path: 'lenders',
     loadChildren: () => import('./lenders/lenders.module').then(m => m.LendersModule),
     canActivate: [ AuthGuard ] },
-    
+
   // Another path
-  { path: '**', component: StartComponent, canActivate: [ AuthGuard ] },
+  { path: '**', redirectTo: '', canActivate: [ AuthGuard ] },
 ];
 
 @NgModule({
