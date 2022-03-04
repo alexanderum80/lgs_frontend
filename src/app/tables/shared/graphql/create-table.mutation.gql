@@ -1,0 +1,8 @@
+mutation CreateTable($tableInput: TableInput!) {
+    createTable(tableInput: $tableInput) {
+        IdTable
+        Description
+        IdGame
+        Enabled
+    }
+}

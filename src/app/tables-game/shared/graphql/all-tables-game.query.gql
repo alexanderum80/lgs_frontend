@@ -1,0 +1,7 @@
+query GetTablesGame {
+    getTablesGame {
+        IdGame
+        Name
+        StartAmount
+    }
+}

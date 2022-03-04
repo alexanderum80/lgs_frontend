@@ -1,0 +1,11 @@
+query GetTables {
+    getTables {
+        IdTable
+        Description
+        IdGame
+        TableGame {
+            Name
+        }
+        Enabled
+    }
+}

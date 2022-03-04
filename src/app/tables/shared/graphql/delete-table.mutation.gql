@@ -1,0 +1,3 @@
+mutation DeleteTable($IDs: [Int!]!) {
+    deleteTable(IDs: $IDs) 
+}

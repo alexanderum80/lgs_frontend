@@ -1,0 +1,8 @@
+mutation UpdateTable($tableInput: TableInput!) {
+    updateTable(tableInput: $tableInput) {
+        IdTable
+        Description
+        IdGame
+        Enabled
+    }
+}

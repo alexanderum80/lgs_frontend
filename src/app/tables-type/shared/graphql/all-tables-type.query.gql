@@ -1,6 +1,0 @@
-query GetTablesType {
-    getTablesType {
-        IdTableType
-        Name
-    }
-}

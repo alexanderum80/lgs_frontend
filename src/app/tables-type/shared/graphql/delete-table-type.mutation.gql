@@ -1,3 +1,0 @@
-mutation DeleteTableType($IDs: [Int!]!) {
-    deleteTableType(IDs: $IDs)
-}

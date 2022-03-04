@@ -5,6 +5,7 @@ interface IUserRole {
 
 export interface IUser {
     Id?: number;
+    UserName: string;
     Name: string;
     LastName: string;
     UserRoles?: IUserRole[];
@@ -15,6 +16,7 @@ export interface IUser {
 
 export class User {
     Id: number;
+    UserName: string;
     Name: string;
     LastName: string;
     Enabled: boolean;

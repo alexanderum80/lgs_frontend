@@ -1,6 +1,7 @@
 mutation UpdateUser($userInfo: UserInput!) {
   updateUser(userInfo: $userInfo) {
     Id
+    UserName
     Name
     LastName
     Enabled

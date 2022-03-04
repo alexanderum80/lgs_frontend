@@ -1,0 +1,7 @@
+query GetTableGame($id: Int!) {
+    getTableGame(id: $id) {
+        IdGame
+        Name
+        StartAmount
+    }
+}

@@ -76,6 +76,7 @@ export class UserFormComponent implements OnInit {
   private _save(): void {
     const userInfo = {
       Id: toNumber(this.fg.controls['id'].value),
+      UserName: this.fg.controls['userName'].value,
       Name: this.fg.controls['name'].value,
       LastName: this.fg.controls['lastName'].value,
       Psw: this.fg.controls['password'].value,

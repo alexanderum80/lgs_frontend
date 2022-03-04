@@ -1,6 +1,7 @@
 query GetAllUsers {
   getAllUsers {
     Id
+    UserName
     Name
     LastName
     Enabled

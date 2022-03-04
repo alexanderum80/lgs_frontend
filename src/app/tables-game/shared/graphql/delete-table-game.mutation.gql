@@ -1,0 +1,3 @@
+mutation DeleteTableGame($IDs: [Int!]!) {
+    deleteTableGame(IDs: $IDs)
+}

@@ -1,6 +1,7 @@
 mutation CreateUser($userInfo: UserInput!) {
   createUser(userInfo: $userInfo) {
     Id
+    UserName
     Name
     LastName
     Enabled

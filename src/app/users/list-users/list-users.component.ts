@@ -21,6 +21,7 @@ import { isArray, join } from 'lodash';
 })
 export class ListUsersComponent implements OnInit, AfterViewInit, OnDestroy {
   columns: ITableColumns[] = [
+    { header: 'User Name', field: 'UserName', type: 'string' },
     { header: 'Name', field: 'Name', type: 'string' },
     { header: 'Last Name', field: 'LastName', type: 'string' },
     { header: 'Enabled', field: 'Enabled', type: 'boolean' },
@@ -83,6 +84,7 @@ export class ListUsersComponent implements OnInit, AfterViewInit, OnDestroy {
   private _add(): void {
     const inputData = {
       id: null,
+      userName: '',
       name: '',
       lastName: '',
       password: '',
@@ -112,6 +114,7 @@ export class ListUsersComponent implements OnInit, AfterViewInit, OnDestroy {
 
         const inputData = {
           id: selectedUser.Id,
+          userName: selectedUser.UserName,
           name: selectedUser.Name,
           lastName: selectedUser.LastName,
           enabled: selectedUser.Enabled,

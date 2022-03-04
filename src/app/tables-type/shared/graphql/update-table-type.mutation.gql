@@ -1,6 +1,0 @@
-mutation UpdateTableType($tableTypeInput: TableTypeInput!) {
-    updateTableType(tableTypeInput: $tableTypeInput) {
-        IdTableType
-        Name
-    }
-}

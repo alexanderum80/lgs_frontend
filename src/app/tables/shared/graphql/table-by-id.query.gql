@@ -1,0 +1,8 @@
+query GetTable($id: Int!) {
+    getTable(id: $id) {
+        IdTable
+        Description
+        IdGame
+        Enabled
+    }
+}

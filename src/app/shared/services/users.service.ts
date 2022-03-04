@@ -26,6 +26,7 @@ export class UsersService {
 
     fg = new FormGroup({
         id: new FormControl(''),
+        userName: new FormControl(''),
         name: new FormControl(''),
         lastName: new FormControl(''),
         password: new FormControl(''),

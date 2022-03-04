@@ -16,15 +16,22 @@ export const MenuItems: MenuItem[] = [
       icon: 'mdi mdi-warehouse',
       routerLink: 'casino-info',
       disabled: false,
-      title: 'Manage Table Types.',
+      title: 'Manage Casino Information.',
     },
     { label: 'Tables', icon: 'mdi mdi-table-chair', items: [
       {
-        label: 'Tables Type',
-        icon: 'mdi mdi-table-chair',
-        routerLink: 'tables-type',
+        label: 'Tables Games',
+        icon: 'mdi mdi-gamepad-variant-outline',
+        routerLink: 'tables-game',
         disabled: false,
-        title: 'Manage Table Types.',
+        title: 'Manage Table Games.',
+      },
+      {
+        label: 'Tables',
+        icon: 'mdi mdi-table-settings',
+        routerLink: 'tables',
+        disabled: false,
+        title: 'Manage Table.',
       },
     ]},
     {

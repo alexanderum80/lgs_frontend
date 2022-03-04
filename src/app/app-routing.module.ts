@@ -30,8 +30,11 @@ const routes: Routes = [
   { path: 'lenders',
     loadChildren: () => import('./lenders/lenders.module').then(m => m.LendersModule),
     canActivate: [ AuthGuard ] },
-  { path: 'tables-type',
-    loadChildren: () => import('./tables-type/tables-type.module').then(m => m.TablesTypeModule),
+  { path: 'tables',
+    loadChildren: () => import('./tables/tables.module').then(m => m.TablesModule),
+    canActivate: [ AuthGuard ] },
+  { path: 'tables-game',
+    loadChildren: () => import('./tables-game/tables-game.module').then(m => m.TablesGameModule),
     canActivate: [ AuthGuard ] },
 
   // Another path
