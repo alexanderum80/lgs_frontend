@@ -1,0 +1,8 @@
+mutation UpdateChip($chipInput: ChipInput!) {
+    updateChip(chipInput: $chipInput) {
+        IdChip
+        Color
+        Value
+        Image
+    }
+}

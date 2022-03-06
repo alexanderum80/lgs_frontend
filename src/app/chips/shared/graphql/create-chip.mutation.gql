@@ -1,0 +1,8 @@
+mutation CreateChip($chipInput: ChipInput!) {
+    createChip(chipInput: $chipInput) {
+        IdChip
+        Color
+        Value
+        Image
+    }
+}

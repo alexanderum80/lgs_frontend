@@ -70,6 +70,13 @@ export const MenuItems: MenuItem[] = [
       title: 'Manage Coins.',
     },
     {
+      label: 'Chips',
+      icon: 'mdi mdi-poker-chip',
+      routerLink: 'chips',
+      disabled: false,
+      title: 'Manage Chips.',
+    },
+    {
       label: 'Lenders',
       icon: 'mdi mdi-account-cash-outline',
       routerLink: 'lenders',

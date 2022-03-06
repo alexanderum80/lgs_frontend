@@ -1,3 +1,4 @@
+import { PrimeFileUploadModule } from './file-upload/file-upload.module';
 import { PrimeDataViewModule } from './data-view/data-view.module';
 import { PrimeInputSwitchModule } from './input-switch/input-switch.module';
 import { PrimeSidebarModule } from './sidebar/sidebar.module';
@@ -43,6 +44,7 @@ const modules = [
   PrimeDinamicDialogModule,
   PrimeDropdownModule,
   PrimeFieldsetModule,
+  PrimeFileUploadModule,
   PrimeInputMaskModule,
   PrimeInputNumberModule,
   PrimeInputTextModule,

@@ -1,31 +1,30 @@
 import { isArray } from 'lodash';
-import { CitiesFormComponent } from './../cities-form/cities-form.component';
+import { ChipFormComponent } from './../chip-form/chip-form.component';
 import { IActionItemClickedArgs, ActionClicked } from './../../shared/models/list-items';
 import { cloneDeep } from '@apollo/client/utilities';
 import { SweetalertService } from './../../shared/services/sweetalert.service';
 import { MessageService } from 'primeng/api';
-import { CitiesService } from './../shared/services/cities.service';
 import { DinamicDialogService } from './../../shared/ui/prime-ng/dinamic-dialog/dinamic-dialog.service';
-import { ICities } from './../shared/models/cities.model';
+import { ChipsService } from './../shared/services/chips.service';
+import { IChips } from './../shared/models/chips.model';
 import { ITableColumns } from './../../shared/ui/prime-ng/table/table.model';
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 
 @Component({
-  selector: 'app-list-cities',
-  templateUrl: './list-cities.component.html',
-  styleUrls: ['./list-cities.component.scss']
+  selector: 'app-list-chips',
+  templateUrl: './list-chips.component.html',
+  styleUrls: ['./list-chips.component.scss']
 })
-export class ListCitiesComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ListChipsComponent implements OnInit, AfterViewInit, OnDestroy {
   columns: ITableColumns[] = [
-    { header: 'Name', field: 'City', type: 'string' },
-    { header: 'Country', field: 'Country.Name', type: 'string' },
-    { header: 'Enabled', field: 'Enabled', type: 'boolean' },
+    { header: 'Value', field: 'Value', type: 'decimal' },
+    { header: 'Color', field: 'Color', type: 'string' },
   ];
 
-  cities: ICities[] = [];
+  chips: IChips[] = [];
 
   constructor(
-    private _citiesSvc: CitiesService,
+    private _chipsSvc: ChipsService,
     private _dinamicDialogSvc: DinamicDialogService,
     private _msgSvc: MessageService,
     private _sweetAlertSvc: SweetalertService
@@ -35,18 +34,18 @@ export class ListCitiesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   
   ngAfterViewInit(): void {
-    this._getCities();
+    this._getchips();
   }
 
   ngOnDestroy(): void {
-    this._citiesSvc.subscription.forEach(subs => subs.unsubscribe());
+    this._chipsSvc.subscription.forEach(subs => subs.unsubscribe());
   }
 
-  private _getCities(): void {
+  private _getchips(): void {
     try {
-      this._citiesSvc.subscription.push(this._citiesSvc.getCities().subscribe({
+      this._chipsSvc.subscription.push(this._chipsSvc.getAll().subscribe({
           next: response => {
-            this.cities = cloneDeep(response.getCities);
+            this.chips = cloneDeep(response.getChips);
           },
           error: err => {
             this._sweetAlertSvc.error(err);
@@ -75,14 +74,14 @@ export class ListCitiesComponent implements OnInit, AfterViewInit, OnDestroy {
   private _add(): void {
     const inputData = {
       id: null,
-      name: '',
-      idCountry: null,
-      enabled: true,
+      color: '',
+      value: 0,
+      image: null,
     };
-    this._citiesSvc.fg.patchValue(inputData);
+    this._chipsSvc.fg.patchValue(inputData);
     
-    this._dinamicDialogSvc.open('Add City', CitiesFormComponent);
-    this._citiesSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
+    this._dinamicDialogSvc.open('Add Chip', ChipFormComponent);
+    this._chipsSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
       if (message) {
           this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: message })
       }
@@ -90,23 +89,23 @@ export class ListCitiesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private _edit(data: any): void {
-    const id = data.IdCity;
+    const id = data.IdChip;
 
-    this._citiesSvc.subscription.push(this._citiesSvc.getCity(id).subscribe({
+    this._chipsSvc.subscription.push(this._chipsSvc.getOne(id).subscribe({
       next: response => {
-        const selectedData = response.getCity;
+        const selectedData = response.getChip;
 
         const inputData = {
-          id: selectedData.IdCity,
-          name: selectedData.City,
-          idCountry: selectedData.IdCountry,
-          enabled: selectedData.Enabled,
+          id: selectedData.IdChip,
+          color: selectedData.Color,
+          value: selectedData.Value,
+          image: selectedData.Image,
         };
 
-        this._citiesSvc.fg.patchValue(inputData);
+        this._chipsSvc.fg.patchValue(inputData);
 
-        this._dinamicDialogSvc.open('Edit City', CitiesFormComponent);
-        this._citiesSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
+        this._dinamicDialogSvc.open('Edit Chip', ChipFormComponent);
+        this._chipsSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
           if (message) {
               this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: message })
           }
@@ -119,13 +118,13 @@ export class ListCitiesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private _delete(data: any): void {
-    this._sweetAlertSvc.question('Are you sure you want to delete selected Cities?').then(res => {
+    this._sweetAlertSvc.question('Are you sure you want to delete selected Chip(s)?').then(res => {
       if (res === ActionClicked.Yes) {
-        const IDsToRemove: number[] = !isArray(data) ? [data.IdCity] :  data.map(d => { return d.IdCity });
+        const IDsToRemove: number[] = !isArray(data) ? [data.IdChip] :  data.map(d => { return d.IdChip });
 
-        this._citiesSvc.subscription.push(this._citiesSvc.delete(IDsToRemove).subscribe({
+        this._chipsSvc.subscription.push(this._chipsSvc.delete(IDsToRemove).subscribe({
           next: response => {
-            this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: 'The City(ies) was(were) deleted successfully.' })
+            this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: 'The Chip(s) was(were) deleted successfully.' })
           },
           error: err => {
             this._sweetAlertSvc.error(err);

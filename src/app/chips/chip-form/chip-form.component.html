@@ -1,0 +1,13 @@
+<app-add-edit-item [fg]="fg" (actionClicked)="onActionClicked($event)">
+    <form [formGroup]="fg">
+        <div class="form__group">
+            <png-input-text class="w-full mt-1" label="Color" labelWidth="90" [fg]="fg" control="color" [required]="true" autocomplete="off"></png-input-text>
+        </div>
+        <div class="form__group">
+            <png-input-number class="w-full mt-1" label="Value" labelWidth="90" [fg]="fg" control="value" [required]="true" autocomplete="off"></png-input-number>
+        </div>
+        <!-- <div class="form__group">
+            <png-file-upload class="w-full mt-1" label="Image" labelWidth="90" [fg]="fg" control="image"></png-file-upload>
+        </div> -->
+    </form>
+  </app-add-edit-item>

@@ -1,0 +1,3 @@
+mutation deleteChip($id: Int!) {
+    deleteChip(id: $id)
+}

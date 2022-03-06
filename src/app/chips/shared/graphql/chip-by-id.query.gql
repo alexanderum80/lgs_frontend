@@ -1,0 +1,8 @@
+query GetChip($id: Int!) {
+    getChip(id: $id) {
+        IdChip
+        Color
+        Value
+        Image
+    }
+}
