@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { UsersService } from '../../shared/services/users.service';
+import { UsersService } from '../../users/shared/services/users.service';
 
 
 @Injectable()

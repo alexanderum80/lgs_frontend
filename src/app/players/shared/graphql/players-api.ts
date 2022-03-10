@@ -4,4 +4,5 @@ export const playersApi = {
     create: require('graphql-tag/loader!./create-player.mutation.gql'),
     update: require('graphql-tag/loader!./update-player.mutation.gql'),
     delete: require('graphql-tag/loader!./delete-player.mutation.gql'),
+    recover: require('graphql-tag/loader!./recover-player.mutation.gql'),
 }

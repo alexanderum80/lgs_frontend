@@ -8,7 +8,9 @@ query GetPlayers {
         Passport_Number
         Note
         CellPhone
-        Enabled
+        DateOfBirth
         IdCountry
+        Enabled
+        Deleted
     }
 }

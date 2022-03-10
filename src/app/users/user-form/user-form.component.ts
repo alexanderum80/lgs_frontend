@@ -2,14 +2,10 @@ import { DinamicDialogService } from 'src/app/shared/ui/prime-ng/dinamic-dialog/
 import { SweetalertService } from '../../shared/services/sweetalert.service';
 import { SelectItem } from 'primeng/api';
 import { ActionClicked } from '../../shared/models/list-items';
-import { UsersMutationResponse } from '../shared/models/users.model';
-import { userApi } from '../shared/graphql/userActions.gql';
 import { Apollo, gql } from 'apollo-angular';
-import { UsersService } from '../../shared/services/users.service';
+import { UsersService } from '../shared/services/users.service';
 import { FormGroup } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import { IUser } from 'src/app/shared/models';
-import { toNumber } from 'lodash';
 
 @Component({
   selector: 'app-user-form',
@@ -74,32 +70,15 @@ export class UserFormComponent implements OnInit {
   }
 
   private _save(): void {
-    const userInfo = {
-      Id: toNumber(this.fg.controls['id'].value),
-      UserName: this.fg.controls['userName'].value,
-      Name: this.fg.controls['name'].value,
-      LastName: this.fg.controls['lastName'].value,
-      Psw: this.fg.controls['password'].value,
-      Role: this.fg.controls['roles'].value,
-      Enabled: this.fg.controls['enabled'].value,
-    };
+    const action = this.fg.controls['id'].value === 0 ? ActionClicked.Add : ActionClicked.Edit;
 
-    const userMutation = userInfo.Id === 0 ? userApi.create : userApi.update;
-
-    this._userSvc.subscription.push(this._apollo.mutate<UsersMutationResponse>({
-      mutation: userMutation,
-      variables: { userInfo },
-      refetchQueries: ['GetAllUsers']
-    }).subscribe({
+    this._userSvc.subscription.push(this._userSvc.save().subscribe({
       next: response => {
-        let result;
         let txtMessage;
 
-        if (userInfo.Id === 0) {
-          result = response.data?.createUser;
+        if (action === ActionClicked.Add) {
           txtMessage = 'The user was created successfully.';
         } else {
-          result = response.data?.updateUser;
           txtMessage = 'The user was updated successfully.';
         }
 

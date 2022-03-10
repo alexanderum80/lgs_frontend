@@ -8,7 +8,8 @@ query GetPlayer($id: Int!) {
         Passport_Number
         Note
         CellPhone
-        Enabled
+        DateOfBirth
         IdCountry
+        Enabled
     }
 }

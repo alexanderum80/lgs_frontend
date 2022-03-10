@@ -9,6 +9,6 @@ export interface UsersQueryResponse {
 export interface UsersMutationResponse {
     createUser: IUser;
     updateUser: IUser;
-    deleteUser: IUser;
+    deleteUser: number;
     changePassword: IUser;
 }

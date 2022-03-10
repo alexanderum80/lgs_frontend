@@ -2,9 +2,9 @@ export enum DateFormatEnum {
     US_DATE = 'MM/dd/yyyy',
     US_SHORT_DATE = 'MM/dd/yy',
     US_DATE_HOUR = 'MM/dd/yyyy HH:mm:ss',
-    ES_DATE = 'dd/MM/yyyy',
-    ES_SHORT_DATE = 'dd/MM/yy',
-    ES_DATE_HOUR = 'dd/MM/yyyy HH:mm:ss',
+    ES_DATE = 'MM/dd/yyyy',
+    ES_SHORT_DATE = 'MM/dd/yy',
+    ES_DATE_HOUR = 'MM/dd/yyyy HH:mm:ss',
 }
 
 export enum LocaleFormatEnum {

@@ -121,7 +121,7 @@ export class ListTablesComponent implements OnInit, AfterViewInit, OnDestroy {
   private _delete(data: any): void {
     this._sweetAlertSvc.question('Are you sure you want to delete selected Table?').then(res => {
       if (res === ActionClicked.Yes) {
-        const IDsToRemove: number[] = !isArray(data) ? [data.IdTable] :  data.map(d => { return d.IdTable });
+        const IDsToRemove: number[] = !isArray(data) ? [data.IdTable] : data.map(d => { return d.IdTable });
 
         this._tableSvc.subscription.push(this._tableSvc.delete(IDsToRemove).subscribe({
           next: response => {

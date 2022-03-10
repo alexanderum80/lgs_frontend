@@ -120,7 +120,7 @@ export class ListChipsComponent implements OnInit, AfterViewInit, OnDestroy {
   private _delete(data: any): void {
     this._sweetAlertSvc.question('Are you sure you want to delete selected Chip(s)?').then(res => {
       if (res === ActionClicked.Yes) {
-        const IDsToRemove: number[] = !isArray(data) ? [data.IdChip] :  data.map(d => { return d.IdChip });
+        const IDsToRemove: number[] = !isArray(data) ? [data.IdChip] : data.map(d => { return d.IdChip });
 
         this._chipsSvc.subscription.push(this._chipsSvc.delete(IDsToRemove).subscribe({
           next: response => {

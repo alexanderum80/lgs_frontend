@@ -7,7 +7,8 @@ import { DinamicDialogService } from './../../shared/ui/prime-ng/dinamic-dialog/
 import { ITableColumns } from './../../shared/ui/prime-ng/table/table.model';
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { PlayersService } from '../shared/services/players.service';
-import { isArray } from 'lodash';
+import { isArray, sortBy } from 'lodash';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-list-players',
@@ -16,11 +17,11 @@ import { isArray } from 'lodash';
 })
 export class ListPlayersComponent implements OnInit, AfterViewInit, OnDestroy {
   columns: ITableColumns[] = [
+    { header: 'ID', field: 'IdPlayer', type: 'string' },
     { header: 'Name', field: 'Name', type: 'string' },
     { header: 'Last Name', field: 'LastName', type: 'string' },
-    { header: 'Personal ID', field: 'Personal_Id', type: 'string' },
-    { header: 'Cell Phone', field: 'CellPhone', type: 'string' },
     { header: 'Enabled', field: 'Enabled', type: 'boolean' },
+    { header: 'Deleted', field: 'Deleted', type: 'boolean' },
   ];
 
   players: any[] = [];
@@ -47,7 +48,7 @@ export class ListPlayersComponent implements OnInit, AfterViewInit, OnDestroy {
     try {
       this._playerSvc.getAllPlayers().subscribe({
         next: result => {
-          this.players = cloneDeep(result.getPlayers);
+          this.players = cloneDeep(sortBy(result.getPlayers, 'IdPlayer'));
         },
         error: err => {
           this._sweetAlertSvc.error(err);
@@ -81,6 +82,7 @@ export class ListPlayersComponent implements OnInit, AfterViewInit, OnDestroy {
       passportNumber: '',
       note: '',
       cellPhone: '',
+      dateOfBirth: new Date(),
       enabled: true,
       idCountry: null
     };
@@ -94,8 +96,21 @@ export class ListPlayersComponent implements OnInit, AfterViewInit, OnDestroy {
     }));
   }
 
-  private _edit(data: any): void {
+  private async _edit(data: any): Promise<void> {
     const id = data.IdPlayer;
+
+    if (data.Deleted) {
+      const res = await this._sweetAlertSvc.question('The selected Player is Deleted, cannot be edited. Do you wich to recover this Player?');
+      if (res === ActionClicked.Yes) {
+        this._playerSvc.recoverPlayer(id).subscribe({
+          error: err => {
+            this._sweetAlertSvc.error(err);
+          }
+        });
+      } else {
+        return;
+      }
+    }
 
     this._playerSvc.subscription.push(this._playerSvc.getPlayer(id).subscribe({
       next: response => {
@@ -109,6 +124,7 @@ export class ListPlayersComponent implements OnInit, AfterViewInit, OnDestroy {
           passportNumber: selectedPlayer.Passport_Number,
           note: selectedPlayer.Note,
           cellPhone: selectedPlayer.CellPhone,
+          dateOfBirth: moment(selectedPlayer.DateOfBirth).toDate(),
           enabled: selectedPlayer.Enabled,
           idCountry: selectedPlayer.IdCountry,
         };
@@ -129,6 +145,10 @@ export class ListPlayersComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private _delete(data: any): void {
+    if (data.Deleted) {
+      return this._sweetAlertSvc.warning('This Player is already deleted.');
+    }
+
     this._sweetAlertSvc.question('Are you sure you want to delete selected Players?').then(res => {
       if (res === ActionClicked.Yes) {
         const IDsToRemove: number[] = !isArray(data) ? [data.IdPlayer] : data.map(d => { return d.IdPlayer });

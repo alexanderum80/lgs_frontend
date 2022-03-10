@@ -19,6 +19,7 @@ export class PlayersService {
     passportNumber: new FormControl(''),
     note: new FormControl(''),
     cellPhone: new FormControl(''),
+    dateOfBirth: new FormControl(new Date()),
     enabled: new FormControl(true),
     idCountry: new FormControl(null)
   })
@@ -69,6 +70,7 @@ export class PlayersService {
       Passport_Number: this.fg.controls['passportNumber'].value,
       Note: this.fg.controls['note'].value,
       CellPhone: this.fg.controls['cellPhone'].value,
+      DateOfBirth: this.fg.controls['dateOfBirth'].value,
       Enabled: this.fg.controls['enabled'].value,
       IdCountry: this.fg.controls['idCountry'].value,
     };
@@ -107,7 +109,24 @@ export class PlayersService {
       }))
     })
   }
- 
+
+  recoverPlayer(id: number): Observable<PlayersMutationResponse> {
+    return new Observable<PlayersMutationResponse>(subscriber => {
+      this.subscription.push(this._apollo.mutate<PlayersMutationResponse>({
+        mutation: playersApi.recover,
+        variables: { id },
+        refetchQueries: ['GetPlayers']
+      }).subscribe({
+        next: (result) => {
+          subscriber.next(result.data!);
+        },
+        error: err => {
+          subscriber.error(err.message || err);
+        }
+      }))
+    })
+  }
+  
   dispose(): void {
     this.subscription.forEach(subs => subs.unsubscribe());
   }

@@ -118,7 +118,7 @@ export class ListTablesGameComponent implements OnInit, AfterViewInit, OnDestroy
   private _delete(data: any): void {
     this._sweetAlertSvc.question('Are you sure you want to delete selected Table Game?').then(res => {
       if (res === ActionClicked.Yes) {
-        const IDsToRemove: number[] = !isArray(data) ? [data.IdGame] :  data.map(d => { return d.IdGame });
+        const IDsToRemove: number[] = !isArray(data) ? [data.IdGame] : data.map(d => { return d.IdGame });
 
         this._tableGameSvc.subscription.push(this._tableGameSvc.delete(IDsToRemove).subscribe({
           next: response => {

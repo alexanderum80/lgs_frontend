@@ -118,7 +118,7 @@ export class ListLendersComponent implements OnInit, AfterViewInit, OnDestroy {
   private _delete(data: any): void {
     this._sweetAlertSvc.question('Are you sure you want to delete selected Lenders?').then(res => {
       if (res === ActionClicked.Yes) {
-        const IDsToRemove: number[] = !isArray(data) ? [data.IdLender] :  data.map(d => { return d.IdLender });
+        const IDsToRemove: number[] = !isArray(data) ? [data.IdLender] : data.map(d => { return d.IdLender });
 
         this._lendersSvc.subscription.push(this._lendersSvc.delete(IDsToRemove).subscribe({
           next: response => {

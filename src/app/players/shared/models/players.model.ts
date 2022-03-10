@@ -8,6 +8,7 @@ export interface IPlayers {
     Passport_Number?: string;
     Note?: string;
     CellPhone?: string;
+    DateOfBirth?: Date;
     Enabled: boolean;
     IdCountry: number;  
 }

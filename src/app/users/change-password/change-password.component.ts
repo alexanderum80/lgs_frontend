@@ -5,7 +5,7 @@ import { UsersMutationResponse } from './../shared/models/users.model';
 import { Apollo } from 'apollo-angular';
 import { Subscription } from 'rxjs';
 import { toNumber } from 'lodash';
-import { UsersService } from 'src/app/shared/services/users.service';
+import { UsersService } from 'src/app/users/shared/services/users.service';
 import { FormGroup } from '@angular/forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import SweetAlert from 'sweetalert2';

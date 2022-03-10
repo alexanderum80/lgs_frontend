@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { UsersService } from './users.service';
+import { UsersService } from '../../users/shared/services/users.service';
 
 export interface RouteAccess {
     id: number;

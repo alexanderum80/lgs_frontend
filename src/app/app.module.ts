@@ -1,3 +1,5 @@
+import { PrimeMenuModule } from './shared/ui/prime-ng/menu/menu.module';
+import { UserInfoComponent } from './users/user-info/user-info.component';
 import { PrimeSidebarModule } from './shared/ui/prime-ng/sidebar/sidebar.module';
 import { PrimePanelMenuModule } from './shared/ui/prime-ng/panel-menu/panel-menu.module';
 import { PrimeMenubarModule } from './shared/ui/prime-ng/menubar/menubar.module';
@@ -24,6 +26,7 @@ import { DialogService } from 'primeng/dynamicdialog';
     AppComponent,
     StartComponent,
     LoginComponent,
+    UserInfoComponent
   ],
   imports: [
     BrowserModule,
@@ -35,9 +38,11 @@ import { DialogService } from 'primeng/dynamicdialog';
     // Prime NG
     // PrimeNgModule,
     PrimeCardModule,
+    PrimeButtonModule,
     PrimeInputTextModule,
     PrimePasswordModule,
     PrimeButtonModule,
+    PrimeMenuModule,
     PrimePanelMenuModule,
     PrimeMenubarModule,
     PrimeSidebarModule,

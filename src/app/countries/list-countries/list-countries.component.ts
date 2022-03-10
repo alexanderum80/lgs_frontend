@@ -118,7 +118,7 @@ export class ListCountriesComponent implements OnInit, AfterViewInit, OnDestroy 
   private _delete(data: any): void {
     this._sweetAlertSvc.question('Are you sure you want to delete selected Countries?').then(res => {
       if (res === ActionClicked.Yes) {
-        const IDsToRemove: number[] = !isArray(data) ? [data.IdCountry] :  data.map(d => { return d.IdCountry });
+        const IDsToRemove: number[] = !isArray(data) ? [data.IdCountry] : data.map(d => { return d.IdCountry });
 
         this._countriesSvc.subscription.push(this._countriesSvc.delete(IDsToRemove).subscribe({
           next: response => {

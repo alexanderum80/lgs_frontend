@@ -6,5 +6,6 @@ export const userApi = {
     create: require('graphql-tag/loader!./create-user.mutation.gql'),
     update: require('graphql-tag/loader!./update-user.mutation.gql'),
     delete: require('graphql-tag/loader!./delete-user.mutation.gql'),
+    recover: require('graphql-tag/loader!./recover-user.mutation.gql'),
 };
 

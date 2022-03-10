@@ -47,7 +47,7 @@
                 <th *ngIf="groupMode === 'rowspan'  " [ngSwitch]="col.type" [ngStyle]="{'width': col.width || 'auto'}">
                     <p-columnFilter *ngSwitchCase="'date'" type="date" [field]="col.field" matchMode="is" class="w-full">
                         <ng-template pTemplate="filter" let-filter="filterCallback">
-                            <p-calendar (onSelect)="filter($event)" dateFormat="dd/mm/yy"></p-calendar>
+                            <p-calendar (onSelect)="filter($event)" dateFormat="mm/dd/yy"></p-calendar>
                         </ng-template>
                     </p-columnFilter>
                     <p-columnFilter *ngSwitchCase="'boolean'" type="boolean" [field]="col.field" matchMode="is" class="w-full"></p-columnFilter>
@@ -56,7 +56,7 @@
                 <th *ngIf="groupMode !== 'rowspan' && col.field !== groupField " [ngSwitch]="col.type" [ngStyle]="{'width': col.width || 'auto'}">
                     <p-columnFilter *ngSwitchCase="'date'" type="date" [field]="col.field" matchMode="is" class="w-full">
                         <ng-template pTemplate="filter" let-filter="filterCallback">
-                            <p-calendar (onSelect)="filter($event)" dateFormat="dd/mm/yy"></p-calendar>
+                            <p-calendar (onSelect)="filter($event)" dateFormat="mm/dd/yy"></p-calendar>
                         </ng-template>
                     </p-columnFilter>
                     <p-columnFilter *ngSwitchCase="'boolean'" type="boolean" [field]="col.field" matchMode="is" class="w-full"></p-columnFilter>
@@ -86,13 +86,13 @@
             </td>
             <ng-container *ngFor="let col of columns">
                 <td *ngIf="groupMode === 'rowspan' && col.field !== groupField " [ngSwitch]="col.type" [class.text-right]="col.type === 'number' || col.type === 'decimal'">
-                    <span *ngSwitchCase="'date'"> {{ rowData[col.field] | date: 'dd/MM/yyyy' }}</span>
+                    <span *ngSwitchCase="'date'"> {{ rowData[col.field] | date: 'MM/dd/yyyy' }}</span>
                     <span *ngSwitchCase="'decimal'"> {{ rowData[col.field] | currency }}</span>
                     <i *ngSwitchCase="'boolean'" class="pi" [ngClass]="{'true-icon pi-check-circle text-green-500': rowData[col.field], 'false-icon pi-times-circle text-pink-500': !rowData[col.field]}"></i>
                     <span *ngSwitchDefault> {{ _(rowData, col.field) }}</span>
                 </td>
                 <td *ngIf="groupMode !== 'rowspan' && col.field !== groupField " [ngSwitch]="col.type" [class.text-right]="col.type === 'number' || col.type === 'decimal'">
-                    <span *ngSwitchCase="'date'"> {{ rowData[col.field] | date: 'dd/MM/yyyy' }}</span>
+                    <span *ngSwitchCase="'date'"> {{ rowData[col.field] | date: 'MM/dd/yyyy' }}</span>
                     <span *ngSwitchCase="'decimal'"> {{ rowData[col.field] | currency }}</span>
                     <i *ngSwitchCase="'boolean'" class="pi" [ngClass]="{'true-icon pi-check-circle text-green-500': rowData[col.field], 'false-icon pi-times-circle text-pink-500': !rowData[col.field]}"></i>
                     <span *ngSwitchDefault> {{ _(rowData, col.field) }}</span>

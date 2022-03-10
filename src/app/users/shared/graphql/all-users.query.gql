@@ -8,5 +8,6 @@ query GetAllUsers {
     UserRoles {
       IdRole
     }
+    Deleted
   }
 }

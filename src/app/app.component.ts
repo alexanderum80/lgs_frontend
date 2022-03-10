@@ -3,7 +3,7 @@ import { MenuItems } from './shared/models/menu-items';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { cloneDeep } from '@apollo/client/utilities';
 import { MenuItem } from 'primeng/api';
-import { UsersService } from './shared/services/users.service';
+import { UsersService } from './users/shared/services/users.service';
 
 @Component({
   selector: 'app-root',

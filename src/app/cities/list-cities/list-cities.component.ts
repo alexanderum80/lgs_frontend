@@ -121,7 +121,7 @@ export class ListCitiesComponent implements OnInit, AfterViewInit, OnDestroy {
   private _delete(data: any): void {
     this._sweetAlertSvc.question('Are you sure you want to delete selected Cities?').then(res => {
       if (res === ActionClicked.Yes) {
-        const IDsToRemove: number[] = !isArray(data) ? [data.IdCity] :  data.map(d => { return d.IdCity });
+        const IDsToRemove: number[] = !isArray(data) ? [data.IdCity] : data.map(d => { return d.IdCity });
 
         this._citiesSvc.subscription.push(this._citiesSvc.delete(IDsToRemove).subscribe({
           next: response => {
