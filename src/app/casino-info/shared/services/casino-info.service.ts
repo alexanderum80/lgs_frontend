@@ -39,6 +39,22 @@ export class CasinoInfoService {
     });
   }
 
+  loadCasinoState(): Observable<CasinoInfoQueryResponse> {
+    return new Observable<CasinoInfoQueryResponse>(subscriber => {
+      this.subscription.push(this._apollo.query<CasinoInfoQueryResponse>({
+        query: casinoApi.state,
+        fetchPolicy: 'network-only'
+      }).subscribe({
+        next: reponse => {
+          subscriber.next(reponse.data);
+        },
+        error: err => {
+          subscriber.error(err);
+        }
+      }));
+    });
+  }
+
   save(): Observable<CasinoInfoMutationResponse> {
     const inputData = {
       Id: toNumber(this.fg.controls['id'].value),

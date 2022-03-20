@@ -6,5 +6,6 @@ query GetCasinoInfo {
         Phone
         IdCountry
         IdCity
+        IdState
     }
 }

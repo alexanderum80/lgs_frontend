@@ -1,3 +1,4 @@
+import { PaymentsModule } from './../payments/payments.module';
 import { TablesGameModule } from './../tables-game/tables-game.module';
 import { TablesService } from './shared/services/tables.service';
 import { TableService } from './../shared/ui/prime-ng/table/table.service';
@@ -24,7 +25,8 @@ import { ListTablesComponent } from './list-tables/list-tables.component';
     ReactiveFormsModule,
     PrimeNgModule,
     SharedModule,
-    TablesGameModule
+    TablesGameModule,
+    PaymentsModule
   ],
   providers: [
     TablesService

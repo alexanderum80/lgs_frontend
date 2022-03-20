@@ -12,5 +12,9 @@ query GetPlayers {
         IdCountry
         Enabled
         Deleted
+        StatusInfo {
+            IdOperation
+            OperationName
+        }
     }
 }

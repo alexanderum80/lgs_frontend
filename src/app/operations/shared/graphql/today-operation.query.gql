@@ -1,0 +1,8 @@
+query GetOperationsToday($idState: Int!) {
+    getOperationsToday(idState: $idState) {
+        IdOperation
+        IdTable
+        Table
+        Amount
+    }
+}

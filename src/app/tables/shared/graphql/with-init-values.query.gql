@@ -1,0 +1,10 @@
+query GetTablesWithInitValues {
+    getTablesWithInitValues {
+        IdTable
+        Description
+        IdGame
+        Game
+        Enabled
+        TotalInitValues
+    }
+}

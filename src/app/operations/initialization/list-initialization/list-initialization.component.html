@@ -1,0 +1,9 @@
+<png-progress-spinner *ngIf="finishing"></png-progress-spinner>
+
+<app-list-item title="Initialization">
+    <png-table [columns]="columns" [data]="operations" [loading]="loading" [canEditDelete]="isCasinoOpen" [additionalButtons]="additionalButtons" (actionClicked)="actionClicked($event)"></png-table>
+</app-list-item>
+
+<p-toast></p-toast>
+
+<!-- <png-data-view header="List of Countries" [data]="countries"></png-data-view> -->

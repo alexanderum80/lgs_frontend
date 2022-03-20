@@ -1,0 +1,7 @@
+query GetOperation($id: Int!) {
+  getOperation(id: $id) {
+    IdOperation
+    IdUser
+    IdTable
+  }
+}

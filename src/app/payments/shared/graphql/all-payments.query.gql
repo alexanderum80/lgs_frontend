@@ -1,0 +1,14 @@
+query GetPayments {
+    getPayments {
+        IdPayment
+        Description
+        Denomination
+        IdPayInstr
+        IdCoin
+        PayInstrument
+      	Coin
+      	Rate
+      	PaymentName
+        Enabled
+    }
+}

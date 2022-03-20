@@ -1,8 +1,9 @@
 import { MenuItem } from 'primeng/api';
 
 export const MenuItems: MenuItem[] = [
-  { label: 'Reports', items: [
+  { id: 'reports', label: 'Reports', items: [
     {
+      id: 'auditReport',
       label: 'Audit Report',
       icon: 'mdi mdi-clipboard-text-outline',
       routerLink: 'concilia-interna-dwh',
@@ -10,16 +11,29 @@ export const MenuItems: MenuItem[] = [
       title: 'See Audit Report.',
     },
   ]},
-  { label: 'Settings', icon: 'mdi mdi-settings-outline', items: [
+  { id: 'operations', label: 'Operations', items: [
     {
+      id: 'initialization',
+      label: 'Initialization',
+      icon: 'mdi mdi-restart',
+      routerLink: 'operations/initialization',
+      disabled: false,
+      title: 'Initialize values for Cage and Tables.',
+    },
+  ]},
+  { id: 'settings', label: 'Settings', icon: 'mdi mdi-settings-outline', items: [
+    {
+      id: 'casinoInfo',
       label: 'Casino Information',
       icon: 'mdi mdi-warehouse',
       routerLink: 'casino-info',
       disabled: false,
       title: 'Manage Casino Information.',
     },
-    { label: 'Tables', icon: 'mdi mdi-table-chair', items: [
+    { separator: true },
+    { id: 'tables', label: 'Tables', icon: 'mdi mdi-table-chair', items: [
       {
+        id: 'tablesGames',
         label: 'Tables Games',
         icon: 'mdi mdi-gamepad-variant-outline',
         routerLink: 'tables-game',
@@ -27,6 +41,7 @@ export const MenuItems: MenuItem[] = [
         title: 'Manage Table Games.',
       },
       {
+        id: 'tables',
         label: 'Tables',
         icon: 'mdi mdi-table-settings',
         routerLink: 'tables',
@@ -35,20 +50,16 @@ export const MenuItems: MenuItem[] = [
       },
     ]},
     {
-      label: 'Players',
-      icon: 'mdi mdi-gamepad-up',
-      routerLink: 'players',
-      disabled: false,
-      title: 'Manage Players.',
-    },
-    {
+      id: 'users',
       label: 'Users',
       icon: 'mdi mdi-account-supervisor',
       routerLink: 'users',
       disabled: false,
       title: 'Manage Users.',
     },
+    { separator: true },
     {
+      id: 'countries',
       label: 'Countries',
       icon: 'mdi mdi-map-check-outline',
       routerLink: 'countries',
@@ -56,13 +67,16 @@ export const MenuItems: MenuItem[] = [
       title: 'Manage Countries.',
     },
     {
+      id: 'cities',
       label: 'Cities',
       icon: 'mdi mdi-map-marker-outline',
       routerLink: 'cities',
       disabled: false,
       title: 'Manage Cities.',
     },
+    { separator: true },
     {
+      id: 'coins',
       label: 'Coins',
       icon: 'mdi mdi-cash-multiple',
       routerLink: 'coins',
@@ -70,13 +84,24 @@ export const MenuItems: MenuItem[] = [
       title: 'Manage Coins.',
     },
     {
-      label: 'Chips',
-      icon: 'mdi mdi-poker-chip',
-      routerLink: 'chips',
+      id: 'payments',
+      label: 'Payments',
+      icon: 'mdi mdi-poker-payment',
+      routerLink: 'payments',
       disabled: false,
-      title: 'Manage Chips.',
+      title: 'Manage Payments.',
+    },
+    { separator: true },
+    {
+      id: 'players',
+      label: 'Players',
+      icon: 'mdi mdi-gamepad-up',
+      routerLink: 'players',
+      disabled: false,
+      title: 'Manage Players.',
     },
     {
+      id: 'lenders',
       label: 'Lenders',
       icon: 'mdi mdi-account-cash-outline',
       routerLink: 'lenders',

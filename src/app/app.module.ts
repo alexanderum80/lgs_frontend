@@ -1,3 +1,4 @@
+import { UnauthorizedComponent } from './shared/ui/unauthorized/unauthorized.component';
 import { PrimeMenuModule } from './shared/ui/prime-ng/menu/menu.module';
 import { UserInfoComponent } from './users/user-info/user-info.component';
 import { PrimeSidebarModule } from './shared/ui/prime-ng/sidebar/sidebar.module';
@@ -26,7 +27,8 @@ import { DialogService } from 'primeng/dynamicdialog';
     AppComponent,
     StartComponent,
     LoginComponent,
-    UserInfoComponent
+    UserInfoComponent,
+    UnauthorizedComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +53,7 @@ import { DialogService } from 'primeng/dynamicdialog';
     HttpClientModule, // provides HttpClient for HttpLink
 
     // App modules
-    GraphQLModule,    
+    GraphQLModule,
   ],
   providers: [
     DialogService,

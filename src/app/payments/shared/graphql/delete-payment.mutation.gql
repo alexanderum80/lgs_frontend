@@ -1,0 +1,3 @@
+mutation deletePayment($id: Int!) {
+    deletePayment(id: $id)
+}

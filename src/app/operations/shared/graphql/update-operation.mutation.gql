@@ -1,0 +1,7 @@
+mutation UpdateOperation($operationInput: OperationInput!) {
+  updateOperation(operationInput: $operationInput) {
+    IdOperation
+    IdTable
+    Table
+  }
+}

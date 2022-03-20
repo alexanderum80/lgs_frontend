@@ -1,0 +1,10 @@
+mutation UpdatePayment($paymentInput: PaymentInput!) {
+    updatePayment(paymentInput: $paymentInput) {
+        IdPayment
+        Description
+        Denomination
+        IdPayInstr
+        IdCoin
+        Enabled
+    }
+}

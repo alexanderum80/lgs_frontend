@@ -1,0 +1,6 @@
+query getPaymentInstruments {
+  getPaymentInstruments {
+    IdPayInstr
+    Name
+  }
+}

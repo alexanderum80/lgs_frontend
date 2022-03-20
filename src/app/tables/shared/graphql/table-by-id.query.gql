@@ -4,5 +4,10 @@ query GetTable($id: Int!) {
         Description
         IdGame
         Enabled
+        InitValues {
+            IdInitValue
+            IdPayment
+            Qty
+        }    
     }
 }

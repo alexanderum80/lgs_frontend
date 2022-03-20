@@ -1,0 +1,11 @@
+query GetOperationDetails($id: Int!) {
+    getOperationDetails(id: $id) {
+        IdOperationDetail
+        IdOperation
+        IdPayment
+        Denomination
+        IdInstrument
+        Rate
+        Qty
+    }
+}

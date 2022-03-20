@@ -9,6 +9,7 @@ interface ICasino {
 
 export interface CasinoInfoQueryResponse {
     getCasinoInfo: ICasino;
+    getCasinoState: number;
 }
 
 export interface CasinoInfoMutationResponse {

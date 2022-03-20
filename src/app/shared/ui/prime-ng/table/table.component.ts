@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angu
 import { ITableColumns } from './table.model';
 import { get } from 'lodash';
 import { TableService } from './table.service';
+import { IAdditionalButtons } from '../button/button.model';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -22,6 +23,7 @@ export class TableComponent implements OnInit {
   @Input() groupMode: 'subheader'|'rowspan' = 'subheader';
   @Input() expandible = false;
   @Input() resizableColumns = false;
+  @Input() additionalButtons: IAdditionalButtons[] = [];
 
   @Output() actionClicked = new EventEmitter<IActionItemClickedArgs>()
 
@@ -65,6 +67,12 @@ export class TableComponent implements OnInit {
         this.actionClicked.emit({
           action: 'delete',
           item: data || this._tableSvc.selectedRow
+        })
+        break;
+      case ActionClicked.Other:
+        this.actionClicked.emit({
+          action: 'other',
+          item: []
         })
         break;
     }

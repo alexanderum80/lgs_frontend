@@ -18,7 +18,8 @@ import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 export class ListTablesComponent implements OnInit, AfterViewInit, OnDestroy {
   columns: ITableColumns[] = [
     { header: 'Description', field: 'Description', type: 'string' },
-    { header: 'Game', field: 'TableGame.Name', type: 'string' },
+    { header: 'Game', field: 'Game', type: 'string' },
+    { header: 'Total Init Values', field: 'TotalInitValues', type: 'decimal' },
     { header: 'Enabled', field: 'Enabled', type: 'boolean' },
   ];
 
@@ -44,9 +45,9 @@ export class ListTablesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private _getTables(): void {
     try {
-      this._tableSvc.subscription.push(this._tableSvc.getTables().subscribe({
+      this._tableSvc.subscription.push(this._tableSvc.getTablesWithInitValues().subscribe({
           next: response => {
-            this.tables = cloneDeep(response.getTables);
+            this.tables = cloneDeep(response.getTablesWithInitValues.filter(f => f.IdTable !== 0));
           },
           error: err => {
             this._sweetAlertSvc.error(err);
@@ -74,14 +75,14 @@ export class ListTablesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private _add(): void {
     const inputData = {
-      id: null,
+      id: 0,
       description: '',
       tableGame: null,
       enabled: true,
     };
     this._tableSvc.fg.patchValue(inputData);
     
-    this._dinamicDialogSvc.open('Add Table', TablesFormComponent);
+    this._dinamicDialogSvc.open('Add Table', TablesFormComponent, '600px');
     this._tableSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
       if (message) {
           this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: message })
@@ -105,7 +106,7 @@ export class ListTablesComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this._tableSvc.fg.patchValue(inputData);
 
-        this._dinamicDialogSvc.open('Edit Table', TablesFormComponent);
+        this._dinamicDialogSvc.open('Edit Table', TablesFormComponent, '600px');
         this._tableSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
           if (message) {
               this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: message })

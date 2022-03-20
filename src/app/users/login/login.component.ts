@@ -1,10 +1,10 @@
 import { NavigationService } from './../../shared/services/navigation.service';
 import { SweetalertService } from './../../shared/services/sweetalert.service';
-import { UsersService } from 'src/app/users/shared/services/users.service';
 import { User } from '../../shared/models/users';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { UsersService } from '../shared/services/users.service';
 
 @Component({
   selector: 'app-login',

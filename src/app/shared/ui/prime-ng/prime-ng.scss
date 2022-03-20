@@ -7,7 +7,13 @@
         margin-right: 5px;
     }
 
-    p-dropdown, .p-dropdown, .p-inputtext, p-password, .p-password, .p-calendar, p-multiselect, .p-multiselect {
+    p-dropdown, .p-dropdown, 
+    .p-inputtext, 
+    p-inputnumber, .p-inputnumber, 
+    p-password, .p-password, 
+    .p-calendar, 
+    p-multiselect, .p-multiselect,
+    p-inputswitch {
         width: 100% !important;
     }
 
@@ -138,6 +144,10 @@ p-inputnumber, .p-inputnumber {
 .p-datatable .p-datatable-thead > tr > th,
 .p-datatable .p-datatable-tbody > tr > td {
     padding: .5rem !important;
+}
+
+.p-datatable-responsive-scroll>.p-datatable-wrapper {
+    overflow-x: unset !important;
 }
 
 .p-paginator .p-dropdown, 

@@ -3,7 +3,7 @@ export interface IActionItemClickedArgs {
     item?: any;
 }
 
-export type Actions = 'add' | 'edit' | 'delete' | 'save' | 'cancel' | 'yes' | 'no';
+export type Actions = 'add' | 'edit' | 'delete' | 'save' | 'cancel' | 'yes' | 'no' | 'other';
 
 export enum ActionClicked {
     Add = 'add',
@@ -12,5 +12,6 @@ export enum ActionClicked {
     Save = 'save',
     Cancel = 'cancel',
     Yes = 'yes',
-    No = 'no'
+    No = 'no',
+    Other = 'other'
 };

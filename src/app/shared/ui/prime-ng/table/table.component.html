@@ -3,6 +3,9 @@
         <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" pTooltip="Add new item" tooltipPosition="bottom" (click)="onActionClicked('add')"></button>
         <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" pTooltip="Delete selected items" tooltipPosition="bottom" (click)="onActionClicked('delete')" [disabled]="!selectedRow || !selectedRow.length"></button>
     </ng-template>
+    <ng-template pTemplate="right">
+        <button *ngFor="let button of additionalButtons" pButton pRipple [label]="button.label" [icon]="button.icon!" [class]="button.class" [pTooltip]="button.tooltip!" [tooltipPosition]="button.tooltipPosition!" (click)="onActionClicked(button.id)"></button>
+    </ng-template>
 </p-toolbar>
 
 <p-table #table

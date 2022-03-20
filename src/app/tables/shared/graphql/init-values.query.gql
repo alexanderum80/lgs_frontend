@@ -1,0 +1,8 @@
+query GetTableInitValues($idTable: Int!) {
+  getTableInitValues(idTable: $idTable) {
+    IdInitValue
+    IdTable
+    IdPayment
+    Qty
+  }
+}

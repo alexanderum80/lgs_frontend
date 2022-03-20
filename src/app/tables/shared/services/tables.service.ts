@@ -1,5 +1,5 @@
 import { toNumber } from 'lodash';
-import { TablesQueryResponse, TablesMutationResponse } from './../models/tables.model';
+import { TablesQueryResponse, TablesMutationResponse, ITableInitValues } from './../models/tables.model';
 import { Apollo } from 'apollo-angular';
 import { Subscription, Observable } from 'rxjs';
 import { FormGroup, FormControl } from '@angular/forms';
@@ -54,21 +54,59 @@ export class TablesService {
     })
   }
 
-  save(): Observable<TablesMutationResponse> {
+  getTablesWithInitValues(): Observable<TablesQueryResponse> {
+    return new Observable<TablesQueryResponse>(subscriber => {
+        this._apollo.watchQuery<TablesQueryResponse> ({
+            query: tablesApi.withInitValues,
+            fetchPolicy: 'network-only'
+        }).valueChanges.subscribe({
+            next: (response) => {
+                subscriber.next(response.data);
+            },
+            error: (error) => { 
+                subscriber.error(error.message);
+            }
+        });
+    })
+  }
+
+  getTableInitValues(): Observable<TablesQueryResponse> {
+    const idTable = this.fg.controls['id'].value;
+
+    return new Observable<TablesQueryResponse>(subscriber => {
+        this._apollo.watchQuery<TablesQueryResponse> ({
+            query: tablesApi.initValues,
+            variables: { idTable },
+            fetchPolicy: 'network-only'
+        }).valueChanges.subscribe({
+            next: (response) => {
+                subscriber.next(response.data);
+            },
+            error: (error) => { 
+                subscriber.error(error.message);
+            }
+        });
+    })
+  }
+
+  save(initValues: ITableInitValues[]): Observable<TablesMutationResponse> {
     const payload = {
-      IdTable: toNumber(this.fg.controls['id'].value),
-      Description: this.fg.controls['description'].value,
-      IdGame: toNumber(this.fg.controls['tableGame'].value),
-      Enabled: this.fg.controls['enabled'].value,
+      Table: {
+        IdTable: toNumber(this.fg.controls['id'].value),
+        Description: this.fg.controls['description'].value,
+        IdGame: toNumber(this.fg.controls['tableGame'].value),
+        Enabled: this.fg.controls['enabled'].value,
+      },
+      InitValues: initValues
     };
 
-    const countryMutation = payload.IdTable === 0 ? tablesApi.create : tablesApi.update;
+    const countryMutation = payload.Table.IdTable === 0 ? tablesApi.create : tablesApi.update;
 
     return new Observable<TablesMutationResponse>(subscriber => {
       this.subscription.push(this._apollo.mutate<TablesMutationResponse>({
         mutation: countryMutation,
         variables: { tableInput: payload },
-        refetchQueries: ['GetTables']
+        refetchQueries: ['GetTablesWithInitValues']
       }).subscribe({
         next: (result) => {
           subscriber.next(result.data!);
@@ -85,7 +123,7 @@ export class TablesService {
       this.subscription.push(this._apollo.mutate<TablesMutationResponse>({
         mutation: tablesApi.delete,
         variables: { IDs },
-        refetchQueries: ['GetTables']
+        refetchQueries: ['GetTablesWithInitValues']
       }).subscribe({
         next: (result) => {
           subscriber.next(result.data!);

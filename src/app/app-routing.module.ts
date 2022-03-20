@@ -1,13 +1,19 @@
+import { UnauthorizedComponent } from './shared/ui/unauthorized/unauthorized.component';
 import { StartComponent } from './shared/ui/start/start.component';
 import { AuthGuard } from './shared/services/auth-guard.service';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { LoginComponent } from './users/login/login.component';
 
 const routes: Routes = [
   { path: '', component: StartComponent, canActivate: [ AuthGuard ] },
   { path: 'login', component: LoginComponent },
+  { path: 'unauthorized', component: UnauthorizedComponent },
 
+  // Operations
+  { path: 'operations',
+    loadChildren: () => import('./operations/operations.module').then(m => m.OperationsModule),
+    canActivate: [ AuthGuard ] },
   // Settings
   { path: 'casino-info',
     loadChildren: () => import('./casino-info/casino-info.module').then(m => m.CasinoInfoModule),
@@ -27,8 +33,8 @@ const routes: Routes = [
   { path: 'coins',
     loadChildren: () => import('./coins/coins.module').then(m => m.CoinsModule),
     canActivate: [ AuthGuard ] },
-  { path: 'chips',
-    loadChildren: () => import('./chips/chips.module').then(m => m.ChipsModule),
+  { path: 'payments',
+    loadChildren: () => import('./payments/payments.module').then(m => m.PaymentsModule),
     canActivate: [ AuthGuard ] },
   { path: 'lenders',
     loadChildren: () => import('./lenders/lenders.module').then(m => m.LendersModule),
@@ -45,7 +51,9 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {
+    preloadingStrategy: PreloadAllModules
+  })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

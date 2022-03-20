@@ -1,7 +1,0 @@
-query GetCountries{
-  getCountries {
-    IdCountry
-    Name
-    Enabled
-  }
-}

@@ -20,6 +20,7 @@ export class ListPlayersComponent implements OnInit, AfterViewInit, OnDestroy {
     { header: 'ID', field: 'IdPlayer', type: 'string' },
     { header: 'Name', field: 'Name', type: 'string' },
     { header: 'Last Name', field: 'LastName', type: 'string' },
+    { header: 'Status', field: 'StatusInfo.OperationName', type: 'string' },
     { header: 'Enabled', field: 'Enabled', type: 'boolean' },
     { header: 'Deleted', field: 'Deleted', type: 'boolean' },
   ];
@@ -48,7 +49,7 @@ export class ListPlayersComponent implements OnInit, AfterViewInit, OnDestroy {
     try {
       this._playerSvc.getAllPlayers().subscribe({
         next: result => {
-          this.players = cloneDeep(sortBy(result.getPlayers, 'IdPlayer'));
+          this.players = cloneDeep(sortBy(result.getPlayers.filter(f => f.IdPlayer !== 0), 'IdPlayer'));
         },
         error: err => {
           this._sweetAlertSvc.error(err);
