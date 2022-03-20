@@ -1,3 +1,4 @@
+import { IPayments } from './../../payments/shared/models/payments.model';
 import { PaymentsService } from './../../payments/shared/services/payments.service';
 import { TablesGameService } from './../../tables-game/shared/services/tables-game.service';
 import { SelectItem } from 'primeng/api';
@@ -19,6 +20,7 @@ export class TablesFormComponent implements OnInit {
 
   initialValues: any[] = [];
   clonedInitialValues: any[] = [];
+  payments: IPayments[] = [];
 
   tableGamesValues: SelectItem[] = [];
   paymentsValues: SelectItem[] = [];
@@ -54,10 +56,11 @@ export class TablesFormComponent implements OnInit {
     try {
       return new Promise(resolve => this._tablesSvc.subscription.push(this._paymentsSvc.getAll().subscribe({
         next: result => {
-          this.paymentsValues = result.getPayments.map(c => {
+          this.payments = cloneDeep(result.getPayments);
+          this.paymentsValues = this.payments.map(c => {
             return {
               value: c.IdPayment,
-              label: c.Denomination.toString()
+              label: c.PaymentName
             }
           });
           resolve();
@@ -83,8 +86,8 @@ export class TablesFormComponent implements OnInit {
   }
   
   getPaymentDescription(idPayment: number): string {
-    const payment = this.paymentsValues.find(p => p.value === (idPayment || 0));
-    return payment ? payment.label! : '';
+    const payment = this.payments.find(p => p.IdPayment === (idPayment || 0));
+    return payment ? payment.PaymentName! : '';
   }
   
   addRow(): void {
