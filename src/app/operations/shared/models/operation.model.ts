@@ -20,6 +20,7 @@ export enum EPaymentInstrument {
 
 export interface IOperationR {
     IdOperation: number,
+    Consecutive: number,
     IdOperationType: number,
     IdTable: number,
     IdPlayer: number,

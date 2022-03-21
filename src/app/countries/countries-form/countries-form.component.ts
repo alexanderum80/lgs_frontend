@@ -16,7 +16,7 @@ export class CountriesFormComponent implements OnInit {
   constructor(
     private _countriesSvc: CountriesService,
     private _dinamicDialogSvc: DinamicDialogService,
-    private _sweetAlterSvc: SweetalertService,
+    private _sweetAlertSvc: SweetalertService,
   ) { }
 
   ngOnInit(): void {
@@ -50,7 +50,7 @@ export class CountriesFormComponent implements OnInit {
         this._closeModal(txtMessage);
       },
       error: err => {
-        this._sweetAlterSvc.error(err);
+        this._sweetAlertSvc.error(err);
       }
     }));
   }

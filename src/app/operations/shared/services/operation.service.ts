@@ -10,8 +10,9 @@ import { Injectable } from '@angular/core';
 export class OperationService {
   fg: FormGroup = new FormGroup({
     id: new FormControl(0),
-    finished: new FormControl(false),
-    cancelled: new FormControl(false),
+    consecutive: new FormControl(0),
+    idTable: new FormControl(null),
+    idPlayer: new FormControl(null),
   });
 
   subscription: Subscription[] = [];
@@ -20,11 +21,11 @@ export class OperationService {
     private _apollo: Apollo
   ) { }
 
-  getTodayOperation(): Observable<OperationQueryResponse> {
+  getTodayOperation(operation: EOperations): Observable<OperationQueryResponse> {
     return new Observable<OperationQueryResponse>(subscriber => {
       this.subscription.push(this._apollo.watchQuery<OperationQueryResponse>({
         query: operationApi.today,
-        variables: { idState : EOperations.INITIALIZING },
+        variables: { idState : operation },
         fetchPolicy: 'network-only'
       }).valueChanges.subscribe({
         next: (result) => {
@@ -102,6 +103,40 @@ export class OperationService {
       this.subscription.push(this._apollo.mutate<OperationMutationResponse>({
         mutation: operationApi.delete,
         variables: { IDs },
+        refetchQueries: ['GetOperationsToday']
+      }).subscribe({
+        next: (result) => {
+          subscriber.next(result.data!);
+        },
+        error: err => {
+          subscriber.error(err.message || err);
+        }
+      }));
+    });
+  }
+  
+  finishOperation(idOperation: number): Observable<OperationMutationResponse> {
+    return new Observable<OperationMutationResponse>(subscriber => {
+      this.subscription.push(this._apollo.mutate<OperationMutationResponse>({
+        mutation: operationApi.finish,
+        variables: { idOperation },
+        refetchQueries: ['GetOperationsToday']
+      }).subscribe({
+        next: (result) => {
+          subscriber.next(result.data!);
+        },
+        error: err => {
+          subscriber.error(err.message || err);
+        }
+      }));
+    });
+  }
+    
+  cancelOperation(idOperation: number): Observable<OperationMutationResponse> {
+    return new Observable<OperationMutationResponse>(subscriber => {
+      this.subscription.push(this._apollo.mutate<OperationMutationResponse>({
+        mutation: operationApi.cancel,
+        variables: { idOperation },
         refetchQueries: ['GetOperationsToday']
       }).subscribe({
         next: (result) => {

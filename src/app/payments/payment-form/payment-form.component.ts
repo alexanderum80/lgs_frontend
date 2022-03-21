@@ -21,7 +21,7 @@ export class PaymentFormComponent implements OnInit {
 
   constructor(
     private _dinamicDialogSvc: DinamicDialogService,
-    private _sweetAlterSvc: SweetalertService,
+    private _sweetAlertSvc: SweetalertService,
     private _paymentsSvc: PaymentsService,
     private _coinsSvc: CoinsService,
   ) { }
@@ -45,11 +45,11 @@ export class PaymentFormComponent implements OnInit {
           });
         },
         error: err => {
-          this._sweetAlterSvc.error(err);
+          this._sweetAlertSvc.error(err);
         }
       }));
     } catch (err: any) {
-      this._sweetAlterSvc.error(err.message || err);
+      this._sweetAlertSvc.error(err.message || err);
     }
   }
 
@@ -65,11 +65,11 @@ export class PaymentFormComponent implements OnInit {
           });
         },
         error: err => {
-          this._sweetAlterSvc.error(err);
+          this._sweetAlertSvc.error(err);
         }
       }));
     } catch (err: any) {
-      this._sweetAlterSvc.error(err.message || err);
+      this._sweetAlertSvc.error(err.message || err);
     }
   }
   
@@ -100,7 +100,7 @@ export class PaymentFormComponent implements OnInit {
         this._closeModal(txtMessage);
       },
       error: err => {
-        this._sweetAlterSvc.error(err);
+        this._sweetAlertSvc.error(err);
       }
     }));
   }

@@ -17,6 +17,7 @@ export class DinamicDialogService {
       header: header,
       closable: false,
       width: width,
+      height: width,
       // style: { "max-width": "90%" },
       contentStyle: {"max-height": "90%", "overflow": "auto" },
       baseZIndex: 1000

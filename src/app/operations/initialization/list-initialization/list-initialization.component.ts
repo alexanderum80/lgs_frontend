@@ -20,7 +20,8 @@ import { cloneDeep, isArray } from 'lodash';
 export class ListInitializationComponent implements OnInit, AfterViewInit, OnDestroy {
   columns: ITableColumns[] = [
     { header: 'Table', field: 'Table', type: 'string' },
-    { header: 'Amount', field: 'Amount', type: 'decimal' },
+    { header: 'Date', field: 'Date', type: 'date' },
+    { header: 'Amount', field: 'AmountIn', type: 'decimal' },
     // { header: 'Finished', field: 'Finished', type: 'boolean' },
     // { header: 'Cancelled', field: 'Cancelled', type: 'boolean' },
   ];
@@ -63,7 +64,7 @@ export class ListInitializationComponent implements OnInit, AfterViewInit, OnDes
 
   private _getInitializations(): void {
     try {
-      this._operationSvc.subscription.push(this._operationSvc.getTodayOperation().subscribe({
+      this._operationSvc.subscription.push(this._operationSvc.getTodayOperation(EOperations.INITIALIZING).subscribe({
           next: response => {
             this.loading = false;
             this.operations = cloneDeep(response.getOperationsToday);
@@ -95,7 +96,7 @@ export class ListInitializationComponent implements OnInit, AfterViewInit, OnDes
     }
   }
 
-  get isCasinoOpen(): boolean {
+  get isCasinoClosed(): boolean {
     return this.casinoState === EOperations.CLOSED;
   }
 
@@ -110,7 +111,7 @@ export class ListInitializationComponent implements OnInit, AfterViewInit, OnDes
       case ActionClicked.Delete:
         this._delete(event.item)
         break;
-      case ActionClicked.Other:
+      case ActionClicked.Finish:
         this._finish();
         break;
     }

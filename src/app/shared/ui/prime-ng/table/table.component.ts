@@ -23,6 +23,7 @@ export class TableComponent implements OnInit {
   @Input() groupMode: 'subheader'|'rowspan' = 'subheader';
   @Input() expandible = false;
   @Input() resizableColumns = false;
+  @Input() operations = false;
   @Input() additionalButtons: IAdditionalButtons[] = [];
 
   @Output() actionClicked = new EventEmitter<IActionItemClickedArgs>()
@@ -69,10 +70,16 @@ export class TableComponent implements OnInit {
           item: data || this._tableSvc.selectedRow
         })
         break;
-      case ActionClicked.Other:
+      case ActionClicked.Finish:
         this.actionClicked.emit({
-          action: 'other',
-          item: []
+          action: 'finish',
+          item: data
+        })
+        break;
+      case ActionClicked.Cancel:
+        this.actionClicked.emit({
+          action: 'cancel',
+          item: data
         })
         break;
     }

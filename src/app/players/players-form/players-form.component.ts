@@ -20,7 +20,7 @@ export class PlayersFormComponent implements OnInit {
   constructor(
     private _playerSvc: PlayersService,
     private _dinamicDialogSvc: DinamicDialogService,
-    private _sweetAlterSvc: SweetalertService,
+    private _sweetAlertSvc: SweetalertService,
     private _countriesSvc: CountriesService
   ) { }
 
@@ -43,7 +43,7 @@ export class PlayersFormComponent implements OnInit {
         }
       }))
     } catch (err: any) {
-      this._sweetAlterSvc.error(err.message || err);
+      this._sweetAlertSvc.error(err.message || err);
     }
   }
   
@@ -74,7 +74,7 @@ export class PlayersFormComponent implements OnInit {
         this._closeModal(txtMessage);
       },
       error: err => {
-        this._sweetAlterSvc.error(err);
+        this._sweetAlertSvc.error(err);
       }
     }));
   }

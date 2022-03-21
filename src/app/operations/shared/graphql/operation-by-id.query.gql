@@ -1,7 +1,9 @@
 query GetOperation($id: Int!) {
   getOperation(id: $id) {
     IdOperation
+    Consecutive
     IdUser
     IdTable
+    IdPlayer
   }
 }

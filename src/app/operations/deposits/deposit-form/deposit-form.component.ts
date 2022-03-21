@@ -1,26 +1,29 @@
-import { IPayments } from './../../../payments/shared/models/payments.model';
-import { PaymentsService } from './../../../payments/shared/services/payments.service';
-import { cloneDeep } from '@apollo/client/utilities';
-import { EPaymentInstrument, IOperationD, EOperations, IOperationR } from './../../shared/models/operation.model';
+import { PlayersService } from './../../../players/shared/services/players.service';
+import { toNumber, sortBy } from 'lodash';
 import { ActionClicked } from './../../../shared/models/list-items';
-import { SelectItem } from 'primeng/api';
+import { PaymentsService } from './../../../payments/shared/services/payments.service';
 import { SweetalertService } from './../../../shared/services/sweetalert.service';
 import { DinamicDialogService } from 'src/app/shared/ui/prime-ng/dinamic-dialog/dinamic-dialog.service';
 import { OperationService } from './../../shared/services/operation.service';
+import { SelectItem } from 'primeng/api';
+import { IPayments } from './../../../payments/shared/models/payments.model';
+import { IOperationD, EPaymentInstrument, EOperations, IOperationR } from './../../shared/models/operation.model';
 import { FormGroup } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import { toNumber } from 'lodash';
+import { cloneDeep } from '@apollo/client/utilities';
 
 @Component({
-  selector: 'app-initialization-form',
-  templateUrl: './initialization-form.component.html',
-  styleUrls: ['./initialization-form.component.scss']
+  selector: 'app-deposit-form',
+  templateUrl: './deposit-form.component.html',
+  styleUrls: ['./deposit-form.component.scss']
 })
-export class InitializationFormComponent implements OnInit {
+export class DepositFormComponent implements OnInit {
   fg: FormGroup;
-  operationDetails: IOperationD[] = [];
+  operationReceived: IOperationD[] = [];
+  operationDelivered: IOperationD[] = [];
   payments: IPayments[] = [];
 
+  playersValues: SelectItem[] = [];
   instrumentsValues: SelectItem[] = [];
   denominationsValues: SelectItem[] = [];
 
@@ -29,40 +32,33 @@ export class InitializationFormComponent implements OnInit {
     private _dinamicDialogSvc: DinamicDialogService,
     private _sweetAlertSvc: SweetalertService,
     private _paymentsSvc: PaymentsService,
+    private _playerSvc: PlayersService,
   ) { }
 
   async ngOnInit(): Promise<void> {
     this.fg = this._operationSvc.fg;
 
     this._getOperationDetails();
+    this._getPlayers();
     await this._getPaymentInstruments();
     await this._getPayments();
-
-    if (this.fg.controls['id'].value === 0) {
-      this.payments.filter(f => f.IdPayment !== EPaymentInstrument.BONUS).map((c, i) => {
-        this.operationDetails.push({
-          IdOperationDetail: 9000 + this.operationDetails.length,
-          IdOperation: EOperations.INITIALIZING,
-          IdInstrument: c.IdPayInstr,
-          IdPayment: c.IdPayment,
-          Denomination: c.Denomination,
-          Rate: c.Rate,
-          Qty: 0
-        })
-      });
-    }
   }
 
   private _getOperationDetails(): void {
     try {
       const id = this.fg.controls['id'].value;
-      this.operationDetails = [];
+      this.operationReceived = [];
 
       this._operationSvc.subscription.push(this._operationSvc.getOperationDetails(id).subscribe({
         next: result => {
-          this.operationDetails = cloneDeep(result.getOperationDetails.map(({ __typename, ...rest }) => {
+          const op = cloneDeep(result.getOperationDetails.map(({ __typename, ...rest }) => {
             return rest;
           }));
+          this.operationReceived = op.filter(o => o.Qty > 0);
+          this.operationDelivered = op.filter(o => o.Qty < 0).map(o => { 
+            o.Qty = Math.abs(o.Qty);
+            return o;
+          });
         },
         error: err => {
           this._sweetAlertSvc.error(err);
@@ -70,6 +66,26 @@ export class InitializationFormComponent implements OnInit {
       }))
     } catch (err: any) {
       this._sweetAlertSvc.error(err.message || err);
+    }
+  }
+  
+  private _getPlayers(): void {
+    try {
+      this._playerSvc.getAllPlayers().subscribe({
+        next: result => {
+          this.playersValues = sortBy(result.getPlayers.filter(f => f.IdPlayer !== 0), 'IdPlayer').map(p => {
+            return {
+              value: p.IdPlayer,
+              label: p.Name + ' ' + p.LastName
+            }
+          });
+        },
+        error: err => {
+          this._sweetAlertSvc.error(err);
+        }
+      });
+    } catch (err: any) {
+      this._sweetAlertSvc.error(err);
     }
   }
 
@@ -125,25 +141,57 @@ export class InitializationFormComponent implements OnInit {
 
   private _save(): void {
     const action = this.fg.controls['id'].value === 0 ? ActionClicked.Add : ActionClicked.Edit;
+    let totalReceived = 0;
+    let totalDelivered = 0;
 
     const operationR: IOperationR = {
       IdOperation: toNumber(this.fg.controls['id'].value),
-      Consecutive: 0,
-      IdOperationType: EOperations.INITIALIZING,
-      IdTable: 0,
-      IdPlayer: 0,
-      Finished: true,
-      Cancelled: this.fg.controls['cancelled'].value,
+      Consecutive: toNumber(this.fg.controls['consecutive'].value),
+      IdOperationType: EOperations.DEPOSIT,
+      IdTable: toNumber(this.fg.controls['idTable'].value),
+      IdPlayer: toNumber(this.fg.controls['idPlayer'].value),
     };
+
+    const operationD: IOperationD[] = [];
+    this.operationReceived.map(r => {
+      totalReceived += r.Denomination! * r.Qty * r.Rate;
+      operationD.push({
+        IdOperationDetail: r.IdOperationDetail,
+        IdOperation: r.IdOperation,
+        IdInstrument: r.IdInstrument,
+        IdPayment: r.IdPayment,
+        Denomination: r.Denomination,
+        Qty: r.Qty,
+        Rate: r.Rate
+      })
+    }); 
+
+    this.operationDelivered.map(r => {
+      totalDelivered += r.Denomination! * r.Qty * r.Rate;
+      operationD.push({
+        IdOperationDetail: r.IdOperationDetail,
+        IdOperation: r.IdOperation,
+        IdInstrument: r.IdInstrument,
+        IdPayment: r.IdPayment,
+        Denomination: r.Denomination,
+        Qty: r.Qty * -1,
+        Rate: r.Rate
+      })
+    }); 
+
+    if (totalReceived !== totalDelivered) {
+      this._sweetAlertSvc.warning('Received Amount do not match with Delivered Amount. Fix it.')
+      return;
+    }
     
-    this._operationSvc.subscription.push(this._operationSvc.saveOperation(operationR, this.operationDetails).subscribe({
+    this._operationSvc.subscription.push(this._operationSvc.saveOperation(operationR, operationD).subscribe({
       next: response => {
         let txtMessage;
 
         if (action === ActionClicked.Add) {
-          txtMessage = 'The Initialization was created successfully.';
+          txtMessage = 'The Deposit was created successfully.';
         } else {
-          txtMessage = 'The Initialization was updated successfully.';
+          txtMessage = 'The Deposit was updated successfully.';
         }
 
         this._closeModal(txtMessage);

@@ -11,7 +11,7 @@ export const MenuItems: MenuItem[] = [
       title: 'See Audit Report.',
     },
   ]},
-  { id: 'operations', label: 'Operations', items: [
+  { id: 'operations', label: 'Cage Operations', items: [
     {
       id: 'initialization',
       label: 'Initialization',
@@ -19,6 +19,14 @@ export const MenuItems: MenuItem[] = [
       routerLink: 'operations/initialization',
       disabled: false,
       title: 'Initialize values for Cage and Tables.',
+    },
+    {
+      id: 'deposit',
+      label: 'Deposit',
+      icon: 'mdi mdi-bank-plus',
+      routerLink: 'operations/deposit',
+      disabled: false,
+      title: 'Make deposits in cash.',
     },
   ]},
   { id: 'settings', label: 'Settings', icon: 'mdi mdi-settings-outline', items: [

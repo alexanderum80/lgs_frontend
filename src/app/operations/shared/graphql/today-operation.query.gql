@@ -3,6 +3,14 @@ query GetOperationsToday($idState: Int!) {
         IdOperation
         IdTable
         Table
-        Amount
+        IdPlayer
+        Player
+        IdUser
+        UserName
+        Date
+        Finished
+        Cancelled
+        AmountIn
+        AmountOut
     }
 }

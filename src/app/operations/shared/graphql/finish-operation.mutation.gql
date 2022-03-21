@@ -1,0 +1,3 @@
+mutation FinishOperation($idOperation: Int!) {
+  finishOperation(idOperation: $idOperation)
+}

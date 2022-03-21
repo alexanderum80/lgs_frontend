@@ -20,7 +20,7 @@ export class CitiesFormComponent implements OnInit {
   constructor(
     private _citiesSvc: CitiesService,
     private _dinamicDialogSvc: DinamicDialogService,
-    private _sweetAlterSvc: SweetalertService,
+    private _sweetAlertSvc: SweetalertService,
     private _countriesSvc: CountriesService
   ) { }
 
@@ -69,7 +69,7 @@ export class CitiesFormComponent implements OnInit {
         this._closeModal(txtMessage);
       },
       error: err => {
-        this._sweetAlterSvc.error(err);
+        this._sweetAlertSvc.error(err);
       }
     }));
   }

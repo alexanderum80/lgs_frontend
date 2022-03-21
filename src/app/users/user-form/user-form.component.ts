@@ -23,7 +23,7 @@ export class UserFormComponent implements OnInit {
     private _userSvc: UsersService,
     private _dinamicDialogSvc: DinamicDialogService,
     private _apollo: Apollo,
-    private _sweetAlterSvc: SweetalertService
+    private _sweetAlertSvc: SweetalertService
   ) { }
 
   ngOnInit(): void {
@@ -53,7 +53,7 @@ export class UserFormComponent implements OnInit {
         })
       },
       error: err => {
-        this._sweetAlterSvc.error(err);
+        this._sweetAlertSvc.error(err);
       }
     }));
   }
@@ -85,7 +85,7 @@ export class UserFormComponent implements OnInit {
         this._closeModal(txtMessage);
       },
       error: err => {
-        this._sweetAlterSvc.error(err);
+        this._sweetAlertSvc.error(err);
       }
     }));
   }

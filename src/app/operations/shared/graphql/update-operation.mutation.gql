@@ -1,7 +1,13 @@
 mutation UpdateOperation($operationInput: OperationInput!) {
   updateOperation(operationInput: $operationInput) {
     IdOperation
+    Consecutive
+    IdOperationType
     IdTable
-    Table
+    IdPlayer
+    IdUser
+    Date
+    Finished
+    Cancelled
   }
 }

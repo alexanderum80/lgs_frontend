@@ -28,7 +28,7 @@ export class TablesFormComponent implements OnInit {
   constructor(
     private _tablesSvc: TablesService,
     private _dinamicDialogSvc: DinamicDialogService,
-    private _sweetAlterSvc: SweetalertService,
+    private _sweetAlertSvc: SweetalertService,
     private _tablesGameSvc: TablesGameService,
     private _paymentsSvc: PaymentsService
   ) { }
@@ -66,12 +66,12 @@ export class TablesFormComponent implements OnInit {
           resolve();
         },
         error: err => {
-          this._sweetAlterSvc.error(err);
+          this._sweetAlertSvc.error(err);
           resolve();
         }
       })));
     } catch (err: any) {
-      this._sweetAlterSvc.error(err.message || err);
+      this._sweetAlertSvc.error(err.message || err);
     }
   }
 
@@ -104,7 +104,7 @@ export class TablesFormComponent implements OnInit {
   }
 
   onRowDelete(index: any): void {
-    this._sweetAlterSvc.question('Do you wish to delete selected detail?').then(result => {
+    this._sweetAlertSvc.question('Do you wish to delete selected detail?').then(result => {
       if (result === ActionClicked.Yes) {
         this.initialValues.splice(index, 1);
       }
@@ -147,7 +147,7 @@ export class TablesFormComponent implements OnInit {
         this._closeModal(txtMessage);
       },
       error: err => {
-        this._sweetAlterSvc.error(err);
+        this._sweetAlertSvc.error(err);
       }
     }));
   }

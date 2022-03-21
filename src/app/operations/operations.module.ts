@@ -1,3 +1,4 @@
+import { PlayersService } from './../players/shared/services/players.service';
 import { CasinoInfoModule } from './../casino-info/casino-info.module';
 import { PaymentsModule } from './../payments/payments.module';
 import { TablesModule } from './../tables/tables.module';
@@ -11,11 +12,17 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { OperationsRoutingModule } from './operations-routing.module';
+import { ListDepositComponent } from './deposits/list-deposit/list-deposit.component';
+import { DepositFormComponent } from './deposits/deposit-form/deposit-form.component';
+import { DetailFormComponent } from './shared/ui/detail-form/detail-form.component';
 
 @NgModule({
   declarations: [
     ListInitializationComponent,
-    InitializationFormComponent
+    InitializationFormComponent,
+    ListDepositComponent,
+    DepositFormComponent,
+    DetailFormComponent
   ],
   imports: [
     CommonModule,
@@ -29,7 +36,8 @@ import { OperationsRoutingModule } from './operations-routing.module';
     CasinoInfoModule
   ],
   providers: [
-    OperationService
+    OperationService,
+    PlayersService
   ]
 })
 export class OperationsModule { }

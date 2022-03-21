@@ -1,0 +1,56 @@
+<div> 
+    <png-button class="mb-2" icon="mdi mdi-plus" tooltip="Add detail" [text]="true" [rounded]="true" (clicked)="addRow()"></png-button>
+</div>
+<p-table [value]="operationDetails" dataKey="IdOperationDetail" editMode="row" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="col-6">Payment Instrument</th>
+        <th class="col-2">Denomination</th>
+        <th class="col-2">Quantity</th>
+        <th class="col-1 md:col-2 sm:col-2"></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-operation let-editing="editing" let-ri="rowIndex">
+      <tr [pEditableRow]="operation">
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <p-dropdown [options]="instrumentsValues" [(ngModel)]="operation.IdInstrument" (onChange)="onChangeInstrument($event, ri)" [style]="{'width':'100%'}" placeholder="Select an Instrument" [filter]="true" [showClear]="true"></p-dropdown>
+            </ng-template>
+            <ng-template pTemplate="output">{{getInstrumentDescription(operation.IdInstrument)}}</ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <p-dropdown [options]="denominationsValues" [(ngModel)]="operation.IdPayment" (onChange)="onChangeDenomination($event, ri)" [style]="{'width':'100%'}" placeholder="Select an Instrument" [filter]="true" [showClear]="true"></p-dropdown>
+            </ng-template>
+            <ng-template pTemplate="output">{{getPaymentDescription(operation.IdPayment)}}</ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText="pInputText" type="number" [(ngModel)]="operation.Qty" style="width:100%"/>
+            </ng-template>
+            <ng-template pTemplate="output">{{operation.Qty}}</ng-template>
+          </p-cellEditor>
+        </td>
+        <td style="text-align:center">
+          <button class="p-button-rounded p-button-text" *ngIf="!editing" pButton="pButton" pRipple="pRipple" type="button" pInitEditableRow="pInitEditableRow" icon="pi pi-pencil" (click)="onRowEditInit(operation)"></button>
+          <button class="p-button-rounded p-button-text" *ngIf="!editing" pButton="pButton" pRipple="pRipple" type="button" icon="pi pi-trash" (click)="onRowDelete(ri)"></button>
+          <button class="p-button-rounded p-button-text p-button-success p-mr-2" *ngIf="editing" pButton="pButton" pRipple="pRipple" type="button" pSaveEditableRow="pSaveEditableRow" icon="pi pi-check" (click)="onRowEditSave(operation)"></button>
+          <button class="p-button-rounded p-button-text p-button-danger" *ngIf="editing" pButton="pButton" pRipple="pRipple" type="button" pCancelEditableRow="pCancelEditableRow" icon="pi pi-times" (click)="onRowEditCancel(operation, ri)"></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="footer" let-operation>
+      <tr class="p-footer">
+          <td colspan="2">
+              <div style="text-align: right; width: 100%">Total Amount</div>
+          </td>
+          <td>{{calculateTotal() | currency}}</td>
+          <td></td>
+      </tr>
+  </ng-template>
+  </p-table>

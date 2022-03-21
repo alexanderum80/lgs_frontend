@@ -104,6 +104,8 @@
             <td *ngIf="canEditDelete" class="menu-items-cell" style="padding: 0 !important;">
                 <button pButton pRipple icon="mdi mdi-18px mdi-pencil" class="p-button-rounded p-button-text p-button-warning" pTooltip="Edit" tooltipPosition="left" (click)="onActionClicked('edit', rowData)"></button>
                 <button pButton pRipple icon="mdi mdi-18px mdi-delete" class=" p-button-rounded p-button-text p-button-danger" pTooltip="Delete" tooltipPosition="left" (click)="onActionClicked('delete', rowData)"></button>
+                <button pButton pRipple icon="mdi mdi-18px mdi-check-underline" *ngIf="operations" class=" p-button-rounded p-button-text p-button-success" pTooltip="Finish" tooltipPosition="left" (click)="onActionClicked('finish', rowData)"></button>
+                <button pButton pRipple icon="mdi mdi-18px mdi-close-circle-outline" *ngIf="operations" class=" p-button-rounded p-button-text p-button-danger" pTooltip="Cancel" tooltipPosition="left" (click)="onActionClicked('cancel', rowData)"></button>
             </td>
         </tr>
     </ng-template>
