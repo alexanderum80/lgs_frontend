@@ -1,7 +1,7 @@
 <div> 
     <png-button class="mb-2" icon="mdi mdi-plus" tooltip="Add detail" [text]="true" [rounded]="true" (clicked)="addRow()"></png-button>
 </div>
-<p-table [value]="operationDetails" dataKey="IdOperationDetail" editMode="row" responsiveLayout="scroll">
+<p-table #dt [value]="operationDetails" dataKey="IdOperationDetail" editMode="row" responsiveLayout="scroll">
     <ng-template pTemplate="header">
       <tr>
         <th class="col-6">Payment Instrument</th>

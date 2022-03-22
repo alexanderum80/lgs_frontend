@@ -3,7 +3,8 @@ import { SweetalertService } from './../../../../shared/services/sweetalert.serv
 import { SelectItem } from 'primeng/api';
 import { IPayments } from './../../../../payments/shared/models/payments.model';
 import { IOperationD } from './../../models/operation.model';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-detail-form',
@@ -11,9 +12,10 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./detail-form.component.scss']
 })
 export class DetailFormComponent implements OnInit {
+  @ViewChild('dt') table: Table;
   @Input() operationDetails: IOperationD[] = [];
-  @Input() payments: IPayments[] = [];
   @Input() instrumentsValues: SelectItem[] = [];
+  @Input() payments: IPayments[] = [];
 
   denominationsValues: SelectItem[] = [];
   clonedOperation: { [s: string]: any; } = {};
@@ -25,14 +27,14 @@ export class DetailFormComponent implements OnInit {
   ngOnInit(): void {
   }
   
-  getPaymentDescription(idPayment: number): string {
-    const payment = this.payments.find(c => c.IdPayment === (idPayment || 0));
-    return payment ? payment.PaymentName! : '';
-  }
-
   getInstrumentDescription(idInstrument: number): string {
     const instrument = this.instrumentsValues.find(p => p.value === (idInstrument || 0));
     return instrument ? instrument.label! : '';
+  }
+  
+  getPaymentDescription(idPayment: number): string {
+    const payment = this.payments.find(c => c.IdPayment === (idPayment || 0));
+    return payment ? payment.PaymentName! : '';
   }
 
   calculateTotal(): number {
@@ -57,6 +59,8 @@ export class DetailFormComponent implements OnInit {
       Rate: 0,
       Qty: 0
     });
+
+    this.table.initRowEdit(this.operationDetails[this.operationDetails.length -1]);
   }
 
   onRowEditInit(operation: IOperationD): void {

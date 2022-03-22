@@ -82,6 +82,12 @@ export class TableComponent implements OnInit {
           item: data
         })
         break;
+      case ActionClicked.Init:
+        this.actionClicked.emit({
+          action: 'init',
+          item: data
+        })
+        break;
     }
   }
 

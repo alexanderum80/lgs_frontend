@@ -17,6 +17,10 @@ export class OperationService {
 
   subscription: Subscription[] = [];
 
+  idOperation: EOperations;
+
+  casinoState: EOperations;
+
   constructor(
     private _apollo: Apollo
   ) { }
@@ -163,6 +167,10 @@ export class OperationService {
         }
       }));
     });
+  }
+
+  dispose(): void {
+    this.subscription.forEach(subs => subs.unsubscribe());
   }
 
 }

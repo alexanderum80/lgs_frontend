@@ -28,6 +28,14 @@ export const MenuItems: MenuItem[] = [
       disabled: false,
       title: 'Make deposits in cash.',
     },
+    {
+      id: 'extraction',
+      label: 'Extraction',
+      icon: 'mdi mdi-bank-minus',
+      routerLink: 'operations/extraction',
+      disabled: false,
+      title: 'Make extraction from cash.',
+    },
   ]},
   { id: 'settings', label: 'Settings', icon: 'mdi mdi-settings-outline', items: [
     {

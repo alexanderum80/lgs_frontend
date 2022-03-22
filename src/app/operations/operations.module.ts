@@ -6,23 +6,19 @@ import { OperationService } from './shared/services/operation.service';
 import { PrimeNgModule } from './../shared/ui/prime-ng/prime-ng.module';
 import { SharedModule } from './../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { InitializationFormComponent } from './initialization/initialization-form/initialization-form.component';
-import { ListInitializationComponent } from './initialization/list-initialization/list-initialization.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { OperationsRoutingModule } from './operations-routing.module';
-import { ListDepositComponent } from './deposits/list-deposit/list-deposit.component';
-import { DepositFormComponent } from './deposits/deposit-form/deposit-form.component';
 import { DetailFormComponent } from './shared/ui/detail-form/detail-form.component';
+import { ListOperationsComponent } from './list-operations/list-operations.component';
+import { OperationsFormComponent } from './operations-form/operations-form.component';
 
 @NgModule({
   declarations: [
-    ListInitializationComponent,
-    InitializationFormComponent,
-    ListDepositComponent,
-    DepositFormComponent,
-    DetailFormComponent
+    DetailFormComponent,
+    ListOperationsComponent,
+    OperationsFormComponent
   ],
   imports: [
     CommonModule,

@@ -1,23 +1,24 @@
-import { IAdditionalButtons } from './../../../shared/ui/prime-ng/button/button.model';
-import { DepositFormComponent } from './../deposit-form/deposit-form.component';
-import { IActionItemClickedArgs, ActionClicked } from './../../../shared/models/list-items';
+import { OperationsFormComponent } from './../operations-form/operations-form.component';
+import { ActivatedRoute } from '@angular/router';
+import { IAdditionalButtons } from './../../shared/ui/prime-ng/button/button.model';
+import { IActionItemClickedArgs, ActionClicked } from './../../shared/models/list-items';
 import { cloneDeep, isArray } from 'lodash';
-import { CasinoInfoService } from './../../../casino-info/shared/services/casino-info.service';
-import { SocketService } from './../../../shared/services/socket.service';
-import { SweetalertService } from './../../../shared/services/sweetalert.service';
+import { CasinoInfoService } from './../../casino-info/shared/services/casino-info.service';
+import { SocketService } from './../../shared/services/socket.service';
+import { SweetalertService } from './../../shared/services/sweetalert.service';
 import { MessageService } from 'primeng/api';
-import { OperationService } from './../../shared/services/operation.service';
+import { OperationService } from './../shared/services/operation.service';
 import { DinamicDialogService } from 'src/app/shared/ui/prime-ng/dinamic-dialog/dinamic-dialog.service';
-import { IOperationR, EOperations } from './../../shared/models/operation.model';
+import { IOperationR, EOperations } from './../shared/models/operation.model';
 import { ITableColumns } from 'src/app/shared/ui/prime-ng/table/table.model';
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 
 @Component({
-  selector: 'app-list-deposit',
-  templateUrl: './list-deposit.component.html',
-  styleUrls: ['./list-deposit.component.scss']
+  selector: 'app-list-operations',
+  templateUrl: './list-operations.component.html',
+  styleUrls: ['./list-operations.component.scss']
 })
-export class ListDepositComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ListOperationsComponent implements OnInit, AfterViewInit, OnDestroy {
   columns: ITableColumns[] = [
     { header: 'Table', field: 'Table', type: 'string' },
     { header: 'Player', field: 'Player', type: 'string' },
@@ -30,14 +31,15 @@ export class ListDepositComponent implements OnInit, AfterViewInit, OnDestroy {
   operations: IOperationR[] = [];
 
   additionalButtons: IAdditionalButtons[] = [
-    // { id: 'other', label: 'Finish Initialization', tooltip: 'Finish day Initialization', tooltipPosition: 'bottom' }
   ];
 
-  casinoState: number = 0;
-
   loading = true;
+  finishing = false;
+
+  title: string;
 
   constructor(
+    private activatedRoute: ActivatedRoute,
     private _dinamicDialogSvc: DinamicDialogService,
     private _operationSvc: OperationService,
     private _msgSvc: MessageService,
@@ -47,12 +49,30 @@ export class ListDepositComponent implements OnInit, AfterViewInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this._getDeposits();
+    this.activatedRoute.data.subscribe(data => {
+      this._operationSvc.idOperation = data['idOperation'];
+
+      switch (this._operationSvc.idOperation) {
+        case EOperations.INITIALIZING:
+          this.title = 'Initialization';
+          this.additionalButtons.push(
+            { id: 'init', label: 'Finish Initialization', tooltip: 'Finish day Initialization', tooltipPosition: 'bottom' }
+          )
+          break;
+        case EOperations.DEPOSIT:
+          this.title = 'Deposit'
+          break;
+        case EOperations.EXTRACTION:
+          this.title = 'Extraction'
+          break;
+      }
+    });
   }
   
   ngAfterViewInit(): void {
+    this._getOperations();
+    
     this._getCasinoState();
-
     this._socketSvc.casinoStatus$.subscribe(() => {
       this._getCasinoState();
     })
@@ -62,9 +82,9 @@ export class ListDepositComponent implements OnInit, AfterViewInit, OnDestroy {
     this._operationSvc.subscription.forEach(subs => subs.unsubscribe());
   }
 
-  private _getDeposits(): void {
+  private _getOperations(): void {
     try {
-      this._operationSvc.subscription.push(this._operationSvc.getTodayOperation(EOperations.DEPOSIT).subscribe({
+      this._operationSvc.subscription.push(this._operationSvc.getTodayOperation(this._operationSvc.idOperation).subscribe({
           next: response => {
             this.loading = false;
             this.operations = cloneDeep(response.getOperationsToday);
@@ -84,7 +104,7 @@ export class ListDepositComponent implements OnInit, AfterViewInit, OnDestroy {
     try {
       this._operationSvc.subscription.push(this._casinoInfoSvc.loadCasinoState().subscribe({
           next: response => {
-            this.casinoState = cloneDeep(response.getCasinoState);
+            this._operationSvc.casinoState = cloneDeep(response.getCasinoState);
           },
           error: err => {
             this._sweetAlertSvc.error(err);
@@ -96,8 +116,21 @@ export class ListDepositComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  get isCasinoOpen(): boolean {
-    return this.casinoState === EOperations.OPEN;
+  get canEditDelete(): boolean {
+    let result = false;
+
+    switch (this._operationSvc.idOperation) {
+      case EOperations.INITIALIZING:
+        result = this._operationSvc.casinoState === EOperations.CLOSED;
+        break;
+      case EOperations.INITIALIZING:
+      case EOperations.DEPOSIT:
+      case EOperations.EXTRACTION:
+        result = this._operationSvc.casinoState === EOperations.OPEN;
+        break;
+    }
+
+    return result;
   }
 
   actionClicked(event: IActionItemClickedArgs) {
@@ -117,6 +150,9 @@ export class ListDepositComponent implements OnInit, AfterViewInit, OnDestroy {
       case ActionClicked.Cancel:
         this._cancel(event.item)
         break;
+      case ActionClicked.Init:
+        this._finishInit();
+        break;
     }
   }
 
@@ -129,7 +165,7 @@ export class ListDepositComponent implements OnInit, AfterViewInit, OnDestroy {
     };
     this._operationSvc.fg.patchValue(inputData);
         
-    this._dinamicDialogSvc.open('Add Deposit', DepositFormComponent, '90%');
+    this._dinamicDialogSvc.open(`Add ${ this.title }`, OperationsFormComponent, '90%');
     this._operationSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
       if (message) {
         this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: message })
@@ -154,7 +190,7 @@ export class ListDepositComponent implements OnInit, AfterViewInit, OnDestroy {
   
           this._operationSvc.fg.patchValue(inputData);
   
-          this._dinamicDialogSvc.open('Edit Deposit', DepositFormComponent, '90%');
+          this._dinamicDialogSvc.open(`Edit ${ this.title }`, OperationsFormComponent, '90%');
           this._operationSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
             if (message) {
               this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: message })
@@ -170,13 +206,13 @@ export class ListDepositComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private _delete(data: any): void {
     if (!data.Finished) {
-      this._sweetAlertSvc.question('Are you sure you want to delete selected Deposit(s)?').then(res => {
+      this._sweetAlertSvc.question(`Are you sure you want to delete selected ${ this.title }(s)?`).then(res => {
         if (res === ActionClicked.Yes) {
           const IDsToRemove: number[] = !isArray(data) ? [data.IdOperation] : data.map(d => { return d.IdOperation });
 
           this._operationSvc.subscription.push(this._operationSvc.deleteOperation(IDsToRemove).subscribe({
             next: response => {
-              this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: 'The Deposit(s) was(were) deleted successfully.' })
+              this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: `The ${ this.title }(s) was(were) deleted successfully.` })
             },
             error: err => {
               this._sweetAlertSvc.error(err);
@@ -189,11 +225,11 @@ export class ListDepositComponent implements OnInit, AfterViewInit, OnDestroy {
   
   private _finish(data: any): void {
     if (!data.Finished) {
-      this._sweetAlertSvc.question('Are you sure you want to Finish selected Deposit?').then(res => {
+      this._sweetAlertSvc.question(`Are you sure you want to Finish selected ${ this.title }?`).then(res => {
         if (res === ActionClicked.Yes) {
           this._operationSvc.subscription.push(this._operationSvc.finishOperation(data.IdOperation).subscribe({
             next: response => {
-              this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: 'The Deposit was finished successfully.' })
+              this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: `The ${ this.title } was finished successfully.` })
             },
             error: err => {
               this._sweetAlertSvc.error(err);
@@ -206,13 +242,35 @@ export class ListDepositComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private _cancel(data: IOperationR): void {
     if (data.Finished && !data.Cancelled) {
-      this._sweetAlertSvc.question('Are you sure you want to Cancel selected Deposit?').then(res => {
+      this._sweetAlertSvc.question(`Are you sure you want to Cancel selected ${ this.title }?`).then(res => {
         if (res === ActionClicked.Yes) {
           this._operationSvc.subscription.push(this._operationSvc.cancelOperation(data.IdOperation).subscribe({
             next: response => {
-              this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: 'The Deposit was cancelled successfully.' })
+              this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: `The ${ this.title } was cancelled successfully.` })
             },
             error: err => {
+              this._sweetAlertSvc.error(err);
+            }
+          }));
+        }
+      });
+    }
+  }
+  
+  private _finishInit(): void {
+    if (this.operations.length) {
+      this._sweetAlertSvc.question('Are you sure you want to finish Initialization?').then(res => {
+        if (res === ActionClicked.Yes) {
+          this.finishing = true;
+
+          this._operationSvc.subscription.push(this._operationSvc.finishInitialization().subscribe({
+            next: response => {
+              this.finishing = false;
+              this._socketSvc.emitSocket('status-change', true);
+              this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: 'Initialization finished.' })
+            },
+            error: err => {
+              this.finishing = false;
               this._sweetAlertSvc.error(err);
             }
           }));

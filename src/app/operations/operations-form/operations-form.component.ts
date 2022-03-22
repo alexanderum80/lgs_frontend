@@ -1,32 +1,37 @@
-import { PlayersService } from './../../../players/shared/services/players.service';
-import { toNumber, sortBy } from 'lodash';
-import { ActionClicked } from './../../../shared/models/list-items';
-import { PaymentsService } from './../../../payments/shared/services/payments.service';
-import { SweetalertService } from './../../../shared/services/sweetalert.service';
+import { PlayersService } from './../../players/shared/services/players.service';
+import { toNumber, sortBy, cloneDeep } from 'lodash';
+import { ActionClicked } from './../../shared/models/list-items';
+import { PaymentsService } from './../../payments/shared/services/payments.service';
+import { SweetalertService } from './../../shared/services/sweetalert.service';
 import { DinamicDialogService } from 'src/app/shared/ui/prime-ng/dinamic-dialog/dinamic-dialog.service';
-import { OperationService } from './../../shared/services/operation.service';
+import { OperationService } from './../shared/services/operation.service';
 import { SelectItem } from 'primeng/api';
-import { IPayments } from './../../../payments/shared/models/payments.model';
-import { IOperationD, EPaymentInstrument, EOperations, IOperationR } from './../../shared/models/operation.model';
+import { IPayments } from './../../payments/shared/models/payments.model';
+import { IOperationD, EOperations, IOperationR, EPaymentInstrument } from './../shared/models/operation.model';
 import { FormGroup } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import { cloneDeep } from '@apollo/client/utilities';
 
 @Component({
-  selector: 'app-deposit-form',
-  templateUrl: './deposit-form.component.html',
-  styleUrls: ['./deposit-form.component.scss']
+  selector: 'app-operations-form',
+  templateUrl: './operations-form.component.html',
+  styleUrls: ['./operations-form.component.scss']
 })
-export class DepositFormComponent implements OnInit {
+export class OperationsFormComponent implements OnInit {
   fg: FormGroup;
   operationReceived: IOperationD[] = [];
   operationDelivered: IOperationD[] = [];
   payments: IPayments[] = [];
 
   playersValues: SelectItem[] = [];
-  instrumentsValues: SelectItem[] = [];
-  denominationsValues: SelectItem[] = [];
+  instrumentsReceiptValues: SelectItem[] = [];
+  instrumentsDeliveryValues: SelectItem[] = [];
 
+  canReceive = true;
+  canDeliver = false;
+  needPlayer = false;
+
+  txtOperation = '';
+  
   constructor(
     private _operationSvc: OperationService,
     private _dinamicDialogSvc: DinamicDialogService,
@@ -42,6 +47,8 @@ export class DepositFormComponent implements OnInit {
     this._getPlayers();
     await this._getPaymentInstruments();
     await this._getPayments();
+
+    this._enableFunctionsByOperation();
   }
 
   private _getOperationDetails(): void {
@@ -93,12 +100,26 @@ export class DepositFormComponent implements OnInit {
     try {
       return new Promise(resolve => this._operationSvc.subscription.push(this._paymentsSvc.getInstruments().subscribe({
         next: result => {
-          this.instrumentsValues = result.getPaymentInstruments.map((t: { IdPayInstr: any; Name: any; }) => {
+          const instruments: SelectItem[] = result.getPaymentInstruments.map((t: { IdPayInstr: any; Name: any; }) => {
             return {
               value: t.IdPayInstr,
               label: t.Name,
             }
           });
+          switch (this._operationSvc.idOperation) {
+            case EOperations.DEPOSIT:
+              this.instrumentsReceiptValues = instruments.filter(p => p.value === EPaymentInstrument.CASH);
+              this.instrumentsDeliveryValues = instruments.filter(p => p.value !== EPaymentInstrument.CASH && p.value !== EPaymentInstrument.BONUS);
+              break;          
+            case EOperations.EXTRACTION:
+              this.instrumentsReceiptValues = instruments.filter(p => p.value !== EPaymentInstrument.CASH && p.value !== EPaymentInstrument.BONUS);
+              this.instrumentsDeliveryValues = instruments.filter(p => p.value === EPaymentInstrument.CASH);
+              break;          
+            default:
+              this.instrumentsReceiptValues = instruments;
+              this.instrumentsDeliveryValues = instruments;
+              break;
+          }
           resolve();
         },
         error: err => {
@@ -115,7 +136,7 @@ export class DepositFormComponent implements OnInit {
     try {
       return new Promise(resolve => this._operationSvc.subscription.push(this._paymentsSvc.getAll().subscribe({
         next: result => {
-          this.payments = cloneDeep(result.getPayments);
+          this.payments = sortBy(cloneDeep(result.getPayments), ['IdPayInstr', 'Denomination']);
           resolve();
         },
         error: err => {
@@ -125,6 +146,43 @@ export class DepositFormComponent implements OnInit {
       })));
     } catch (err: any) {
       this._sweetAlertSvc.error(err.message || err);
+    }
+  }
+
+  private _enableFunctionsByOperation(): void {
+    switch (this._operationSvc.idOperation) {
+      case EOperations.INITIALIZING:
+        this.txtOperation = 'Initialization';
+        this.canReceive = true;
+
+        if (this.fg.controls['id'].value === 0) {
+          this.payments.filter(f => f.IdPayment !== EPaymentInstrument.BONUS).map((c, i) => {
+            this.operationReceived.push({
+              IdOperationDetail: 9000 + this.operationReceived.length,
+              IdOperation: EOperations.INITIALIZING,
+              IdInstrument: c.IdPayInstr,
+              IdPayment: c.IdPayment,
+              Denomination: c.Denomination,
+              Rate: c.Rate,
+              Qty: 0
+            })
+          });
+        }
+        break;
+      case EOperations.DEPOSIT:
+        this.txtOperation = 'Deposit';
+        this.canReceive = true;
+        this.canDeliver = true;
+        this.needPlayer = true;
+        break;
+      case EOperations.EXTRACTION:
+        this.txtOperation = 'Extraction';
+        this.canReceive = true;
+        this.canDeliver = true;
+        this.needPlayer = true;
+        break;
+      default:
+        break;
     }
   }
 
@@ -147,12 +205,13 @@ export class DepositFormComponent implements OnInit {
     const operationR: IOperationR = {
       IdOperation: toNumber(this.fg.controls['id'].value),
       Consecutive: toNumber(this.fg.controls['consecutive'].value),
-      IdOperationType: EOperations.DEPOSIT,
+      IdOperationType: this._operationSvc.idOperation,
       IdTable: toNumber(this.fg.controls['idTable'].value),
       IdPlayer: toNumber(this.fg.controls['idPlayer'].value),
     };
 
     const operationD: IOperationD[] = [];
+    
     this.operationReceived.map(r => {
       totalReceived += r.Denomination! * r.Qty * r.Rate;
       operationD.push({
@@ -166,34 +225,37 @@ export class DepositFormComponent implements OnInit {
       })
     }); 
 
-    this.operationDelivered.map(r => {
-      totalDelivered += r.Denomination! * r.Qty * r.Rate;
-      operationD.push({
-        IdOperationDetail: r.IdOperationDetail,
-        IdOperation: r.IdOperation,
-        IdInstrument: r.IdInstrument,
-        IdPayment: r.IdPayment,
-        Denomination: r.Denomination,
-        Qty: r.Qty * -1,
-        Rate: r.Rate
-      })
-    }); 
-
-    if (totalReceived !== totalDelivered) {
-      this._sweetAlertSvc.warning('Received Amount do not match with Delivered Amount. Fix it.')
-      return;
+    if (this.canDeliver) {
+      this.operationDelivered.map(r => {
+        totalDelivered += r.Denomination! * r.Qty * r.Rate;
+        operationD.push({
+          IdOperationDetail: r.IdOperationDetail,
+          IdOperation: r.IdOperation,
+          IdInstrument: r.IdInstrument,
+          IdPayment: r.IdPayment,
+          Denomination: r.Denomination,
+          Qty: r.Qty * -1,
+          Rate: r.Rate
+        })
+      }); 
+  
+      if (totalReceived !== totalDelivered) {
+        this._sweetAlertSvc.warning('Received Amount do not match with Delivered Amount. Fix it.')
+        return;
+      }
     }
     
     this._operationSvc.subscription.push(this._operationSvc.saveOperation(operationR, operationD).subscribe({
       next: response => {
-        let txtMessage;
-
+        let txtAction;
+        
         if (action === ActionClicked.Add) {
-          txtMessage = 'The Deposit was created successfully.';
+          txtAction = 'created';
         } else {
-          txtMessage = 'The Deposit was updated successfully.';
+          txtAction = 'updated';
         }
-
+        
+        let txtMessage = `The ${ this.txtOperation } was ${ txtAction } successfully.`;
         this._closeModal(txtMessage);
       },
       error: err => {

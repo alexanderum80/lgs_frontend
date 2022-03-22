@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ListInitializationComponent } from './list-initialization.component';
+import { OperationsFormComponent } from './operations-form.component';
 
-describe('ListInitializationComponent', () => {
-  let component: ListInitializationComponent;
-  let fixture: ComponentFixture<ListInitializationComponent>;
+describe('OperationsFormComponent', () => {
+  let component: OperationsFormComponent;
+  let fixture: ComponentFixture<OperationsFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ListInitializationComponent ]
+      declarations: [ OperationsFormComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ListInitializationComponent);
+    fixture = TestBed.createComponent(OperationsFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
