@@ -8,7 +8,7 @@ import { UsersService } from '../shared/services/users.service';
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { ITableColumns } from 'src/app/shared/ui/prime-ng/table/table.model';
 import { cloneDeep } from '@apollo/client/utilities';
-import { isArray, join } from 'lodash';
+import { isArray } from 'lodash';
 
 @Component({
   selector: 'app-users',

@@ -1,3 +1,4 @@
+import { ERole } from './shared/models/users';
 import { UnauthorizedComponent } from './shared/ui/unauthorized/unauthorized.component';
 import { StartComponent } from './shared/ui/start/start.component';
 import { AuthGuard } from './shared/services/auth-guard.service';
@@ -17,10 +18,10 @@ const routes: Routes = [
   // Settings
   { path: 'casino-info',
     loadChildren: () => import('./casino-info/casino-info.module').then(m => m.CasinoInfoModule),
-    canActivate: [ AuthGuard ] },
+    canActivate: [ AuthGuard ], data: { roles: [ERole.Administrator] } },
   { path: 'users',
     loadChildren: () => import('./users/users.module').then(m => m.UsersModule),
-    canActivate: [ AuthGuard ] },
+    canActivate: [ AuthGuard ], data: { roles: [ERole.Administrator] } },
   { path: 'players',
     loadChildren: () => import('./players/players.module').then(m => m.PlayersModule),
     canActivate: [ AuthGuard ] },
@@ -32,19 +33,19 @@ const routes: Routes = [
     canActivate: [ AuthGuard ] },
   { path: 'coins',
     loadChildren: () => import('./coins/coins.module').then(m => m.CoinsModule),
-    canActivate: [ AuthGuard ] },
+    canActivate: [ AuthGuard ], data: { roles: [ERole.Administrator] } },
   { path: 'payments',
     loadChildren: () => import('./payments/payments.module').then(m => m.PaymentsModule),
-    canActivate: [ AuthGuard ] },
+    canActivate: [ AuthGuard ], data: { roles: [ERole.Administrator] } },
   { path: 'lenders',
     loadChildren: () => import('./lenders/lenders.module').then(m => m.LendersModule),
     canActivate: [ AuthGuard ] },
   { path: 'tables',
     loadChildren: () => import('./tables/tables.module').then(m => m.TablesModule),
-    canActivate: [ AuthGuard ] },
+    canActivate: [ AuthGuard ], data: { roles: [ERole.Administrator] } },
   { path: 'tables-game',
     loadChildren: () => import('./tables-game/tables-game.module').then(m => m.TablesGameModule),
-    canActivate: [ AuthGuard ] },
+    canActivate: [ AuthGuard ], data: { roles: [ERole.Administrator] } },
 
   // Another path
   { path: '**', redirectTo: '', canActivate: [ AuthGuard ] },

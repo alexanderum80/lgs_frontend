@@ -57,13 +57,22 @@ export class ListOperationsComponent implements OnInit, AfterViewInit, OnDestroy
           this.title = 'Initialization';
           this.additionalButtons.push(
             { id: 'init', label: 'Finish Initialization', tooltip: 'Finish day Initialization', tooltipPosition: 'bottom' }
-          )
+          );
           break;
         case EOperations.DEPOSIT:
-          this.title = 'Deposit'
+          this.title = 'Deposit';
           break;
         case EOperations.EXTRACTION:
-          this.title = 'Extraction'
+          this.title = 'Extraction';
+          break;
+        case EOperations.REFUND:
+          this.title = 'Refund';
+          break;
+        case EOperations.CLOSED:
+          this.title = 'Closing';
+          this.additionalButtons.push(
+            { id: 'close', label: 'Finish Closing', tooltip: 'Finish day Closing', tooltipPosition: 'bottom' }
+          );
           break;
       }
     });
@@ -123,9 +132,10 @@ export class ListOperationsComponent implements OnInit, AfterViewInit, OnDestroy
       case EOperations.INITIALIZING:
         result = this._operationSvc.casinoState === EOperations.CLOSED;
         break;
-      case EOperations.INITIALIZING:
       case EOperations.DEPOSIT:
       case EOperations.EXTRACTION:
+      case EOperations.REFUND:
+      case EOperations.CLOSED:
         result = this._operationSvc.casinoState === EOperations.OPEN;
         break;
     }
@@ -150,8 +160,11 @@ export class ListOperationsComponent implements OnInit, AfterViewInit, OnDestroy
       case ActionClicked.Cancel:
         this._cancel(event.item)
         break;
-      case ActionClicked.Init:
+      case ActionClicked.Open:
         this._finishInit();
+        break;
+      case ActionClicked.Close:
+        this._finishClosing();
         break;
     }
   }
@@ -160,7 +173,7 @@ export class ListOperationsComponent implements OnInit, AfterViewInit, OnDestroy
     const inputData = {
       id: 0,
       consecutive: 0,
-      idTable: 0,
+      idTable: null,
       idPlayer: null,
     };
     this._operationSvc.fg.patchValue(inputData);
@@ -268,6 +281,28 @@ export class ListOperationsComponent implements OnInit, AfterViewInit, OnDestroy
               this.finishing = false;
               this._socketSvc.emitSocket('status-change', true);
               this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: 'Initialization finished.' })
+            },
+            error: err => {
+              this.finishing = false;
+              this._sweetAlertSvc.error(err);
+            }
+          }));
+        }
+      });
+    }
+  }
+
+  private _finishClosing(): void {
+    if (this.operations.length) {
+      this._sweetAlertSvc.question('Are you sure you want to finish Closing?').then(res => {
+        if (res === ActionClicked.Yes) {
+          this.finishing = true;
+
+          this._operationSvc.subscription.push(this._operationSvc.finishClosing().subscribe({
+            next: response => {
+              this.finishing = false;
+              this._socketSvc.emitSocket('status-change', true);
+              this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: 'Closing finished.' })
             },
             error: err => {
               this.finishing = false;

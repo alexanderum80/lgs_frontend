@@ -1,5 +1,3 @@
-import { ERole } from './../shared/models/users';
-import { UsersService } from './../users/shared/services/users.service';
 import { CasinoInfoService } from './shared/services/casino-info.service';
 import { CasinoInfoFormComponent } from './casino-info-form/casino-info-form.component';
 import { NavigationService } from './../shared/services/navigation.service';
@@ -12,7 +10,6 @@ import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 })
 export class CasinoInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
-    private _usersSvc: UsersService,
     private _dinamicDialogSvc: DinamicDialogService,
     private _navigationSvc: NavigationService,
     private _casinoSvc: CasinoInfoService,
@@ -26,9 +23,6 @@ export class CasinoInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    if (this._usersSvc.user.UserRoles?.findIndex(u => u.IdRole === ERole.Administrator) === -1) {
-      this._navigationSvc.navigateTo('unauthorized');
-    }
   }
 
   ngOnDestroy(): void {

@@ -1,16 +1,6 @@
 import { MenuItem } from 'primeng/api';
 
 export const MenuItems: MenuItem[] = [
-  { id: 'reports', label: 'Reports', items: [
-    {
-      id: 'auditReport',
-      label: 'Audit Report',
-      icon: 'mdi mdi-clipboard-text-outline',
-      routerLink: 'concilia-interna-dwh',
-      disabled: false,
-      title: 'See Audit Report.',
-    },
-  ]},
   { id: 'operations', label: 'Cage Operations', items: [
     {
       id: 'initialization',
@@ -35,6 +25,32 @@ export const MenuItems: MenuItem[] = [
       routerLink: 'operations/extraction',
       disabled: false,
       title: 'Make extraction from cash.',
+    },
+    {
+      id: 'refund',
+      label: 'Refund',
+      icon: 'mdi mdi-bank-transfer',
+      routerLink: 'operations/refund',
+      disabled: false,
+      title: 'Make refund from table to cash.',
+    },
+    {
+      id: 'close',
+      label: 'Close',
+      icon: 'mdi mdi-bank-remove',
+      routerLink: 'operations/close',
+      disabled: false,
+      title: 'Make declaration to close the Casino.',
+    },
+  ]},
+  { id: 'reports', label: 'Reports', items: [
+    {
+      id: 'auditReport',
+      label: 'Audit Report',
+      icon: 'mdi mdi-clipboard-text-outline',
+      routerLink: 'concilia-interna-dwh',
+      disabled: false,
+      title: 'See Audit Report.',
     },
   ]},
   { id: 'settings', label: 'Settings', icon: 'mdi mdi-settings-outline', items: [

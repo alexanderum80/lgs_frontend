@@ -1,4 +1,4 @@
-<div  class="unauthorizedContainer flex flex-column">
+<div  class="unauthorized-container">
      <!-- image -->
     <div class="p-5 flex justify-content-center align-content-center">
         <img src="../../../../assets/img/stop.webp" alt="Unauhotized">
@@ -6,16 +6,17 @@
     
      <!-- header -->
     <div class="mt-2 flex justify-content-center align-content-center">
-        <h2>Unauthorized</h2> 
+        <h1>Unauthorized</h1> 
     </div>
 
      <!-- error message -->
     <div class="mt-2 flex justify-content-center align-content-center">
-        <p class="lead">You do not have access to perform this action</p>
+        <h2 class="lead">You do not have access to perform this action</h2>
     </div>
 
      <!-- actions -->
-    <div class="flex justify-content-center align-content-center">
-        <button class="mdi mdi-back" (clicked)="goBack()">Go Back</button>
+    <div class="mt-2 flex justify-content-center align-content-center">
+        <!-- <button class="mdi mdi-back" (click)="goBack()">Go Back</button> -->
+        <png-button label="Go Back" (clicked)="goBack()" [raised]="true"></png-button>
     </div>
 </div>

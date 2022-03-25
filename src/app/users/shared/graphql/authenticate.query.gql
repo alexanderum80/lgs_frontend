@@ -6,5 +6,8 @@ query AuthenticateUser($user: String!, $passw: String!) {
     LastName
     Enabled
     Token
+    UserRoles {
+      IdRole
+    }
   }
 }

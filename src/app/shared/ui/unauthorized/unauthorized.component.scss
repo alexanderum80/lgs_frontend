@@ -1,6 +1,10 @@
-.unauthorizedContainer {
+.unauthorized-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: white;
     
-    h2 {
+    h1, h2 {
         font-weight: bold;
         text-transform: uppercase;
     }

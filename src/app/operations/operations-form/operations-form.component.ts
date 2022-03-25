@@ -1,3 +1,4 @@
+import { TablesService } from './../../tables/shared/services/tables.service';
 import { PlayersService } from './../../players/shared/services/players.service';
 import { toNumber, sortBy, cloneDeep } from 'lodash';
 import { ActionClicked } from './../../shared/models/list-items';
@@ -23,12 +24,14 @@ export class OperationsFormComponent implements OnInit {
   payments: IPayments[] = [];
 
   playersValues: SelectItem[] = [];
+  tablesValues: SelectItem[] = [];
   instrumentsReceiptValues: SelectItem[] = [];
   instrumentsDeliveryValues: SelectItem[] = [];
 
-  canReceive = true;
+  canReceive = false;
   canDeliver = false;
   needPlayer = false;
+  needTable = false;
 
   txtOperation = '';
   
@@ -38,6 +41,7 @@ export class OperationsFormComponent implements OnInit {
     private _sweetAlertSvc: SweetalertService,
     private _paymentsSvc: PaymentsService,
     private _playerSvc: PlayersService,
+    private _tablesSvc: TablesService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -45,6 +49,7 @@ export class OperationsFormComponent implements OnInit {
 
     this._getOperationDetails();
     this._getPlayers();
+    this._getTables();
     await this._getPaymentInstruments();
     await this._getPayments();
 
@@ -55,6 +60,7 @@ export class OperationsFormComponent implements OnInit {
     try {
       const id = this.fg.controls['id'].value;
       this.operationReceived = [];
+      this.operationDelivered = [];
 
       this._operationSvc.subscription.push(this._operationSvc.getOperationDetails(id).subscribe({
         next: result => {
@@ -95,6 +101,26 @@ export class OperationsFormComponent implements OnInit {
       this._sweetAlertSvc.error(err);
     }
   }
+  
+  private _getTables(): void {
+    try {
+      this._tablesSvc.getTables().subscribe({
+        next: result => {
+          this.tablesValues = sortBy(result.getTables.filter(f => this._operationSvc.idOperation === EOperations.CLOSED ? f.IdTable == f.IdTable : f.IdTable !== 0), 'IdTable').map(p => {
+            return {
+              value: p.IdTable,
+              label: p.Description
+            }
+          });
+        },
+        error: err => {
+          this._sweetAlertSvc.error(err);
+        }
+      });
+    } catch (err: any) {
+      this._sweetAlertSvc.error(err);
+    }
+  }
 
   private async _getPaymentInstruments(): Promise<void> {
     try {
@@ -107,6 +133,10 @@ export class OperationsFormComponent implements OnInit {
             }
           });
           switch (this._operationSvc.idOperation) {
+            case EOperations.INITIALIZING:
+            case EOperations.CLOSED:
+              this.instrumentsReceiptValues = instruments.filter(p => p.value !== EPaymentInstrument.BONUS);
+              break;
             case EOperations.DEPOSIT:
               this.instrumentsReceiptValues = instruments.filter(p => p.value === EPaymentInstrument.CASH);
               this.instrumentsDeliveryValues = instruments.filter(p => p.value !== EPaymentInstrument.CASH && p.value !== EPaymentInstrument.BONUS);
@@ -114,7 +144,11 @@ export class OperationsFormComponent implements OnInit {
             case EOperations.EXTRACTION:
               this.instrumentsReceiptValues = instruments.filter(p => p.value !== EPaymentInstrument.CASH && p.value !== EPaymentInstrument.BONUS);
               this.instrumentsDeliveryValues = instruments.filter(p => p.value === EPaymentInstrument.CASH);
-              break;          
+              break;      
+            case EOperations.REFUND:
+              this.instrumentsReceiptValues = instruments.filter(p => p.value === EPaymentInstrument.CASH);
+              this.instrumentsDeliveryValues = instruments.filter(p => p.value === EPaymentInstrument.CASH);
+              break;
             default:
               this.instrumentsReceiptValues = instruments;
               this.instrumentsDeliveryValues = instruments;
@@ -181,6 +215,16 @@ export class OperationsFormComponent implements OnInit {
         this.canDeliver = true;
         this.needPlayer = true;
         break;
+      case EOperations.REFUND:
+        this.txtOperation = 'Refund';
+        this.canDeliver = true;
+        this.needTable = true;
+        break;
+      case EOperations.CLOSED:
+        this.txtOperation = 'Closing';
+        this.canReceive = true;
+        this.needTable = true;
+        break;
       default:
         break;
     }
@@ -212,22 +256,26 @@ export class OperationsFormComponent implements OnInit {
 
     const operationD: IOperationD[] = [];
     
-    this.operationReceived.map(r => {
-      totalReceived += r.Denomination! * r.Qty * r.Rate;
-      operationD.push({
-        IdOperationDetail: r.IdOperationDetail,
-        IdOperation: r.IdOperation,
-        IdInstrument: r.IdInstrument,
-        IdPayment: r.IdPayment,
-        Denomination: r.Denomination,
-        Qty: r.Qty,
-        Rate: r.Rate
-      })
-    }); 
+    if (this.canReceive) {
+      this.operationReceived.map(r => {
+        totalReceived += r.Denomination! * r.Qty * r.Rate;
+
+        operationD.push({
+          IdOperationDetail: r.IdOperationDetail,
+          IdOperation: r.IdOperation,
+          IdInstrument: r.IdInstrument,
+          IdPayment: r.IdPayment,
+          Denomination: r.Denomination,
+          Qty: r.Qty,
+          Rate: r.Rate
+        })
+      }); 
+    }
 
     if (this.canDeliver) {
       this.operationDelivered.map(r => {
         totalDelivered += r.Denomination! * r.Qty * r.Rate;
+
         operationD.push({
           IdOperationDetail: r.IdOperationDetail,
           IdOperation: r.IdOperation,
@@ -238,13 +286,13 @@ export class OperationsFormComponent implements OnInit {
           Rate: r.Rate
         })
       }); 
-  
-      if (totalReceived !== totalDelivered) {
-        this._sweetAlertSvc.warning('Received Amount do not match with Delivered Amount. Fix it.')
-        return;
-      }
     }
-    
+
+    if (this.canReceive && this.canDeliver && totalReceived !== totalDelivered) {
+      this._sweetAlertSvc.warning('Received Amount do not match with Delivered Amount. Fix it.')
+      return;
+    }
+
     this._operationSvc.subscription.push(this._operationSvc.saveOperation(operationR, operationD).subscribe({
       next: response => {
         let txtAction;

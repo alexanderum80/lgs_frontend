@@ -10,7 +10,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { OperationsRoutingModule } from './operations-routing.module';
-import { DetailFormComponent } from './shared/ui/detail-form/detail-form.component';
+import { DetailFormComponent } from './detail-form/detail-form.component';
 import { ListOperationsComponent } from './list-operations/list-operations.component';
 import { OperationsFormComponent } from './operations-form/operations-form.component';
 

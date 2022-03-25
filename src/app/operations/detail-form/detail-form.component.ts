@@ -1,8 +1,9 @@
-import { ActionClicked } from './../../../../shared/models/list-items';
-import { SweetalertService } from './../../../../shared/services/sweetalert.service';
+import { EOperations } from './../shared/models/operation.model';
+import { ActionClicked } from '../../shared/models/list-items';
+import { SweetalertService } from '../../shared/services/sweetalert.service';
 import { SelectItem } from 'primeng/api';
-import { IPayments } from './../../../../payments/shared/models/payments.model';
-import { IOperationD } from './../../models/operation.model';
+import { IPayments } from '../../payments/shared/models/payments.model';
+import { IOperationD } from '../shared/models/operation.model';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Table } from 'primeng/table';
 
@@ -13,6 +14,7 @@ import { Table } from 'primeng/table';
 })
 export class DetailFormComponent implements OnInit {
   @ViewChild('dt') table: Table;
+  @Input() operationType: EOperations;
   @Input() operationDetails: IOperationD[] = [];
   @Input() instrumentsValues: SelectItem[] = [];
   @Input() payments: IPayments[] = [];
@@ -41,9 +43,9 @@ export class DetailFormComponent implements OnInit {
     let total = 0;
 
     if (this.operationDetails) {
-        for (let operation of this.operationDetails) {
-          total += operation.Denomination! * operation.Qty * operation.Rate;
-        }
+      for (let operation of this.operationDetails) {
+        total += operation.Denomination! * operation.Qty * operation.Rate;
+      }
     }
 
     return total;

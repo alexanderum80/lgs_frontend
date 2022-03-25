@@ -8,6 +8,8 @@ const routes: Routes = [
     { path: 'initialization', component: ListOperationsComponent, data: { idOperation: EOperations.INITIALIZING } },
     { path: 'deposit', component: ListOperationsComponent, data: { idOperation: EOperations.DEPOSIT } },
     { path: 'extraction', component: ListOperationsComponent, data: { idOperation: EOperations.EXTRACTION } },
+    { path: 'refund', component: ListOperationsComponent, data: { idOperation: EOperations.REFUND } },
+    { path: 'close', component: ListOperationsComponent, data: { idOperation: EOperations.CLOSED } },
   ]}
 ];
 

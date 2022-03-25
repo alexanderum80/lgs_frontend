@@ -1,4 +1,4 @@
-import { IActionItemClickedArgs, ActionClicked } from './../../../models/list-items';
+import { IActionItemClickedArgs, ActionClicked, Actions } from './../../../models/list-items';
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ITableColumns } from './table.model';
 import { get } from 'lodash';
@@ -53,41 +53,48 @@ export class TableComponent implements OnInit {
 
   onActionClicked(action: string, data?: any) {
     switch (action) {
-      case ActionClicked.Add:
-        this.actionClicked.emit({
-          action: 'add'
-        })
-        break;
-      case ActionClicked.Edit:
-        this.actionClicked.emit({
-          action: 'edit',
-          item: data || []
-        })
-        break;
       case ActionClicked.Delete:
         this.actionClicked.emit({
           action: 'delete',
           item: data || this._tableSvc.selectedRow
         })
         break;
-      case ActionClicked.Finish:
+      default:
         this.actionClicked.emit({
-          action: 'finish',
-          item: data
+          action: action as Actions,
+          item: data || []
         })
         break;
-      case ActionClicked.Cancel:
-        this.actionClicked.emit({
-          action: 'cancel',
-          item: data
-        })
-        break;
-      case ActionClicked.Init:
-        this.actionClicked.emit({
-          action: 'init',
-          item: data
-        })
-        break;
+
+      // case ActionClicked.Add:
+      //   this.actionClicked.emit({
+      //     action: 'add'
+      //   })
+      //   break;
+      // case ActionClicked.Edit:
+      //   this.actionClicked.emit({
+      //     action: 'edit',
+      //     item: data
+      //   })
+      //   break;
+      // case ActionClicked.Finish:
+      //   this.actionClicked.emit({
+      //     action: 'finish',
+      //     item: data
+      //   })
+      //   break;
+      // case ActionClicked.Cancel:
+      //   this.actionClicked.emit({
+      //     action: 'cancel',
+      //     item: data
+      //   })
+      //   break;
+      // case ActionClicked.Open:
+      //   this.actionClicked.emit({
+      //     action: 'open',
+      //     item: data
+      //   })
+      //   break;
     }
   }
 

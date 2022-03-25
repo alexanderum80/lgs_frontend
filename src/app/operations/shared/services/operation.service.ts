@@ -169,6 +169,22 @@ export class OperationService {
     });
   }
 
+  finishClosing(): Observable<OperationMutationResponse> {
+    return new Observable<OperationMutationResponse>(subscriber => {
+      this.subscription.push(this._apollo.mutate<OperationMutationResponse>({
+        mutation: operationApi.finishClose,
+        refetchQueries: ['GetOperationsToday']
+      }).subscribe({
+        next: (result) => {
+          subscriber.next(result.data!);
+        },
+        error: err => {
+          subscriber.error(err.message || err);
+        }
+      }));
+    });
+  }
+
   dispose(): void {
     this.subscription.forEach(subs => subs.unsubscribe());
   }
