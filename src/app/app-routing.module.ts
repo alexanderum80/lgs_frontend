@@ -1,5 +1,5 @@
 import { ERole } from './shared/models/users';
-import { UnauthorizedComponent } from './shared/ui/unauthorized/unauthorized.component';
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { StartComponent } from './shared/ui/start/start.component';
 import { AuthGuard } from './shared/services/auth-guard.service';
 import { NgModule } from '@angular/core';

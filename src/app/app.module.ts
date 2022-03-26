@@ -1,4 +1,4 @@
-import { UnauthorizedComponent } from './shared/ui/unauthorized/unauthorized.component';
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { PrimeMenuModule } from './shared/ui/prime-ng/menu/menu.module';
 import { UserInfoComponent } from './users/user-info/user-info.component';
 import { PrimeSidebarModule } from './shared/ui/prime-ng/sidebar/sidebar.module';
