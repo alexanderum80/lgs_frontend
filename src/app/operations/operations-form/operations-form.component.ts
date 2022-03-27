@@ -139,7 +139,7 @@ export class OperationsFormComponent implements OnInit {
               break;
             case EOperations.DEPOSIT:
               this.instrumentsReceiptValues = instruments.filter(p => p.value === EPaymentInstrument.CASH);
-              this.instrumentsDeliveryValues = instruments.filter(p => p.value !== EPaymentInstrument.CASH && p.value !== EPaymentInstrument.BONUS);
+              this.instrumentsDeliveryValues = instruments.filter(p => p.value !== EPaymentInstrument.CASH);
               break;          
             case EOperations.EXTRACTION:
               this.instrumentsReceiptValues = instruments.filter(p => p.value !== EPaymentInstrument.CASH && p.value !== EPaymentInstrument.BONUS);
@@ -254,7 +254,7 @@ export class OperationsFormComponent implements OnInit {
       IdPlayer: toNumber(this.fg.controls['idPlayer'].value),
     };
 
-    const operationD: IOperationD[] = [];
+    let operationD: IOperationD[] = [];
     
     if (this.canReceive) {
       this.operationReceived.map(r => {
@@ -274,7 +274,7 @@ export class OperationsFormComponent implements OnInit {
 
     if (this.canDeliver) {
       this.operationDelivered.map(r => {
-        totalDelivered += r.Denomination! * r.Qty * r.Rate;
+        totalDelivered += r.IdInstrument !== EPaymentInstrument.BONUS ? r.Denomination! * r.Qty * r.Rate : 0;
 
         operationD.push({
           IdOperationDetail: r.IdOperationDetail,
@@ -286,6 +286,41 @@ export class OperationsFormComponent implements OnInit {
           Rate: r.Rate
         })
       }); 
+    }
+
+    if (operationR.IdOperationType === EOperations.DEPOSIT) {
+      const haveBonus = operationD.findIndex(d => d.IdInstrument === EPaymentInstrument.BONUS) !== -1;
+      
+      if (totalReceived > 10000) {
+        const maxValueOfOperation = Math.max(...operationD.map(o => o.IdOperationDetail), 0);
+        const idPayment = this.payments.find(p => p.IdPayInstr === EPaymentInstrument.BONUS && p.Denomination === 1000)?.IdPayment;
+        if (!idPayment) {
+          this._sweetAlertSvc.error('There are not defined a Bonus with an amount of 1000. Please cancel this operation and add the bonus to can continue.')
+          return;
+        }
+
+        if (!haveBonus) {
+          this._sweetAlertSvc.info('The total amount deposited by the player is greater than 10000, so a bonus with value of 1000 will be added.')
+        } else {
+          operationD = operationD.filter(d => d.IdInstrument !== EPaymentInstrument.BONUS);
+        }
+        
+        operationD.push({
+          IdOperationDetail: maxValueOfOperation + 1,
+          IdOperation: operationR.IdOperation,
+          IdInstrument: EPaymentInstrument.BONUS,
+          IdPayment: idPayment,
+          Denomination: 1000,
+          Qty: -1,
+          Rate: 1
+        });
+      } else {
+        if (haveBonus) {
+          operationD = operationD.filter(d => d.IdInstrument !== EPaymentInstrument.BONUS);
+
+          this._sweetAlertSvc.info('The total amount deposited by the player is less than 10000, so the bonus has been removed.')
+        }
+      }
     }
 
     if (this.canReceive && this.canDeliver && totalReceived !== totalDelivered) {

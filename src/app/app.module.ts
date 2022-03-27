@@ -15,7 +15,6 @@ import { LoginComponent } from './users/login/login.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { StartComponent } from './shared/ui/start/start.component';
 import { GraphQLModule } from './graphql.module';
-import { ErrorInterceptor } from './shared/helpers/error.interceptor';
 import { JwtInterceptor } from './shared/helpers/jwt.interceptor';
 import { PrimeCardModule } from './shared/ui/prime-ng/card/card.module';
 import { PrimeInputTextModule } from './shared/ui/prime-ng/input-text/input-text.module';
@@ -58,7 +57,6 @@ import { DialogService } from 'primeng/dynamicdialog';
   providers: [
     DialogService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })
