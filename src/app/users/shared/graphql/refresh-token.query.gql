@@ -1,0 +1,13 @@
+query RefreshToken($user: String!, $passw: String!) {
+  refreshToken(user: $user, passw: $passw) {
+    Id
+    UserName
+    Name
+    LastName
+    Enabled
+    Token
+    UserRoles {
+      IdRole
+    }
+  }
+}

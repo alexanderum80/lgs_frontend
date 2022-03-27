@@ -1,5 +1,6 @@
 export const userApi = {
     authenticate: require('graphql-tag/loader!./authenticate.query.gql'),
+    refreshToken: require('graphql-tag/loader!./refresh-token.query.gql'),
     all: require('graphql-tag/loader!./all-users.query.gql'),
     byId: require('graphql-tag/loader!./user-by-id.query.gql'),
     changePassword: require('graphql-tag/loader!./change-password.mutation.gql'),

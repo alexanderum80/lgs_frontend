@@ -5,7 +5,7 @@ import { userApi } from '../graphql/userActions.gql';
 import { UsersQueryResponse } from '../models/users.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { IUser } from '../../../shared/models/users';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, timeout } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { QueryRef, Apollo } from 'apollo-angular';
 
@@ -98,6 +98,11 @@ export class UsersService {
                 fetchPolicy: 'network-only'
             }).subscribe({
                 next: (response) => {
+                    const user: User = new User(response.data.authenticateUser);
+                    this.login(user);
+
+                    this._refreshToken(authVariables);
+
                     subscriber.next(response.data);
                 },
                 error: (error) => { 
@@ -105,6 +110,32 @@ export class UsersService {
                 }
             });
         })
+    }
+
+    private _refreshToken(authVariables: any) {
+        try {
+            setTimeout(() => {
+                this._apollo.query<UsersQueryResponse> ({
+                    query: userApi.refreshToken,
+                    variables: {
+                        user: authVariables.User,
+                        passw: authVariables.Password
+                    },
+                    fetchPolicy: 'network-only'
+                }).subscribe({
+                    next: (response) => {
+                        const user: User = new User(response.data.refreshToken);
+                        this.login(user);
+                        
+                        this._refreshToken(authVariables);
+                    },
+                    error: (error) => { 
+                        this.logout();
+                    }
+                });
+            }, 1680000);
+        } catch (err) {
+        }
     }
 
     getAll(): Observable<UsersQueryResponse> {

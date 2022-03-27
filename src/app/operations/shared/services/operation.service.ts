@@ -1,4 +1,4 @@
-import { toNumber } from 'lodash';
+import { ApolloService } from './../../../shared/services/apollo.service';
 import { OperationQueryResponse, EOperations, OperationMutationResponse, IOperationD, IOperationR } from './../models/operation.model';
 import { operationApi } from './../graphql/operation-api';
 import { Apollo } from 'apollo-angular';
@@ -22,18 +22,15 @@ export class OperationService {
   casinoState: EOperations;
 
   constructor(
+    private _apolloSvc: ApolloService,
     private _apollo: Apollo
   ) { }
 
   getTodayOperation(operation: EOperations): Observable<OperationQueryResponse> {
     return new Observable<OperationQueryResponse>(subscriber => {
-      this.subscription.push(this._apollo.watchQuery<OperationQueryResponse>({
-        query: operationApi.today,
-        variables: { idState : operation },
-        fetchPolicy: 'network-only'
-      }).valueChanges.subscribe({
+      this.subscription.push(this._apolloSvc.watchQuery<OperationQueryResponse>(operationApi.today, {idState : operation }).subscribe({
         next: (result) => {
-          subscriber.next(result.data);
+          subscriber.next(result);
         },
         error: err => {
           subscriber.error(err.message || err);

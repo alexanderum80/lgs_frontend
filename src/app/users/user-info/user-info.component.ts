@@ -37,7 +37,7 @@ export class UserInfoComponent implements OnInit {
   }
 
   get userName(): string {
-    return this._userSvc.user.UserName.toUpperCase();
+    return this._userSvc.user.UserName.toUpperCase() || '';
   }
 
 }

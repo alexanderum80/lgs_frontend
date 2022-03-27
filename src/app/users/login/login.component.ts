@@ -44,12 +44,6 @@ export class LoginComponent implements OnInit {
         next: (response) => {
           this.autenticando = false;
 
-          const result = response.authenticateUser;
-
-          const user: User = new User(result);
-
-          this._userSvc.login(user);
-
           this._navigateSvc.navigateTo(this._navigateSvc.continueURL);
         },
         error: (err) => {
