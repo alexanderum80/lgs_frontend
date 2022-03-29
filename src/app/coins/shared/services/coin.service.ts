@@ -1,7 +1,7 @@
+import { ApolloService } from './../../../shared/services/apollo.service';
 import { coinsApi } from './../graphql/coinsApi';
 import { toNumber } from 'lodash';
 import { CoinsQueryResponse, CoinsMutationResponse } from './../models/coins.model';
-import { Apollo } from 'apollo-angular';
 import { Subscription, Observable } from 'rxjs';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Injectable } from '@angular/core';
@@ -18,17 +18,14 @@ export class CoinsService {
   subscription: Subscription[] = [];
 
   constructor(
-    private _apollo: Apollo,
+    private _apolloSvc: ApolloService,
   ) { }
   
   getCoins(): Observable<CoinsQueryResponse> {
     return new Observable<CoinsQueryResponse>(subscriber => {
-        this._apollo.watchQuery<CoinsQueryResponse> ({
-            query: coinsApi.all,
-            fetchPolicy: 'network-only'
-        }).valueChanges.subscribe({
+        this._apolloSvc.watchQuery<CoinsQueryResponse>(coinsApi.all).subscribe({
             next: (response) => {
-                subscriber.next(response.data);
+                subscriber.next(response);
             },
             error: (error) => { 
                 subscriber.error(error.message);
@@ -39,13 +36,9 @@ export class CoinsService {
 
   getCoin(id: number): Observable<CoinsQueryResponse> {
     return new Observable<CoinsQueryResponse>(subscriber => {
-        this._apollo.query<CoinsQueryResponse> ({
-            query: coinsApi.byId,
-            variables: { id },
-            fetchPolicy: 'network-only'
-        }).subscribe({
+        this._apolloSvc.query<CoinsQueryResponse>(coinsApi.byId, { id }).subscribe({
             next: (response) => {
-                subscriber.next(response.data);
+                subscriber.next(response);
             },
             error: (error) => { 
                 subscriber.error(error.message);
@@ -65,13 +58,9 @@ export class CoinsService {
     const CoinMutation = payload.IdCoin === 0 ? coinsApi.create : coinsApi.update;
 
     return new Observable<CoinsMutationResponse>(subscriber => {
-      this.subscription.push(this._apollo.mutate<CoinsMutationResponse>({
-        mutation: CoinMutation,
-        variables: { coinInput: payload },
-        refetchQueries: ['GetCoins']
-      }).subscribe({
+      this.subscription.push(this._apolloSvc.mutation<CoinsMutationResponse>(CoinMutation, { coinInput: payload }, ['GetCoins']).subscribe({
         next: (result) => {
-          subscriber.next(result.data!);
+          subscriber.next(result);
         },
         error: err => {
           subscriber.error(err.message || err);
@@ -82,13 +71,9 @@ export class CoinsService {
   
   delete(IDs: number[]): Observable<CoinsMutationResponse> {
     return new Observable<CoinsMutationResponse>(subscriber => {
-      this.subscription.push(this._apollo.mutate<CoinsMutationResponse>({
-        mutation: coinsApi.delete,
-        variables: { IDs },
-        refetchQueries: ['GetCoins']
-      }).subscribe({
+      this.subscription.push(this._apolloSvc.mutation<CoinsMutationResponse>(coinsApi.delete, { IDs }, ['GetCoins']).subscribe({
         next: (result) => {
-          subscriber.next(result.data!);
+          subscriber.next(result);
         },
         error: err => {
           subscriber.error(err.message || err);

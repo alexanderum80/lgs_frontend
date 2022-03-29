@@ -1,7 +1,7 @@
+import { ApolloService } from './../../../shared/services/apollo.service';
 import { toNumber } from 'lodash';
 import { lendersApi } from './../graphql/lendersApi';
 import { LendersQueryResponse, LendersMutationResponse } from './../models/lenders.model';
-import { Apollo } from 'apollo-angular';
 import { Subscription, Observable } from 'rxjs';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Injectable } from '@angular/core';
@@ -17,17 +17,14 @@ export class LendersService {
   subscription: Subscription[] = [];
 
   constructor(
-    private _apollo: Apollo,
+    private _apolloSvc: ApolloService,
   ) { }
   
   getLenders(): Observable<LendersQueryResponse> {
     return new Observable<LendersQueryResponse>(subscriber => {
-        this._apollo.watchQuery<LendersQueryResponse> ({
-            query: lendersApi.all,
-            fetchPolicy: 'network-only'
-        }).valueChanges.subscribe({
+        this._apolloSvc.watchQuery<LendersQueryResponse>(lendersApi.all).subscribe({
             next: (response) => {
-                subscriber.next(response.data);
+                subscriber.next(response);
             },
             error: (error) => { 
                 subscriber.error(error.message);
@@ -38,13 +35,9 @@ export class LendersService {
 
   getLender(id: number): Observable<LendersQueryResponse> {
     return new Observable<LendersQueryResponse>(subscriber => {
-        this._apollo.query<LendersQueryResponse> ({
-            query: lendersApi.byId,
-            variables: { id },
-            fetchPolicy: 'network-only'
-        }).subscribe({
+        this._apolloSvc.query<LendersQueryResponse>(lendersApi.byId, { id }).subscribe({
             next: (response) => {
-                subscriber.next(response.data);
+                subscriber.next(response);
             },
             error: (error) => { 
                 subscriber.error(error.message);
@@ -63,13 +56,9 @@ export class LendersService {
     const LenderMutation = payload.IdLender === 0 ? lendersApi.create : lendersApi.update;
 
     return new Observable<LendersMutationResponse>(subscriber => {
-      this.subscription.push(this._apollo.mutate<LendersMutationResponse>({
-        mutation: LenderMutation,
-        variables: { lenderInput: payload },
-        refetchQueries: ['GetLenders']
-      }).subscribe({
+      this.subscription.push(this._apolloSvc.mutation<LendersMutationResponse>(LenderMutation, { lenderInput: payload }, ['GetLenders']).subscribe({
         next: (result) => {
-          subscriber.next(result.data!);
+          subscriber.next(result);
         },
         error: err => {
           subscriber.error(err.message || err);
@@ -80,13 +69,9 @@ export class LendersService {
   
   delete(IDs: number[]): Observable<LendersMutationResponse> {
     return new Observable<LendersMutationResponse>(subscriber => {
-      this.subscription.push(this._apollo.mutate<LendersMutationResponse>({
-        mutation: lendersApi.delete,
-        variables: { IDs },
-        refetchQueries: ['GetLenders']
-      }).subscribe({
+      this.subscription.push(this._apolloSvc.mutation<LendersMutationResponse>(lendersApi.delete, { IDs }, ['GetLenders']).subscribe({
         next: (result) => {
-          subscriber.next(result.data!);
+          subscriber.next(result);
         },
         error: err => {
           subscriber.error(err.message || err);

@@ -1,6 +1,6 @@
+import { ApolloService } from './../../../shared/services/apollo.service';
 import { toNumber } from 'lodash';
 import { playersApi } from './../graphql/players-api';
-import { Apollo } from 'apollo-angular';
 import { PlayersQueryResponse, PlayersMutationResponse } from './../models/players.model';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Subscription, Observable } from 'rxjs';
@@ -25,17 +25,14 @@ export class PlayersService {
   })
 
   constructor(
-    private _apollo: Apollo
+    private _apolloSvc: ApolloService,
   ) { }
 
   getAllPlayers(): Observable<PlayersQueryResponse> {
     return new Observable<PlayersQueryResponse>(subscriber => {
-      this.subscription.push(this._apollo.watchQuery<PlayersQueryResponse>({
-        query: playersApi.all,
-        fetchPolicy: 'network-only'
-      }).valueChanges.subscribe({
+      this.subscription.push(this._apolloSvc.watchQuery<PlayersQueryResponse>(playersApi.all).subscribe({
         next: (result) => {
-          subscriber.next(result.data);
+          subscriber.next(result);
         },
         error: err => {
           subscriber.error(err.message || err);
@@ -46,13 +43,9 @@ export class PlayersService {
 
   getPlayer(id: number): Observable<PlayersQueryResponse> {
     return new Observable<PlayersQueryResponse>(subscriber => {
-      this.subscription.push(this._apollo.watchQuery<PlayersQueryResponse>({
-        query: playersApi.byId,
-        variables: { id },
-        fetchPolicy: 'network-only'
-      }).valueChanges.subscribe({
+      this.subscription.push(this._apolloSvc.query<PlayersQueryResponse>(playersApi.byId, { id }).subscribe({
         next: (result) => {
-          subscriber.next(result.data);
+          subscriber.next(result);
         },
         error: err => {
           subscriber.error(err.message || err);
@@ -78,13 +71,9 @@ export class PlayersService {
     const playerMutation = payload.IdPlayer === 0 ? playersApi.create : playersApi.update;
 
     return new Observable<PlayersMutationResponse>(subscriber => {
-      this.subscription.push(this._apollo.mutate<PlayersMutationResponse>({
-        mutation: playerMutation,
-        variables: { playerInput: payload },
-        refetchQueries: ['GetPlayers']
-      }).subscribe({
+      this.subscription.push(this._apolloSvc.mutation<PlayersMutationResponse>(playerMutation, { playerInput: payload }, ['GetPlayers']).subscribe({
         next: (result) => {
-          subscriber.next(result.data!);
+          subscriber.next(result);
         },
         error: err => {
           subscriber.error(err.message || err);
@@ -95,13 +84,9 @@ export class PlayersService {
   
   deletePlayer(IDs: number[]): Observable<PlayersMutationResponse> {
     return new Observable<PlayersMutationResponse>(subscriber => {
-      this.subscription.push(this._apollo.mutate<PlayersMutationResponse>({
-        mutation: playersApi.delete,
-        variables: { IDs },
-        refetchQueries: ['GetPlayers']
-      }).subscribe({
+      this.subscription.push(this._apolloSvc.mutation<PlayersMutationResponse>(playersApi.delete, { IDs }, ['GetPlayers']).subscribe({
         next: (result) => {
-          subscriber.next(result.data!);
+          subscriber.next(result);
         },
         error: err => {
           subscriber.error(err.message || err);
@@ -112,13 +97,9 @@ export class PlayersService {
 
   recoverPlayer(id: number): Observable<PlayersMutationResponse> {
     return new Observable<PlayersMutationResponse>(subscriber => {
-      this.subscription.push(this._apollo.mutate<PlayersMutationResponse>({
-        mutation: playersApi.recover,
-        variables: { id },
-        refetchQueries: ['GetPlayers']
-      }).subscribe({
+      this.subscription.push(this._apolloSvc.mutation<PlayersMutationResponse>(playersApi.recover, { id }, ['GetPlayers']).subscribe({
         next: (result) => {
-          subscriber.next(result.data!);
+          subscriber.next(result);
         },
         error: err => {
           subscriber.error(err.message || err);

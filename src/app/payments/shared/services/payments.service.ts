@@ -1,7 +1,7 @@
+import { ApolloService } from './../../../shared/services/apollo.service';
 import { paymentsApi } from './../graphql/paymentsApi';
 import { PaymentsQueryResponse, PaymentsMutationResponse } from './../models/payments.model';
 import { toNumber } from 'lodash';
-import { Apollo } from 'apollo-angular';
 import { Subscription, Observable } from 'rxjs';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Injectable } from '@angular/core';
@@ -20,17 +20,14 @@ export class PaymentsService {
   subscription: Subscription[] = [];
 
   constructor(
-    private _apollo: Apollo,
+    private _apolloSvc: ApolloService,
   ) { }
   
   getAll(): Observable<PaymentsQueryResponse> {
     return new Observable<PaymentsQueryResponse>(subscriber => {
-        this._apollo.watchQuery<PaymentsQueryResponse> ({
-            query: paymentsApi.all,
-            fetchPolicy: 'network-only'
-        }).valueChanges.subscribe({
+        this._apolloSvc.watchQuery<PaymentsQueryResponse>(paymentsApi.all).subscribe({
             next: (response) => {
-                subscriber.next(response.data);
+                subscriber.next(response);
             },
             error: (error) => { 
                 subscriber.error(error.message);
@@ -41,13 +38,9 @@ export class PaymentsService {
   
   getOne(id: number): Observable<PaymentsQueryResponse> {
     return new Observable<PaymentsQueryResponse>(subscriber => {
-        this._apollo.query<PaymentsQueryResponse> ({
-            query: paymentsApi.byId,
-            variables: { id },
-            fetchPolicy: 'network-only'
-        }).subscribe({
+        this._apolloSvc.query<PaymentsQueryResponse>(paymentsApi.byId, { id }).subscribe({
             next: (response) => {
-                subscriber.next(response.data);
+                subscriber.next(response);
             },
             error: (error) => { 
                 subscriber.error(error.message);
@@ -58,12 +51,9 @@ export class PaymentsService {
 
   getInstruments(): Observable<PaymentsQueryResponse> {
     return new Observable<PaymentsQueryResponse>(subscriber => {
-        this._apollo.query<PaymentsQueryResponse> ({
-            query: paymentsApi.instruments,
-            fetchPolicy: 'network-only'
-        }).subscribe({
+        this._apolloSvc.query<PaymentsQueryResponse>(paymentsApi.instruments).subscribe({
             next: (response) => {
-                subscriber.next(response.data);
+                subscriber.next(response);
             },
             error: (error) => { 
                 subscriber.error(error.message);
@@ -85,13 +75,9 @@ export class PaymentsService {
     const mutation = payload.IdPayment === 0 ? paymentsApi.create : paymentsApi.update;
 
     return new Observable<PaymentsMutationResponse>(subscriber => {
-      this.subscription.push(this._apollo.mutate<PaymentsMutationResponse>({
-        mutation: mutation,
-        variables: { paymentInput: payload },
-        refetchQueries: ['GetPayments']
-      }).subscribe({
+      this.subscription.push(this._apolloSvc.mutation<PaymentsMutationResponse>(mutation, { paymentInput: payload }, ['GetPayments']).subscribe({
         next: (result) => {
-          subscriber.next(result.data!);
+          subscriber.next(result);
         },
         error: err => {
           subscriber.error(err.message || err);
@@ -102,13 +88,9 @@ export class PaymentsService {
   
   delete(IDs: number[]): Observable<PaymentsMutationResponse> {
     return new Observable<PaymentsMutationResponse>(subscriber => {
-      this.subscription.push(this._apollo.mutate<PaymentsMutationResponse>({
-        mutation: paymentsApi.delete,
-        variables: { IDs },
-        refetchQueries: ['GetPayments']
-      }).subscribe({
+      this.subscription.push(this._apolloSvc.mutation<PaymentsMutationResponse>(paymentsApi.delete, { IDs }, ['GetPayments']).subscribe({
         next: (result) => {
-          subscriber.next(result.data!);
+          subscriber.next(result);
         },
         error: err => {
           subscriber.error(err.message || err);

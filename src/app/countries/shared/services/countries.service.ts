@@ -1,8 +1,8 @@
+import { ApolloService } from './../../../shared/services/apollo.service';
 import { toNumber } from 'lodash';
 import { CountriesMutationResponse } from './../models/countries.model';
 import { countriesApi } from './../graphql/countriesApi';
 import { FormGroup, FormControl } from '@angular/forms';
-import { Apollo } from 'apollo-angular';
 import { Injectable } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { CountriesQueryResponse } from '../models/countries.model';
@@ -18,17 +18,14 @@ export class CountriesService {
   subscription: Subscription[] = [];
 
   constructor(
-    private _apollo: Apollo,
+    private _apolloSvc: ApolloService,
   ) { }
   
   getCountries(): Observable<CountriesQueryResponse> {
     return new Observable<CountriesQueryResponse>(subscriber => {
-        this._apollo.watchQuery<CountriesQueryResponse> ({
-            query: countriesApi.all,
-            fetchPolicy: 'network-only'
-        }).valueChanges.subscribe({
+        this._apolloSvc.watchQuery<CountriesQueryResponse>(countriesApi.all).subscribe({
             next: (response) => {
-                subscriber.next(response.data);
+                subscriber.next(response);
             },
             error: (error) => { 
                 subscriber.error(error.message);
@@ -39,13 +36,9 @@ export class CountriesService {
 
   getCountry(id: number): Observable<CountriesQueryResponse> {
     return new Observable<CountriesQueryResponse>(subscriber => {
-        this._apollo.query<CountriesQueryResponse> ({
-            query: countriesApi.byId,
-            variables: { id },
-            fetchPolicy: 'network-only'
-        }).subscribe({
+        this._apolloSvc.query<CountriesQueryResponse>(countriesApi.byId, { id }).subscribe({
             next: (response) => {
-                subscriber.next(response.data);
+                subscriber.next(response);
             },
             error: (error) => { 
                 subscriber.error(error.message);
@@ -64,13 +57,9 @@ export class CountriesService {
     const countryMutation = payload.IdCountry === 0 ? countriesApi.create : countriesApi.update;
 
     return new Observable<CountriesMutationResponse>(subscriber => {
-      this.subscription.push(this._apollo.mutate<CountriesMutationResponse>({
-        mutation: countryMutation,
-        variables: { countryInput: payload },
-        refetchQueries: ['GetCountries']
-      }).subscribe({
+      this.subscription.push(this._apolloSvc.mutation<CountriesMutationResponse>(countryMutation, { countryInput: payload }, ['GetCountries']).subscribe({
         next: (result) => {
-          subscriber.next(result.data!);
+          subscriber.next(result);
         },
         error: err => {
           subscriber.error(err.message || err);
@@ -81,13 +70,9 @@ export class CountriesService {
   
   delete(IDs: number[]): Observable<CountriesMutationResponse> {
     return new Observable<CountriesMutationResponse>(subscriber => {
-      this.subscription.push(this._apollo.mutate<CountriesMutationResponse>({
-        mutation: countriesApi.delete,
-        variables: { IDs },
-        refetchQueries: ['GetCountries']
-      }).subscribe({
+      this.subscription.push(this._apolloSvc.mutation<CountriesMutationResponse>(countriesApi.delete, { IDs }, ['GetCountries']).subscribe({
         next: (result) => {
-          subscriber.next(result.data!);
+          subscriber.next(result);
         },
         error: err => {
           subscriber.error(err.message || err);

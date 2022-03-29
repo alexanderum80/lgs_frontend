@@ -1,7 +1,7 @@
+import { ApolloService } from './../../../shared/services/apollo.service';
 import { toNumber } from 'lodash';
 import { casinoApi } from './../graphql/casinoApi';
 import { CasinoInfoQueryResponse, CasinoInfoMutationResponse } from './../models/casino-info.model';
-import { Apollo } from 'apollo-angular';
 import { Subscription, Observable } from 'rxjs';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Injectable } from '@angular/core';
@@ -20,17 +20,14 @@ export class CasinoInfoService {
   subscription: Subscription[] = [];
 
   constructor(
-    private _apollo: Apollo,
+    private _apolloSvc: ApolloService,
   ) { }
 
   loadCasinoInfo(): Observable<CasinoInfoQueryResponse> {
     return new Observable<CasinoInfoQueryResponse>(subscriber => {
-      this.subscription.push(this._apollo.query<CasinoInfoQueryResponse>({
-        query: casinoApi.get,
-        fetchPolicy: 'network-only'
-      }).subscribe({
+      this.subscription.push(this._apolloSvc.query<CasinoInfoQueryResponse>(casinoApi.get).subscribe({
         next: reponse => {
-          subscriber.next(reponse.data);
+          subscriber.next(reponse);
         },
         error: err => {
           subscriber.error(err);
@@ -41,12 +38,9 @@ export class CasinoInfoService {
 
   loadCasinoState(): Observable<CasinoInfoQueryResponse> {
     return new Observable<CasinoInfoQueryResponse>(subscriber => {
-      this.subscription.push(this._apollo.query<CasinoInfoQueryResponse>({
-        query: casinoApi.state,
-        fetchPolicy: 'network-only'
-      }).subscribe({
+      this.subscription.push(this._apolloSvc.query<CasinoInfoQueryResponse>(casinoApi.state).subscribe({
         next: reponse => {
-          subscriber.next(reponse.data);
+          subscriber.next(reponse);
         },
         error: err => {
           subscriber.error(err);
@@ -66,12 +60,9 @@ export class CasinoInfoService {
     };
 
     return new Observable<CasinoInfoMutationResponse>(subscriber => {
-      this.subscription.push(this._apollo.mutate<CasinoInfoMutationResponse>({
-        mutation: casinoApi.save,
-        variables: { casinoInfoInput: inputData }
-      }).subscribe({
+      this.subscription.push(this._apolloSvc.mutation<CasinoInfoMutationResponse>(casinoApi.save, { casinoInfoInput: inputData }).subscribe({
         next: response => {
-          subscriber.next(response.data || undefined);
+          subscriber.next(response);
         },
         error: err => {
           subscriber.error(err);

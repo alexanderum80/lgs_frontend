@@ -1,7 +1,6 @@
 import { ApolloService } from './../../../shared/services/apollo.service';
 import { OperationQueryResponse, EOperations, OperationMutationResponse, IOperationD, IOperationR } from './../models/operation.model';
 import { operationApi } from './../graphql/operation-api';
-import { Apollo } from 'apollo-angular';
 import { Subscription, Observable } from 'rxjs';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Injectable } from '@angular/core';
@@ -23,13 +22,12 @@ export class OperationService {
 
   constructor(
     private _apolloSvc: ApolloService,
-    private _apollo: Apollo
   ) { }
 
   getTodayOperation(operation: EOperations): Observable<OperationQueryResponse> {
     return new Observable<OperationQueryResponse>(subscriber => {
-      this.subscription.push(this._apolloSvc.watchQuery<OperationQueryResponse>(operationApi.today, {idState : operation }).subscribe({
-        next: (result) => {
+      this.subscription.push(this._apolloSvc.watchQuery<OperationQueryResponse>(operationApi.today, { idState : operation }).subscribe({
+        next: result => {
           subscriber.next(result);
         },
         error: err => {
@@ -41,13 +39,9 @@ export class OperationService {
 
   getOperationDetails(id: number): Observable<OperationQueryResponse> {
     return new Observable<OperationQueryResponse>(subscriber => {
-      this.subscription.push(this._apollo.watchQuery<OperationQueryResponse>({
-        query: operationApi.detail,
-        variables: { id },
-        fetchPolicy: 'network-only'
-      }).valueChanges.subscribe({
-        next: (result) => {
-          subscriber.next(result.data);
+      this.subscription.push(this._apolloSvc.query<OperationQueryResponse>(operationApi.detail, { id }).subscribe({
+        next: result => {
+          subscriber.next(result);
         },
         error: err => {
           subscriber.error(err.message || err);
@@ -58,13 +52,9 @@ export class OperationService {
 
   getOperation(id: number): Observable<OperationQueryResponse> {
     return new Observable<OperationQueryResponse>(subscriber => {
-      this.subscription.push(this._apollo.watchQuery<OperationQueryResponse>({
-        query: operationApi.byId,
-        variables: { id },
-        fetchPolicy: 'network-only'
-      }).valueChanges.subscribe({
-        next: (result) => {
-          subscriber.next(result.data);
+      this.subscription.push(this._apolloSvc.query<OperationQueryResponse>(operationApi.byId, { id }).subscribe({
+        next: result => {
+          subscriber.next(result);
         },
         error: err => {
           subscriber.error(err.message || err);
@@ -84,13 +74,9 @@ export class OperationService {
     const operationMutation = operationR.IdOperation === 0 ? operationApi.create : operationApi.update;
 
     return new Observable<OperationMutationResponse>(subscriber => {
-      this.subscription.push(this._apollo.mutate<OperationMutationResponse>({
-        mutation: operationMutation,
-        variables: { operationInput: payload },
-        refetchQueries: ['GetOperationsToday']
-      }).subscribe({
-        next: (result) => {
-          subscriber.next(result.data!);
+      this.subscription.push(this._apolloSvc.mutation<OperationMutationResponse>(operationMutation, { operationInput: payload }, ['GetOperationsToday']).subscribe({
+        next: result => {
+          subscriber.next(result);
         },
         error: err => {
           subscriber.error(err.message || err);
@@ -101,13 +87,9 @@ export class OperationService {
 
   deleteOperation(IDs: number[]): Observable<OperationMutationResponse> {
     return new Observable<OperationMutationResponse>(subscriber => {
-      this.subscription.push(this._apollo.mutate<OperationMutationResponse>({
-        mutation: operationApi.delete,
-        variables: { IDs },
-        refetchQueries: ['GetOperationsToday']
-      }).subscribe({
-        next: (result) => {
-          subscriber.next(result.data!);
+      this.subscription.push(this._apolloSvc.mutation<OperationMutationResponse>(operationApi.delete, { IDs }, ['GetOperationsToday']).subscribe({
+        next: result => {
+          subscriber.next(result);
         },
         error: err => {
           subscriber.error(err.message || err);
@@ -118,13 +100,9 @@ export class OperationService {
   
   finishOperation(idOperation: number): Observable<OperationMutationResponse> {
     return new Observable<OperationMutationResponse>(subscriber => {
-      this.subscription.push(this._apollo.mutate<OperationMutationResponse>({
-        mutation: operationApi.finish,
-        variables: { idOperation },
-        refetchQueries: ['GetOperationsToday']
-      }).subscribe({
-        next: (result) => {
-          subscriber.next(result.data!);
+      this.subscription.push(this._apolloSvc.mutation<OperationMutationResponse>(operationApi.finish, { idOperation }, ['GetOperationsToday']).subscribe({
+        next: result => {
+          subscriber.next(result);
         },
         error: err => {
           subscriber.error(err.message || err);
@@ -135,13 +113,9 @@ export class OperationService {
     
   cancelOperation(idOperation: number): Observable<OperationMutationResponse> {
     return new Observable<OperationMutationResponse>(subscriber => {
-      this.subscription.push(this._apollo.mutate<OperationMutationResponse>({
-        mutation: operationApi.cancel,
-        variables: { idOperation },
-        refetchQueries: ['GetOperationsToday']
-      }).subscribe({
-        next: (result) => {
-          subscriber.next(result.data!);
+      this.subscription.push(this._apolloSvc.mutation<OperationMutationResponse>(operationApi.cancel, { idOperation }, ['GetOperationsToday']).subscribe({
+        next: result => {
+          subscriber.next(result);
         },
         error: err => {
           subscriber.error(err.message || err);
@@ -152,12 +126,9 @@ export class OperationService {
 
   finishInitialization(): Observable<OperationMutationResponse> {
     return new Observable<OperationMutationResponse>(subscriber => {
-      this.subscription.push(this._apollo.mutate<OperationMutationResponse>({
-        mutation: operationApi.finishInit,
-        refetchQueries: ['GetOperationsToday']
-      }).subscribe({
-        next: (result) => {
-          subscriber.next(result.data!);
+      this.subscription.push(this._apolloSvc.mutation<OperationMutationResponse>(operationApi.finishInit, null, ['GetOperationsToday']).subscribe({
+        next: result => {
+          subscriber.next(result);
         },
         error: err => {
           subscriber.error(err.message || err);
@@ -168,12 +139,9 @@ export class OperationService {
 
   finishClosing(): Observable<OperationMutationResponse> {
     return new Observable<OperationMutationResponse>(subscriber => {
-      this.subscription.push(this._apollo.mutate<OperationMutationResponse>({
-        mutation: operationApi.finishClose,
-        refetchQueries: ['GetOperationsToday']
-      }).subscribe({
-        next: (result) => {
-          subscriber.next(result.data!);
+      this.subscription.push(this._apolloSvc.mutation<OperationMutationResponse>(operationApi.finishClose, null, ['GetOperationsToday']).subscribe({
+        next: result => {
+          subscriber.next(result);
         },
         error: err => {
           subscriber.error(err.message || err);

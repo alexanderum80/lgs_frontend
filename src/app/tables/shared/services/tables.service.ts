@@ -1,6 +1,6 @@
+import { ApolloService } from './../../../shared/services/apollo.service';
 import { toNumber } from 'lodash';
 import { TablesQueryResponse, TablesMutationResponse, ITableInitValues } from './../models/tables.model';
-import { Apollo } from 'apollo-angular';
 import { Subscription, Observable } from 'rxjs';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Injectable } from '@angular/core';
@@ -18,17 +18,14 @@ export class TablesService {
   subscription: Subscription[] = [];
 
   constructor(
-    private _apollo: Apollo,
+    private _apolloSvc: ApolloService,
   ) { }
   
   getTables(): Observable<TablesQueryResponse> {
     return new Observable<TablesQueryResponse>(subscriber => {
-        this._apollo.watchQuery<TablesQueryResponse> ({
-            query: tablesApi.all,
-            fetchPolicy: 'network-only'
-        }).valueChanges.subscribe({
+        this._apolloSvc.watchQuery<TablesQueryResponse>(tablesApi.all).subscribe({
             next: (response) => {
-                subscriber.next(response.data);
+                subscriber.next(response);
             },
             error: (error) => { 
                 subscriber.error(error.message);
@@ -39,13 +36,9 @@ export class TablesService {
 
   getTable(id: number): Observable<TablesQueryResponse> {
     return new Observable<TablesQueryResponse>(subscriber => {
-        this._apollo.query<TablesQueryResponse> ({
-            query: tablesApi.byId,
-            variables: { id },
-            fetchPolicy: 'network-only'
-        }).subscribe({
+        this._apolloSvc.query<TablesQueryResponse>(tablesApi.byId, { id }).subscribe({
             next: (response) => {
-                subscriber.next(response.data);
+                subscriber.next(response);
             },
             error: (error) => { 
                 subscriber.error(error.message);
@@ -56,12 +49,9 @@ export class TablesService {
 
   getTablesWithInitValues(): Observable<TablesQueryResponse> {
     return new Observable<TablesQueryResponse>(subscriber => {
-        this._apollo.watchQuery<TablesQueryResponse> ({
-            query: tablesApi.withInitValues,
-            fetchPolicy: 'network-only'
-        }).valueChanges.subscribe({
+        this._apolloSvc.watchQuery<TablesQueryResponse>(tablesApi.withInitValues).subscribe({
             next: (response) => {
-                subscriber.next(response.data);
+                subscriber.next(response);
             },
             error: (error) => { 
                 subscriber.error(error.message);
@@ -74,13 +64,9 @@ export class TablesService {
     const idTable = this.fg.controls['id'].value;
 
     return new Observable<TablesQueryResponse>(subscriber => {
-        this._apollo.watchQuery<TablesQueryResponse> ({
-            query: tablesApi.initValues,
-            variables: { idTable },
-            fetchPolicy: 'network-only'
-        }).valueChanges.subscribe({
+        this._apolloSvc.query<TablesQueryResponse>(tablesApi.initValues, { idTable }).subscribe({
             next: (response) => {
-                subscriber.next(response.data);
+                subscriber.next(response);
             },
             error: (error) => { 
                 subscriber.error(error.message);
@@ -103,13 +89,9 @@ export class TablesService {
     const countryMutation = payload.Table.IdTable === 0 ? tablesApi.create : tablesApi.update;
 
     return new Observable<TablesMutationResponse>(subscriber => {
-      this.subscription.push(this._apollo.mutate<TablesMutationResponse>({
-        mutation: countryMutation,
-        variables: { tableInput: payload },
-        refetchQueries: ['GetTablesWithInitValues']
-      }).subscribe({
+      this.subscription.push(this._apolloSvc.mutation<TablesMutationResponse>(countryMutation, { tableInput: payload }, ['GetTablesWithInitValues']).subscribe({
         next: (result) => {
-          subscriber.next(result.data!);
+          subscriber.next(result);
         },
         error: err => {
           subscriber.error(err.message || err);
@@ -120,13 +102,9 @@ export class TablesService {
   
   delete(IDs: number[]): Observable<TablesMutationResponse> {
     return new Observable<TablesMutationResponse>(subscriber => {
-      this.subscription.push(this._apollo.mutate<TablesMutationResponse>({
-        mutation: tablesApi.delete,
-        variables: { IDs },
-        refetchQueries: ['GetTablesWithInitValues']
-      }).subscribe({
+      this.subscription.push(this._apolloSvc.mutation<TablesMutationResponse>(tablesApi.delete, { IDs }, ['GetTablesWithInitValues']).subscribe({
         next: (result) => {
-          subscriber.next(result.data!);
+          subscriber.next(result);
         },
         error: err => {
           subscriber.error(err.message || err);

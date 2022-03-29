@@ -94,7 +94,7 @@ export class ApolloService {
     }
 
     private handleError(error: any): any {
-        if (error.graphQLErrors!.length) {
+        if (error.graphQLErrors && error.graphQLErrors.length) {
             const statusCode = error.graphQLErrors[0].extensions.response.statusCode || 400;
             if ([401, 403].includes(statusCode)) {
                 this._userSvc.logout();

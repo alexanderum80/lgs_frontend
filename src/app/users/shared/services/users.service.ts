@@ -1,3 +1,4 @@
+import { ApolloService } from './../../../shared/services/apollo.service';
 import { toNumber } from 'lodash';
 import { UsersMutationResponse } from './../models/users.model';
 import { Router } from '@angular/router';
@@ -7,7 +8,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { IUser } from '../../../shared/models/users';
 import { BehaviorSubject, Observable, timeout } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { QueryRef, Apollo } from 'apollo-angular';
 
 import { User } from '../../../shared/models';
 import { Subscription } from 'rxjs';
@@ -24,8 +24,6 @@ export class UsersService {
 
     private _authenticatedSubject = new BehaviorSubject<boolean>(false);
 
-    currentUserQuery: QueryRef<any>;
-
     fg = new FormGroup({
         id: new FormControl(''),
         userName: new FormControl(''),
@@ -37,7 +35,7 @@ export class UsersService {
     });
 
     constructor(
-        private _apollo: Apollo,
+        private _apolloSvc: ApolloService,
         private _router: Router
     ) { 
         this._userSubject.subscribe(user => {
@@ -83,27 +81,30 @@ export class UsersService {
     }
 
     logout(): void {
-        this._userSubject.next(null);
-        this._router.navigateByUrl('login');
+        this._apolloSvc.query<UsersQueryResponse>(userApi.logout).subscribe({
+            next: (response) => {
+                this._userSubject.next(null);
+                this._router.navigateByUrl('login');
+            },
+            error: (error) => { 
+                throw new Error(error);
+            }
+        });
     }
 
     autenticate(authVariables: any): Observable<UsersQueryResponse> {
         return new Observable<UsersQueryResponse>(subscriber => {
-            this._apollo.query<UsersQueryResponse> ({
-                query: userApi.authenticate,
-                variables: {
+            this._apolloSvc.query<UsersQueryResponse>(userApi.authenticate, {
                     user: authVariables.User,
                     passw: authVariables.Password
-                },
-                fetchPolicy: 'network-only'
-            }).subscribe({
+                }).subscribe({
                 next: (response) => {
-                    const user: User = new User(response.data.authenticateUser);
+                    const user: User = new User(response.authenticateUser);
                     this.login(user);
 
                     this._refreshToken(authVariables);
 
-                    subscriber.next(response.data);
+                    subscriber.next(response);
                 },
                 error: (error) => { 
                     subscriber.error(error.message);
@@ -115,16 +116,12 @@ export class UsersService {
     private _refreshToken(authVariables: any) {
         try {
             setTimeout(() => {
-                this._apollo.query<UsersQueryResponse> ({
-                    query: userApi.refreshToken,
-                    variables: {
+                this._apolloSvc.query<UsersQueryResponse>(userApi.refreshToken, {
                         user: authVariables.User,
                         passw: authVariables.Password
-                    },
-                    fetchPolicy: 'network-only'
-                }).subscribe({
+                    }).subscribe({
                     next: (response) => {
-                        const user: User = new User(response.data.refreshToken);
+                        const user: User = new User(response.refreshToken);
                         this.login(user);
                         
                         this._refreshToken(authVariables);
@@ -140,12 +137,9 @@ export class UsersService {
 
     getAll(): Observable<UsersQueryResponse> {
         return new Observable<UsersQueryResponse>(subscriber => {
-            this.subscription.push(this._apollo.watchQuery<UsersQueryResponse>({
-                query: userApi.all,
-                fetchPolicy: 'network-only'
-            }).valueChanges.subscribe({
+            this.subscription.push(this._apolloSvc.watchQuery<UsersQueryResponse>(userApi.all).subscribe({
                 next: (response) => {
-                    subscriber.next(response.data);
+                    subscriber.next(response);
                 },
                 error: (error) => { 
                     subscriber.error(error.message);
@@ -156,13 +150,9 @@ export class UsersService {
 
     getOne(id: number): Observable<UsersQueryResponse> {
         return new Observable<UsersQueryResponse>(subscriber => {
-            this.subscription.push(this._apollo.watchQuery<UsersQueryResponse>({
-                query: userApi.byId,
-                variables: { id },
-                fetchPolicy: 'network-only'
-            }).valueChanges.subscribe({
+            this.subscription.push(this._apolloSvc.watchQuery<UsersQueryResponse>(userApi.byId, { id }).subscribe({
                 next: (response) => {
-                    subscriber.next(response.data);
+                    subscriber.next(response);
                 },
                 error: (error) => { 
                     subscriber.error(error.message);
@@ -185,13 +175,9 @@ export class UsersService {
         const userMutation = userInfo.Id === 0 ? userApi.create : userApi.update;
       
         return new Observable<UsersMutationResponse>(subscriber => {
-            this.subscription.push(this._apollo.mutate<UsersMutationResponse>({
-                mutation: userMutation,
-                variables: { userInfo },
-                refetchQueries: ['GetAllUsers']
-            }).subscribe({
+            this.subscription.push(this._apolloSvc.mutation<UsersMutationResponse>(userMutation, { userInfo }, ['GetAllUsers']).subscribe({
                 next: response => {
-                    subscriber.next(response.data!);
+                    subscriber.next(response);
                 },
                 error: err => {
                     subscriber.error(err);
@@ -202,13 +188,9 @@ export class UsersService {
     
     delete(IDsToRemove: number[]): Observable<UsersMutationResponse> {
         return new Observable<UsersMutationResponse>(subscriber => {
-            this.subscription.push(this._apollo.mutate<UsersMutationResponse>({
-                mutation: userApi.delete,
-                variables: { IDs: IDsToRemove },
-                refetchQueries: ['GetAllUsers']
-              }).subscribe({
+            this.subscription.push(this._apolloSvc.mutation<UsersMutationResponse>(userApi.delete, { IDs: IDsToRemove }, ['GetAllUsers']).subscribe({
                 next: (response) => {
-                    subscriber.next(response.data!);
+                    subscriber.next(response);
                 },
                 error: (error) => { 
                     subscriber.error(error.message);
@@ -219,13 +201,9 @@ export class UsersService {
 
     recover(id: number): Observable<UsersMutationResponse> {
         return new Observable<UsersMutationResponse>(subscriber => {
-            this.subscription.push(this._apollo.mutate<UsersMutationResponse>({
-                mutation: userApi.recover,
-                variables: { id },
-                refetchQueries: ['GetAllUsers']
-              }).subscribe({
+            this.subscription.push(this._apolloSvc.mutation<UsersMutationResponse>(userApi.recover, { id }, ['GetAllUsers']).subscribe({
                 next: (response) => {
-                    subscriber.next(response.data!);
+                    subscriber.next(response);
                 },
                 error: (error) => { 
                     subscriber.error(error.message);

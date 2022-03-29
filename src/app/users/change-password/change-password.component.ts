@@ -1,7 +1,6 @@
 import { IUser } from './../../shared/models/users';
 import { NavigationService } from './../../shared/services/navigation.service';
 import { DinamicDialogService } from './../../shared/ui/prime-ng/dinamic-dialog/dinamic-dialog.service';
-import { UsersMutationResponse } from './../shared/models/users.model';
 import { Apollo } from 'apollo-angular';
 import { Subscription } from 'rxjs';
 import { toNumber } from 'lodash';

@@ -1,9 +1,9 @@
+import { ApolloService } from './../../../shared/services/apollo.service';
 import { toNumber } from 'lodash';
 import { citiesApi } from './../graphql/citiesApi';
 import { CitiesQueryResponse, CitiesMutationResponse } from './../models/cities.model';
 import { Subscription, Observable } from 'rxjs';
 import { FormGroup, FormControl } from '@angular/forms';
-import { Apollo } from 'apollo-angular';
 import { Injectable } from '@angular/core';
 
 @Injectable()
@@ -18,17 +18,14 @@ export class CitiesService {
   subscription: Subscription[] = [];
 
   constructor(
-    private _apollo: Apollo,
+    private _apolloSvc: ApolloService,
   ) { }
   
   getCities(): Observable<CitiesQueryResponse> {
     return new Observable<CitiesQueryResponse>(subscriber => {
-        this._apollo.watchQuery<CitiesQueryResponse> ({
-            query: citiesApi.all,
-            fetchPolicy: 'network-only'
-        }).valueChanges.subscribe({
+        this._apolloSvc.watchQuery<CitiesQueryResponse>(citiesApi.all).subscribe({
             next: (response) => {
-                subscriber.next(response.data);
+                subscriber.next(response);
             },
             error: (error) => { 
                 subscriber.error(error.message);
@@ -39,13 +36,9 @@ export class CitiesService {
   
   getCitiesByIdCountry(idCountry: number): Observable<CitiesQueryResponse> {
     return new Observable<CitiesQueryResponse>(subscriber => {
-        this._apollo.watchQuery<CitiesQueryResponse> ({
-            query: citiesApi.byCountry,
-            variables: { idCountry },
-            fetchPolicy: 'network-only'
-        }).valueChanges.subscribe({
+        this._apolloSvc.query<CitiesQueryResponse>(citiesApi.byCountry, { idCountry }).subscribe({
             next: (response) => {
-                subscriber.next(response.data);
+                subscriber.next(response);
             },
             error: (error) => { 
                 subscriber.error(error.message);
@@ -56,13 +49,9 @@ export class CitiesService {
 
   getCity(id: number): Observable<CitiesQueryResponse> {
     return new Observable<CitiesQueryResponse>(subscriber => {
-        this._apollo.query<CitiesQueryResponse> ({
-            query: citiesApi.byId,
-            variables: { id },
-            fetchPolicy: 'network-only'
-        }).subscribe({
+        this._apolloSvc.query<CitiesQueryResponse>(citiesApi.byId, { id }).subscribe({
             next: (response) => {
-                subscriber.next(response.data);
+                subscriber.next(response);
             },
             error: (error) => { 
                 subscriber.error(error.message);
@@ -82,13 +71,9 @@ export class CitiesService {
     const cityMutation = payload.IdCity === 0 ? citiesApi.create : citiesApi.update;
 
     return new Observable<CitiesMutationResponse>(subscriber => {
-      this.subscription.push(this._apollo.mutate<CitiesMutationResponse>({
-        mutation: cityMutation,
-        variables: { cityInput: payload },
-        refetchQueries: ['GetCities']
-      }).subscribe({
+      this.subscription.push(this._apolloSvc.mutation<CitiesMutationResponse>(cityMutation, { cityInput: payload }, ['GetCities']).subscribe({
         next: (result) => {
-          subscriber.next(result.data!);
+          subscriber.next(result);
         },
         error: err => {
           subscriber.error(err.message || err);
@@ -99,13 +84,9 @@ export class CitiesService {
   
   delete(IDs: number[]): Observable<CitiesMutationResponse> {
     return new Observable<CitiesMutationResponse>(subscriber => {
-      this.subscription.push(this._apollo.mutate<CitiesMutationResponse>({
-        mutation: citiesApi.delete,
-        variables: { IDs },
-        refetchQueries: ['GetCities']
-      }).subscribe({
+      this.subscription.push(this._apolloSvc.mutation<CitiesMutationResponse>(citiesApi.delete, { IDs }, ['GetCities']).subscribe({
         next: (result) => {
-          subscriber.next(result.data!);
+          subscriber.next(result);
         },
         error: err => {
           subscriber.error(err.message || err);
