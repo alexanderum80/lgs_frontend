@@ -1,4 +1,4 @@
-import { UsersService } from 'src/app/users/shared/services/users.service';
+import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { Apollo } from 'apollo-angular';
 import { Injectable } from '@angular/core';
@@ -22,7 +22,7 @@ export class ApolloService {
 
     constructor(
         private _apollo: Apollo,
-        private _userSvc: UsersService,
+        private _router: Router,
     ) {}
 
     query <T> (query: any, variables?: any): Observable <T> {
@@ -95,9 +95,9 @@ export class ApolloService {
 
     private handleError(error: any): any {
         if (error.graphQLErrors && error.graphQLErrors.length) {
-            const statusCode = error.graphQLErrors[0].extensions.response.statusCode || 400;
+            const statusCode = error.graphQLErrors[0].extensions?.response?.statusCode || 400;
             if ([401, 403].includes(statusCode)) {
-                this._userSvc.logout();
+                this._router.navigateByUrl('/logout');
                 return 'You must to login again.';
             }
         }

@@ -48,7 +48,7 @@ export const MenuItems: MenuItem[] = [
       id: 'auditReport',
       label: 'Audit Report',
       icon: 'mdi mdi-clipboard-text-outline',
-      routerLink: 'concilia-interna-dwh',
+      routerLink: '',
       disabled: false,
       title: 'See Audit Report.',
     },

@@ -16,6 +16,7 @@ import { PrimePasswordModule } from '../shared/ui/prime-ng/password/password.mod
 import { PrimeDropdownModule } from '../shared/ui/prime-ng/dropdown/dropdown.module';
 import { PrimeCheckboxModule } from '../shared/ui/prime-ng/checkbox/checkbox.module';
 import { PrimeToastModule } from '../shared/ui/prime-ng/toast/toast.module';
+import { LogoutComponent } from './logout/logout.component';
 
 @NgModule({
   imports: [
@@ -34,6 +35,6 @@ import { PrimeToastModule } from '../shared/ui/prime-ng/toast/toast.module';
     PrimeCardModule,
     PrimeMultiSelectModule
   ],
-  declarations: [ListUsersComponent, UserFormComponent, ChangePasswordComponent],
+  declarations: [ListUsersComponent, UserFormComponent, ChangePasswordComponent, LogoutComponent],
 })
 export class UsersModule { }
