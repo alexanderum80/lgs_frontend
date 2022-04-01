@@ -56,7 +56,7 @@ export class ListOperationsComponent implements OnInit, AfterViewInit, OnDestroy
         case EOperations.INITIALIZING:
           this.title = 'Initialization';
           this.additionalButtons.push(
-            { id: 'init', label: 'Finish Initialization', tooltip: 'Finish day Initialization', tooltipPosition: 'bottom' }
+            { id: 'open', label: 'Finish Initialization', tooltip: 'Finish day Initialization', tooltipPosition: 'bottom' }
           );
           break;
         case EOperations.DEPOSIT:
@@ -175,6 +175,7 @@ export class ListOperationsComponent implements OnInit, AfterViewInit, OnDestroy
       consecutive: 0,
       idTable: null,
       idPlayer: null,
+      finished: false
     };
     this._operationSvc.fg.patchValue(inputData);
         
@@ -187,34 +188,33 @@ export class ListOperationsComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   private _edit(data: any): void {
-    if (!data.Finished) {
-      const id = data.IdOperation;
-  
-      this._operationSvc.subscription.push(this._operationSvc.getOperation(id).subscribe({
-        next: response => {
-          const selectedData = response.getOperation;
-  
-          const inputData = {
-            id: selectedData.IdOperation,
-            consecutive: selectedData.Consecutive,
-            idTable: selectedData.IdTable,
-            idPlayer: selectedData.IdPlayer,
-          };
-  
-          this._operationSvc.fg.patchValue(inputData);
-  
-          this._dinamicDialogSvc.open(`Edit ${ this.title }`, OperationsFormComponent, '90%');
-          this._operationSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
-            if (message) {
-              this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: message })
-            }
-          }));    
-        },
-        error: err => {
-          this._sweetAlertSvc.error(err);
-        }  
-      }));
-    }
+    const id = data.IdOperation;
+
+    this._operationSvc.subscription.push(this._operationSvc.getOperation(id).subscribe({
+      next: response => {
+        const selectedData = response.getOperation;
+
+        const inputData = {
+          id: selectedData.IdOperation,
+          consecutive: selectedData.Consecutive,
+          idTable: selectedData.IdTable,
+          idPlayer: selectedData.IdPlayer,
+          finished: selectedData.Finished
+        };
+
+        this._operationSvc.fg.patchValue(inputData);
+
+        this._dinamicDialogSvc.open(`Edit ${ this.title }`, OperationsFormComponent, '90%');
+        this._operationSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
+          if (message) {
+            this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: message })
+          }
+        }));    
+      },
+      error: err => {
+        this._sweetAlertSvc.error(err);
+      }  
+    }));
   }
 
   private _delete(data: any): void {

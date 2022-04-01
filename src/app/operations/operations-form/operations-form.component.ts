@@ -135,7 +135,7 @@ export class OperationsFormComponent implements OnInit {
           switch (this._operationSvc.idOperation) {
             case EOperations.INITIALIZING:
             case EOperations.CLOSED:
-              this.instrumentsReceiptValues = instruments.filter(p => p.value !== EPaymentInstrument.BONUS);
+              this.instrumentsReceiptValues = instruments;
               break;
             case EOperations.DEPOSIT:
               this.instrumentsReceiptValues = instruments.filter(p => p.value === EPaymentInstrument.CASH);

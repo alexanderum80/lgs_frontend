@@ -12,6 +12,7 @@ export class OperationService {
     consecutive: new FormControl(0),
     idTable: new FormControl(null),
     idPlayer: new FormControl(null),
+    finished: new FormControl(false),
   });
 
   subscription: Subscription[] = [];

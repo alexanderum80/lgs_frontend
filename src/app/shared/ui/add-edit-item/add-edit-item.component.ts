@@ -18,6 +18,10 @@ export class AddEditItemComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  get isFinished(): boolean {
+    return this.fg.controls['finished']!.value || false;
+  }
+
   save(): void {
     this.actionClicked.emit(ActionClicked.Save);
   }

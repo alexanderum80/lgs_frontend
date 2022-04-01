@@ -1,5 +1,5 @@
 <div> 
-    <png-button class="mb-2" icon="mdi mdi-plus" tooltip="Add detail" [text]="true" [rounded]="true" (clicked)="addRow()"></png-button>
+    <png-button *ngIf="!isFinished" class="mb-2" icon="mdi mdi-plus" tooltip="Add detail" [text]="true" [rounded]="true" (clicked)="addRow()"></png-button>
 </div>
 <p-table #dt [value]="operationDetails" dataKey="IdOperationDetail" editMode="row" responsiveLayout="scroll">
     <ng-template pTemplate="header">
@@ -37,10 +37,10 @@
           </p-cellEditor>
         </td>
         <td style="text-align:center">
-          <button class="p-button-rounded p-button-text" *ngIf="!editing" pButton="pButton" pRipple="pRipple" type="button" pInitEditableRow="pInitEditableRow" icon="pi pi-pencil" (click)="onRowEditInit(operation)"></button>
-          <button class="p-button-rounded p-button-text" *ngIf="!editing" pButton="pButton" pRipple="pRipple" type="button" icon="pi pi-trash" (click)="onRowDelete(ri)"></button>
-          <button class="p-button-rounded p-button-text p-button-success p-mr-2" *ngIf="editing" pButton="pButton" pRipple="pRipple" type="button" pSaveEditableRow="pSaveEditableRow" icon="pi pi-check" (click)="onRowEditSave(operation)"></button>
-          <button class="p-button-rounded p-button-text p-button-danger" *ngIf="editing" pButton="pButton" pRipple="pRipple" type="button" pCancelEditableRow="pCancelEditableRow" icon="pi pi-times" (click)="onRowEditCancel(operation, ri)"></button>
+          <button class="p-button-rounded p-button-text" *ngIf="!editing && !isFinished" pButton="pButton" pRipple="pRipple" type="button" pInitEditableRow="pInitEditableRow" icon="pi pi-pencil" (click)="onRowEditInit(operation)"></button>
+          <button class="p-button-rounded p-button-text" *ngIf="!editing && !isFinished" pButton="pButton" pRipple="pRipple" type="button" icon="pi pi-trash" (click)="onRowDelete(ri)"></button>
+          <button class="p-button-rounded p-button-text p-button-success p-mr-2" *ngIf="editing && !isFinished" pButton="pButton" pRipple="pRipple" type="button" pSaveEditableRow="pSaveEditableRow" icon="pi pi-check" (click)="onRowEditSave(operation)"></button>
+          <button class="p-button-rounded p-button-text p-button-danger" *ngIf="editing && !isFinished" pButton="pButton" pRipple="pRipple" type="button" pCancelEditableRow="pCancelEditableRow" icon="pi pi-times" (click)="onRowEditCancel(operation, ri)"></button>
         </td>
       </tr>
     </ng-template>

@@ -1,3 +1,5 @@
+import { OperationService } from './../shared/services/operation.service';
+import { FormGroup } from '@angular/forms';
 import { EOperations } from './../shared/models/operation.model';
 import { ActionClicked } from '../../shared/models/list-items';
 import { SweetalertService } from '../../shared/services/sweetalert.service';
@@ -22,11 +24,19 @@ export class DetailFormComponent implements OnInit {
   denominationsValues: SelectItem[] = [];
   clonedOperation: { [s: string]: any; } = {};
 
+  fg: FormGroup;
+
   constructor(
     private _sweetAlertSvc: SweetalertService,
+    private _operationsSvc: OperationService
   ) { }
 
   ngOnInit(): void {
+    this.fg = this._operationsSvc.fg;
+  }
+
+  get isFinished(): boolean {
+    return this.fg.controls['finished']!.value || false;
   }
   
   getInstrumentDescription(idInstrument: number): string {
