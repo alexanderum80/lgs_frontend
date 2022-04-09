@@ -293,3 +293,7 @@ p-slidemenu {
 .label-required:after {
     content: " *";
 }
+
+small.p-error {
+    position: absolute;
+}

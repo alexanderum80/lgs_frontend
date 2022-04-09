@@ -46,10 +46,10 @@
             </ng-template>
             <ng-template pTemplate="groupfooter" let-playerSession>
                 <tr class="p-rowgroup-footer">
-                    <td style="min-width: 50%">
-                        <div style="text-align: right; width: 100%; font-weight: bold;">Total Result</div>
+                    <td class="w-6">
+                        <div class="text-align-right w-full font-bold">Total Result</div>
                     </td>
-                    <td style="text-align: end; width: 50%; font-weight: bold;">{{calculateCustomerTotal(playerSession.IdPlayer) | currency}}</td>
+                    <td style="text-align: end;" class="w-6 font-bold">{{calculateCustomerTotal(playerSession.IdPlayer) | currency}}</td>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-playerSession>
