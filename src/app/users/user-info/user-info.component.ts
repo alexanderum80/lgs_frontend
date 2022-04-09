@@ -11,7 +11,6 @@ import { MenuItem } from 'primeng/api';
 export class UserInfoComponent implements OnInit {
 
   items: MenuItem[] =  [
-    // { label: 'Change Password', icon: 'mdi mdi-account-key-outline' },
     { label: 'Logout', icon: 'mdi mdi-logout', command: () => this.logout() },
   ]
 

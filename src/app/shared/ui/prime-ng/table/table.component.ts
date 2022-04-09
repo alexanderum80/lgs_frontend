@@ -6,7 +6,6 @@ import { TableService } from './table.service';
 import { IAdditionalButtons } from '../button/button.model';
 
 @Component({
-  // tslint:disable-next-line: component-selector
   selector: 'png-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
@@ -25,6 +24,8 @@ export class TableComponent implements OnInit {
   @Input() resizableColumns = false;
   @Input() operations = false;
   @Input() additionalButtons: IAdditionalButtons[] = [];
+  @Input() scrollable = false;
+  @Input() scrollHeight = "";
 
   @Output() actionClicked = new EventEmitter<IActionItemClickedArgs>()
 
@@ -65,36 +66,6 @@ export class TableComponent implements OnInit {
           item: data || []
         })
         break;
-
-      // case ActionClicked.Add:
-      //   this.actionClicked.emit({
-      //     action: 'add'
-      //   })
-      //   break;
-      // case ActionClicked.Edit:
-      //   this.actionClicked.emit({
-      //     action: 'edit',
-      //     item: data
-      //   })
-      //   break;
-      // case ActionClicked.Finish:
-      //   this.actionClicked.emit({
-      //     action: 'finish',
-      //     item: data
-      //   })
-      //   break;
-      // case ActionClicked.Cancel:
-      //   this.actionClicked.emit({
-      //     action: 'cancel',
-      //     item: data
-      //   })
-      //   break;
-      // case ActionClicked.Open:
-      //   this.actionClicked.emit({
-      //     action: 'open',
-      //     item: data
-      //   })
-      //   break;
     }
   }
 

@@ -93,6 +93,18 @@ p-inputnumber, .p-inputnumber {
     font-size: 2rem !important;
 }
 
+.p-datatable-scrollable .p-datatable-thead, 
+.p-datatable-scrollable .p-datatable-tbody, 
+.p-datatable-scrollable .p-datatable-tfoot,
+.p-datatable-scrollable .p-datatable-thead>tr>th, 
+.p-datatable-scrollable .p-datatable-tbody>tr>td, 
+.p-datatable-scrollable .p-datatable-tfoot>tr>td,
+.p-datatable-scrollable .p-datatable-thead>tr, 
+.p-datatable-scrollable .p-datatable-tbody>tr, 
+.p-datatable-scrollable .p-datatable-tfoot>tr {
+    display: revert !important;
+}
+
 .p-dropdown .p-dropdown-trigger, .p-multiselect-trigger {
     width: 2rem !important;
 }
@@ -244,7 +256,12 @@ p-slidemenu {
 
     .p-dialog-content {
         padding: 0 !important;
+        overflow-y: unset !important;
     }
+}
+
+.p-dialog-mask {
+    overflow: auto;
 }
 
 .p-column-filter-row .p-column-filter-menu-button, 
@@ -271,4 +288,8 @@ p-slidemenu {
         height: 1rem !important;
         margin-top: -0.525rem !important;
     }
+}
+
+.label-required:after {
+    content: " *";
 }

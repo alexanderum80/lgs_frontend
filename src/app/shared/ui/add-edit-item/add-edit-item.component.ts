@@ -19,7 +19,7 @@ export class AddEditItemComponent implements OnInit {
   }
 
   get isFinished(): boolean {
-    return this.fg.controls['finished']!.value || false;
+    return (this.fg.controls['finished'] && this.fg.controls['finished']!.value) || false;
   }
 
   save(): void {

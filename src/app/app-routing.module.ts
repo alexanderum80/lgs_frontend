@@ -15,6 +15,10 @@ const routes: Routes = [
   { path: 'operations',
     loadChildren: () => import('./operations/operations.module').then(m => m.OperationsModule),
     canActivate: [ AuthGuard ] },
+  // Reports
+  { path: 'reports',
+    loadChildren: () => import('./reports/reports.module').then(m => m.ReportsModule),
+    canActivate: [ AuthGuard ] },
   // Settings
   { path: 'casino-info',
     loadChildren: () => import('./casino-info/casino-info.module').then(m => m.CasinoInfoModule),
@@ -37,9 +41,6 @@ const routes: Routes = [
   { path: 'payments',
     loadChildren: () => import('./payments/payments.module').then(m => m.PaymentsModule),
     canActivate: [ AuthGuard ], data: { roles: [ERole.Administrator] } },
-  { path: 'lenders',
-    loadChildren: () => import('./lenders/lenders.module').then(m => m.LendersModule),
-    canActivate: [ AuthGuard ] },
   { path: 'tables',
     loadChildren: () => import('./tables/tables.module').then(m => m.TablesModule),
     canActivate: [ AuthGuard ], data: { roles: [ERole.Administrator] } },

@@ -1,0 +1,19 @@
+query CurrentPlayersTracking {
+    currentPlayersTracking {
+      	IdTracking
+      	IdTable
+      	Description
+        IdPlayer
+      	Name
+      	IdOperations
+      	IdOperationType
+      	OperationName
+      	Date
+      	IdPayment
+      	PayDescription
+      	PayInstrument
+      	Denomination
+      	Qty
+      	Amount
+    }
+}

@@ -6,7 +6,6 @@
     box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, .2);
 
     &__login {
-        // height: 250px;
         width: 300px;
         padding: .5rem 1rem;
     }
@@ -14,10 +13,7 @@
     &__group {
         position: relative;
         display: flex;
-        // flex: 1;
-        // flex-direction: row;
         padding: 0 .2rem .5rem .2rem;
-        // margin-bottom: 0.5rem;
     }  
    
     &__checkbox {

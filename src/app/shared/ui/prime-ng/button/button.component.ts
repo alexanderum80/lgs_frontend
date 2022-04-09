@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
-  // tslint:disable-next-line: component-selector
   selector: 'png-button',
   templateUrl: './button.component.html',
   styleUrls: ['./button.component.scss']

@@ -1,0 +1,9 @@
+query FinalPlayerSessions($initSession: Int!, $finalSession: Int!, $idPlayer: Int) {
+    finalPlayerSessions(initSession: $initSession, finalSession: $finalSession, idPlayer: $idPlayer) {
+		IdSession
+		OpenDate
+		IdPlayer
+		Player
+		Result
+    }
+}

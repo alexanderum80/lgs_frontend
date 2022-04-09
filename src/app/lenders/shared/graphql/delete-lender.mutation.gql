@@ -1,3 +1,0 @@
-mutation DeleteLender($IDs: [Int!]!) {
-    deleteLender(IDs: $IDs)
-}

@@ -97,7 +97,7 @@ export class ApolloService {
         if (error.graphQLErrors && error.graphQLErrors.length) {
             const statusCode = error.graphQLErrors[0].extensions?.response?.statusCode || 400;
             if ([401, 403].includes(statusCode)) {
-                this._router.navigateByUrl('/logout');
+                this._router.navigateByUrl('logout');
                 return 'You must to login again.';
             }
         }

@@ -4,6 +4,7 @@
             [for]="control" 
             class="inline-label" 
             [ngStyle]="{'width.px': labelWidth}"
+            [ngClass]="{'label-required': required }"
             [class.p-error]="!fg.controls[control].valid && fg.controls[control].dirty">{{ label }}:
         </label>
         <p-inputNumber [id]="control" 
@@ -18,7 +19,7 @@
             [required]="required" 
             [disabled]="disabled">
         </p-inputNumber>
-        <label *ngIf="floatLabel" [for]="control">{{ label }}</label>
+        <label *ngIf="floatLabel" [for]="control" [ngClass]="{'label-required': required }">{{ label }}</label>
     </span>
     <small *ngIf="!fg.controls[control].valid && fg.controls[control].errors?.['required'] && fg.controls[control].dirty" class="p-error">This field is mandatory.</small>
     <small *ngIf="!fg.controls[control].valid && fg.controls[control].errors?.['minLength'] && fg.controls[control].dirty" class="p-error">Muy pocos caracteres.</small>

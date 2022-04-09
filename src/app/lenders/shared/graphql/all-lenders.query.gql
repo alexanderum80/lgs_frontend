@@ -1,7 +1,0 @@
-query GetLenders {
-    getLenders {
-        IdLender
-        Name
-        Enabled
-    }
-}

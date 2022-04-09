@@ -26,7 +26,9 @@
     expandableRows="true"
     [resizableColumns]="resizableColumns"
     [showCurrentPageReport]="true" 
-    [globalFilterFields]="getFields()">
+    [globalFilterFields]="getFields()"
+    [scrollable]="scrollable"
+    [scrollHeight]="scrollHeight">
     <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngIf="canEditDelete || canSelect">

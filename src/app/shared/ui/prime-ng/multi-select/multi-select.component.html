@@ -4,6 +4,7 @@
             [for]="control" 
             class="inline-label" 
             [ngStyle]="{'width.px': labelWidth}"
+            [ngClass]="{'label-required': required }"
             [class.p-error]="!fg.controls[control].valid && fg.controls[control].dirty">{{ label }}: 
         </label>
         <p-multiSelect [inputId]="control" 
@@ -17,7 +18,7 @@
             [required]="required" 
             [disabled]="disabled">
         </p-multiSelect>
-        <label *ngIf="floatLabel" [for]="control">{{ label }}</label>
+        <label *ngIf="floatLabel" [for]="control" [ngClass]="{'label-required': required }">{{ label }}</label>
     </div>
     <small *ngIf="!fg.controls[control].valid && fg.controls[control].dirty" id="username2-help" class="p-error">This field is mandatory</small>
 </div>

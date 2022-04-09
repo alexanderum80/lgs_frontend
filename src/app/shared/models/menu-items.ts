@@ -45,12 +45,20 @@ export const MenuItems: MenuItem[] = [
   ]},
   { id: 'reports', label: 'Reports', items: [
     {
-      id: 'auditReport',
-      label: 'Audit Report',
+      id: 'todayPlayerTracking',
+      label: `Today's Players Tracking`,
       icon: 'mdi mdi-clipboard-text-outline',
-      routerLink: '',
+      routerLink: 'reports/today-player-tracking',
       disabled: false,
-      title: 'See Audit Report.',
+      title: `See Today's Players Tracking.`,
+    },
+    {
+      id: 'finalPlayerSessions',
+      label: `Final Players Sessions`,
+      icon: 'mdi mdi-clipboard-text-outline',
+      routerLink: 'reports/final-player-sessions',
+      disabled: false,
+      title: `See Final Players Results by Date.`,
     },
   ]},
   { id: 'settings', label: 'Settings', icon: 'mdi mdi-settings-outline', items: [
@@ -131,14 +139,6 @@ export const MenuItems: MenuItem[] = [
       routerLink: 'players',
       disabled: false,
       title: 'Manage Players.',
-    },
-    {
-      id: 'lenders',
-      label: 'Lenders',
-      icon: 'mdi mdi-account-cash-outline',
-      routerLink: 'lenders',
-      disabled: false,
-      title: 'Manage Lenders.',
     },
   ]},
 ];

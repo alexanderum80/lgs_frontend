@@ -37,7 +37,6 @@ import { DialogService } from 'primeng/dynamicdialog';
     AppRoutingModule,
 
     // Prime NG
-    // PrimeNgModule,
     PrimeCardModule,
     PrimeButtonModule,
     PrimeInputTextModule,
