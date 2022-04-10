@@ -37,4 +37,17 @@ export class ReportsService {
     })
   }
 
+  getOperationsView(initSession: number, finalSession: number, idOperation?: number): Observable<ReportsQueryResponse> {
+    return new Observable<ReportsQueryResponse>(subscriber => {
+        this._apolloSvc.query<ReportsQueryResponse>(reportsApi.dropResults, { initSession, finalSession, idOperation }).subscribe({
+            next: (response) => {
+                subscriber.next(response);
+            },
+            error: (error) => { 
+                subscriber.error(error.message);
+            }
+        });
+    })
+  }
+
 }

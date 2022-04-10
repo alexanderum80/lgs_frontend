@@ -1,3 +1,4 @@
+import { DropResultsComponent } from './drop-results/drop-results.component';
 import { FinalPlayerSessionsComponent } from './final-player-sessions/final-player-sessions.component';
 import { TodayPlayerTrackingComponent } from './today-player-tracking/today-player-tracking.component';
 import { NgModule } from '@angular/core';
@@ -7,6 +8,7 @@ const routes: Routes = [
   { path: '', children: [
     { path: 'today-player-tracking', component: TodayPlayerTrackingComponent },
     { path: 'final-player-sessions', component: FinalPlayerSessionsComponent },
+    { path: 'drop-results', component: DropResultsComponent },
   ] }
 ];
 

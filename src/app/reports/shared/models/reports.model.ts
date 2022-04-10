@@ -24,7 +24,17 @@ export interface FinalPlayerSessions {
     Result: number;
 }
 
+export interface DropResults {
+    IdSession: number;
+    IdTable: number;
+    Table: string;
+    Date: string;
+    Time: string;
+    Amount: number;
+}
+
 export interface ReportsQueryResponse {
     currentPlayersTracking: CurrentPlayersTracking[];
     finalPlayerSessions: FinalPlayerSessions[];
+    dropResults: DropResults[];
 }

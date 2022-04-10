@@ -12,11 +12,13 @@ import { ReportsRoutingModule } from './reports-routing.module';
 import { TodayPlayerTrackingComponent } from './today-player-tracking/today-player-tracking.component';
 import { TableModule } from 'primeng/table';
 import { FinalPlayerSessionsComponent } from './final-player-sessions/final-player-sessions.component';
+import { DropResultsComponent } from './drop-results/drop-results.component';
 
 @NgModule({
   declarations: [
     TodayPlayerTrackingComponent,
-    FinalPlayerSessionsComponent
+    FinalPlayerSessionsComponent,
+    DropResultsComponent
   ],
   imports: [
     CommonModule,

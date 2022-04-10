@@ -1,0 +1,10 @@
+query DropResults($initSession: Int!, $finalSession: Int!) {
+    dropResults(initSession: $initSession, finalSession: $finalSession) {
+        IdSession
+        IdTable
+        Table
+        Date
+        Time
+        Amount
+    }
+}

@@ -60,6 +60,14 @@ export const MenuItems: MenuItem[] = [
       disabled: false,
       title: `See Final Players Results by Date.`,
     },
+    {
+      id: 'dropResults',
+      label: `Drop Results`,
+      icon: 'mdi mdi-clipboard-text-outline',
+      routerLink: 'reports/drop-results',
+      disabled: false,
+      title: `See Drop Results by Date.`,
+    },
   ]},
   { id: 'settings', label: 'Settings', icon: 'mdi mdi-settings-outline', items: [
     {
