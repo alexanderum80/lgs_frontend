@@ -106,7 +106,7 @@ export class OperationsFormComponent implements OnInit {
     try {
       this._tablesSvc.getTables().subscribe({
         next: result => {
-          this.tablesValues = sortBy(result.getTables.filter(f => this._operationSvc.idOperation === EOperations.CLOSED ? f.IdTable == f.IdTable : f.IdTable !== 0), 'IdTable').map(p => {
+          this.tablesValues = sortBy(result.getTables.filter(f => this._operationSvc.idOperationType === EOperations.CLOSED ? f.IdTable == f.IdTable : f.IdTable !== 0), 'IdTable').map(p => {
             return {
               value: p.IdTable,
               label: p.Description
@@ -132,12 +132,13 @@ export class OperationsFormComponent implements OnInit {
               label: t.Name,
             }
           });
-          switch (this._operationSvc.idOperation) {
+          switch (this._operationSvc.idOperationType) {
             case EOperations.INITIALIZING:
             case EOperations.CLOSED:
               this.instrumentsReceiptValues = instruments;
               break;
             case EOperations.DEPOSIT:
+            case EOperations.CREDIT:
               this.instrumentsReceiptValues = instruments.filter(p => p.value === EPaymentInstrument.CASH);
               this.instrumentsDeliveryValues = instruments.filter(p => p.value !== EPaymentInstrument.CASH);
               break;          
@@ -184,7 +185,7 @@ export class OperationsFormComponent implements OnInit {
   }
 
   private _enableFunctionsByOperation(): void {
-    switch (this._operationSvc.idOperation) {
+    switch (this._operationSvc.idOperationType) {
       case EOperations.INITIALIZING:
         this.txtOperation = 'Initialization';
         this.canReceive = true;
@@ -220,6 +221,11 @@ export class OperationsFormComponent implements OnInit {
         this.canDeliver = true;
         this.needTable = true;
         break;
+      case EOperations.CREDIT:
+        this.txtOperation = 'Credit';
+        this.canReceive = true;
+        this.canDeliver = true;
+        break;
       case EOperations.CLOSED:
         this.txtOperation = 'Closing';
         this.canReceive = true;
@@ -249,7 +255,7 @@ export class OperationsFormComponent implements OnInit {
     const operationR: IOperationR = {
       IdOperation: toNumber(this.fg.controls['id'].value),
       Consecutive: toNumber(this.fg.controls['consecutive'].value),
-      IdOperationType: this._operationSvc.idOperation,
+      IdOperationType: this._operationSvc.idOperationType,
       IdTable: toNumber(this.fg.controls['idTable'].value),
       IdPlayer: toNumber(this.fg.controls['idPlayer'].value),
     };

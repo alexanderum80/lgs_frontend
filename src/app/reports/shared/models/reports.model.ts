@@ -1,3 +1,20 @@
+export interface MasterTracking {
+    IdSession: number;
+    OpenDate: Date;
+    CloseDate?: Date;
+    IdPlayer: number;
+    PlayerName: string;
+    TimeIn: Date;
+    TimeOut?: Date;
+    SRD: number;
+    USD: number;
+    EUR: number;
+    TotalSRD: number;
+    TotalOutSRD: number;
+    WinLoss: number;
+    TotalCreditsSRD: number;
+}
+
 export interface CurrentPlayersTracking {
     IdTracking: number;
     IdTable: number;
@@ -37,4 +54,5 @@ export interface ReportsQueryResponse {
     currentPlayersTracking: CurrentPlayersTracking[];
     finalPlayerSessions: FinalPlayerSessions[];
     dropResults: DropResults[];
+    masterTracking: MasterTracking[];
 }

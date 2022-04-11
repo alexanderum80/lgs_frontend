@@ -17,7 +17,7 @@ export class OperationService {
 
   subscription: Subscription[] = [];
 
-  idOperation: EOperations;
+  idOperationType: EOperations;
 
   casinoState: EOperations;
 

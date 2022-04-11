@@ -60,7 +60,8 @@ export class TodayPlayerTrackingComponent implements OnInit {
   private _getTodayPlayersTracking(): void {
     try {
       this.loading = true;
-      this._reportsSvc.getCurrentPlayersTracking().subscribe({
+      const idPlayer = this.fg.controls['idPlayer'].value;
+      this._reportsSvc.getCurrentPlayersTracking(idPlayer).subscribe({
         next: result => {
           this.loading = false;
           this.playersTracking = cloneDeep(result.currentPlayersTracking);

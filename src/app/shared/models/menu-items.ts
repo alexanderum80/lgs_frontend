@@ -35,6 +35,14 @@ export const MenuItems: MenuItem[] = [
       title: 'Make refund from table to cash.',
     },
     {
+      id: 'credit',
+      label: 'Credit',
+      icon: 'mdi mdi-bank-transfer-out',
+      routerLink: 'operations/credit',
+      disabled: false,
+      title: 'Make credit approved for player.',
+    },
+    {
       id: 'close',
       label: 'Close',
       icon: 'mdi mdi-bank-remove',
@@ -51,6 +59,14 @@ export const MenuItems: MenuItem[] = [
       routerLink: 'reports/today-player-tracking',
       disabled: false,
       title: `See Today's Players Tracking.`,
+    },
+    {
+      id: 'masterTracking',
+      label: `Master Tracking`,
+      icon: 'mdi mdi-clipboard-text-outline',
+      routerLink: 'reports/master-tracking',
+      disabled: false,
+      title: `See Master Tracking.`,
     },
     {
       id: 'finalPlayerSessions',

@@ -8,6 +8,7 @@ query GetOperationsToday($idState: Int!) {
         IdUser
         UserName
         Date
+        IdOperationType
         Finished
         Cancelled
         AmountIn

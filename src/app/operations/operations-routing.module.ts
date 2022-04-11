@@ -5,11 +5,12 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   { path: '', children: [
-    { path: 'initialization', component: ListOperationsComponent, data: { idOperation: EOperations.INITIALIZING } },
-    { path: 'deposit', component: ListOperationsComponent, data: { idOperation: EOperations.DEPOSIT } },
-    { path: 'extraction', component: ListOperationsComponent, data: { idOperation: EOperations.EXTRACTION } },
-    { path: 'refund', component: ListOperationsComponent, data: { idOperation: EOperations.REFUND } },
-    { path: 'close', component: ListOperationsComponent, data: { idOperation: EOperations.CLOSED } },
+    { path: 'initialization', component: ListOperationsComponent, data: { idOperationType: EOperations.INITIALIZING } },
+    { path: 'deposit', component: ListOperationsComponent, data: { idOperationType: EOperations.DEPOSIT } },
+    { path: 'extraction', component: ListOperationsComponent, data: { idOperationType: EOperations.EXTRACTION } },
+    { path: 'refund', component: ListOperationsComponent, data: { idOperationType: EOperations.REFUND } },
+    { path: 'credit', component: ListOperationsComponent, data: { idOperationType: EOperations.CREDIT } },
+    { path: 'close', component: ListOperationsComponent, data: { idOperationType: EOperations.CLOSED } },
   ]}
 ];
 

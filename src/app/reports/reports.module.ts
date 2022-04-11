@@ -13,12 +13,14 @@ import { TodayPlayerTrackingComponent } from './today-player-tracking/today-play
 import { TableModule } from 'primeng/table';
 import { FinalPlayerSessionsComponent } from './final-player-sessions/final-player-sessions.component';
 import { DropResultsComponent } from './drop-results/drop-results.component';
+import { MasterTrackingComponent } from './master-tracking/master-tracking.component';
 
 @NgModule({
   declarations: [
     TodayPlayerTrackingComponent,
     FinalPlayerSessionsComponent,
-    DropResultsComponent
+    DropResultsComponent,
+    MasterTrackingComponent,
   ],
   imports: [
     CommonModule,

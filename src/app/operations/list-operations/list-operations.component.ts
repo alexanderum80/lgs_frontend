@@ -50,9 +50,9 @@ export class ListOperationsComponent implements OnInit, AfterViewInit, OnDestroy
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(data => {
-      this._operationSvc.idOperation = data['idOperation'];
+      this._operationSvc.idOperationType = data['idOperationType'];
 
-      switch (this._operationSvc.idOperation) {
+      switch (this._operationSvc.idOperationType) {
         case EOperations.INITIALIZING:
           this.title = 'Initialization';
           this.additionalButtons.push(
@@ -67,6 +67,9 @@ export class ListOperationsComponent implements OnInit, AfterViewInit, OnDestroy
           break;
         case EOperations.REFUND:
           this.title = 'Refund';
+          break;
+        case EOperations.CREDIT:
+          this.title = 'Credit';
           break;
         case EOperations.CLOSED:
           this.title = 'Closing';
@@ -93,7 +96,7 @@ export class ListOperationsComponent implements OnInit, AfterViewInit, OnDestroy
 
   private _getOperations(): void {
     try {
-      this._operationSvc.subscription.push(this._operationSvc.getTodayOperation(this._operationSvc.idOperation).subscribe({
+      this._operationSvc.subscription.push(this._operationSvc.getTodayOperation(this._operationSvc.idOperationType).subscribe({
           next: response => {
             this.loading = false;
             this.operations = cloneDeep(response.getOperationsToday);
@@ -128,13 +131,14 @@ export class ListOperationsComponent implements OnInit, AfterViewInit, OnDestroy
   get canEditDelete(): boolean {
     let result = false;
 
-    switch (this._operationSvc.idOperation) {
+    switch (this._operationSvc.idOperationType) {
       case EOperations.INITIALIZING:
         result = this._operationSvc.casinoState === EOperations.CLOSED;
         break;
       case EOperations.DEPOSIT:
       case EOperations.EXTRACTION:
       case EOperations.REFUND:
+      case EOperations.CREDIT:
       case EOperations.CLOSED:
         result = this._operationSvc.casinoState === EOperations.OPEN;
         break;
@@ -217,8 +221,8 @@ export class ListOperationsComponent implements OnInit, AfterViewInit, OnDestroy
     }));
   }
 
-  private _delete(data: any): void {
-    if (!data.Finished) {
+  private _delete(data: IOperationR): void {
+    if (!data.Finished && this._operationSvc.idOperationType !== EOperations.CREDIT) {
       this._sweetAlertSvc.question(`Are you sure you want to delete selected ${ this.title }(s)?`).then(res => {
         if (res === ActionClicked.Yes) {
           const IDsToRemove: number[] = !isArray(data) ? [data.IdOperation] : data.map(d => { return d.IdOperation });
@@ -236,7 +240,7 @@ export class ListOperationsComponent implements OnInit, AfterViewInit, OnDestroy
     }
   }
   
-  private _finish(data: any): void {
+  private _finish(data: IOperationR): void {
     if (!data.Finished) {
       this._sweetAlertSvc.question(`Are you sure you want to Finish selected ${ this.title }?`).then(res => {
         if (res === ActionClicked.Yes) {
@@ -254,7 +258,7 @@ export class ListOperationsComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   private _cancel(data: IOperationR): void {
-    if (data.Finished && !data.Cancelled) {
+    if (data.Finished && !data.Cancelled || (data.IdOperationType === EOperations.CREDIT && !data.Cancelled)) {
       this._sweetAlertSvc.question(`Are you sure you want to Cancel selected ${ this.title }?`).then(res => {
         if (res === ActionClicked.Yes) {
           this._operationSvc.subscription.push(this._operationSvc.cancelOperation(data.IdOperation).subscribe({

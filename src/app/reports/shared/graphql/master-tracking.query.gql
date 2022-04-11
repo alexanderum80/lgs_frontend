@@ -1,0 +1,18 @@
+query MasterTracking($initSession: Int!, $finalSession: Int!, $idPlayer: Int) {
+    masterTracking(initSession: $initSession, finalSession: $finalSession, idPlayer: $idPlayer) {
+        IdSession
+        OpenDate
+        CloseDate
+        IdPlayer
+        PlayerName
+        TimeIn
+        TimeOut
+        SRD
+        USD
+        EUR
+        TotalSRD
+        TotalOutSRD
+        WinLoss
+        TotalCreditsSRD
+    }
+}

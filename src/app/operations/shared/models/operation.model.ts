@@ -8,7 +8,8 @@ export enum EOperations {
     'REFUND' = 7,
     'PLAYER-IN' = 8,
     'PLAYER-OUT' = 9,
-    'OPEN' = 10
+    'OPEN' = 10,
+    'CREDIT' = 11
 }
 
 export enum EPaymentInstrument {
