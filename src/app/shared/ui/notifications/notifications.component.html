@@ -1,0 +1,24 @@
+<i class="pi pi-bell mr-4 p-text-secondary notifications" 
+    pBadge [value]="notificationsQty" severity="warning" 
+    pTooltip="Show notifications"
+    (click)="showConfirm()">
+</i>
+
+<p-toast position="top-right" key="c" [baseZIndex]="5000">
+    <ng-template let-message pTemplate="message">
+        <div class="flex flex-column" style="flex: 1">
+            <div class="text-center">
+                <i class="pi pi-exclamation-triangle" style="font-size: 2rem !important"></i>
+                <h4>{{message.summary}}</h4>
+            </div>
+            <div class="grid p-fluid">
+                <div class="col-6">
+                    <button type="button" pButton (click)="onConfirm(message.id)" label="Approve" class="p-button-success"></button>
+                </div>
+                <div class="col-6">
+                    <button type="button" pButton (click)="onDeny(message.id)" label="Deny" class="p-button-danger"></button>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</p-toast>

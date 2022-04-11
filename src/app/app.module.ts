@@ -1,3 +1,5 @@
+import { PrimeToastModule } from './shared/ui/prime-ng/toast/toast.module';
+import { NotificationsComponent } from './shared/ui/notifications/notifications.component';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { PrimeMenuModule } from './shared/ui/prime-ng/menu/menu.module';
 import { UserInfoComponent } from './users/user-info/user-info.component';
@@ -20,6 +22,7 @@ import { PrimeCardModule } from './shared/ui/prime-ng/card/card.module';
 import { PrimeInputTextModule } from './shared/ui/prime-ng/input-text/input-text.module';
 import { PrimePasswordModule } from './shared/ui/prime-ng/password/password.module';
 import { DialogService } from 'primeng/dynamicdialog';
+import { BadgeModule } from 'primeng/badge';
 
 @NgModule({
   declarations: [
@@ -27,6 +30,7 @@ import { DialogService } from 'primeng/dynamicdialog';
     StartComponent,
     LoginComponent,
     UserInfoComponent,
+    NotificationsComponent,
     UnauthorizedComponent
   ],
   imports: [
@@ -37,6 +41,7 @@ import { DialogService } from 'primeng/dynamicdialog';
     AppRoutingModule,
 
     // Prime NG
+    BadgeModule,
     PrimeCardModule,
     PrimeButtonModule,
     PrimeInputTextModule,
@@ -46,6 +51,7 @@ import { DialogService } from 'primeng/dynamicdialog';
     PrimePanelMenuModule,
     PrimeMenubarModule,
     PrimeSidebarModule,
+    PrimeToastModule,
 
     // Apollo
     HttpClientModule, // provides HttpClient for HttpLink

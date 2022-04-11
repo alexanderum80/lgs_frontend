@@ -223,7 +223,6 @@ p-slidemenu {
 
     .p-tabview-panels {
         height: calc(100% - 50px);
-        overflow: auto;
         padding: .5rem !important;
     }
 }
@@ -296,4 +295,8 @@ p-slidemenu {
 
 small.p-error {
     position: absolute;
+}
+
+.p-overlay-badge .p-badge {
+    font-size: small !important;
 }
