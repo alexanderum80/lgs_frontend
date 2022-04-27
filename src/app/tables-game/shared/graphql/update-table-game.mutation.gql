@@ -2,6 +2,5 @@ mutation UpdateTableGame($tableGameInput: TableGameInput!) {
     updateTableGame(tableGameInput: $tableGameInput) {
         IdGame
         Name
-        StartAmount
     }
 }

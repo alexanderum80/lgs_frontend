@@ -18,7 +18,6 @@ import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 export class ListTablesGameComponent implements OnInit, AfterViewInit, OnDestroy {
   columns: ITableColumns[] = [
     { header: 'Name', field: 'Name', type: 'string' },
-    { header: 'Start Amount', field: 'StartAmount', type: 'decimal' },
   ];
 
   tablesGame: ITablesGame[] = [];
@@ -97,7 +96,6 @@ export class ListTablesGameComponent implements OnInit, AfterViewInit, OnDestroy
         const inputData = {
           id: selectedData.IdGame,
           name: selectedData.Name,
-          startAmount: selectedData.StartAmount,
         };
 
         this._tableGameSvc.fg.patchValue(inputData);

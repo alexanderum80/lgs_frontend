@@ -1,7 +1,6 @@
 export interface ITablesGame {
     IdGame: number;
     Name: string;
-    StartAmount: number;
 }
 
 export interface TablesGameQueryResponse {

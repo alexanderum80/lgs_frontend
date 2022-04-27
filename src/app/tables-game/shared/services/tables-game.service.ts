@@ -11,7 +11,6 @@ export class TablesGameService {
   fg: FormGroup = new FormGroup({
     id: new FormControl(0),
     name: new FormControl(''),
-    startAmount: new FormControl(0),
   })
 
   subscription: Subscription[] = [];
@@ -50,7 +49,6 @@ export class TablesGameService {
     const payload = {
       IdGame: toNumber(this.fg.controls['id'].value),
       Name: this.fg.controls['name'].value,
-      StartAmount: this.fg.controls['startAmount'].value,
     };
 
     const countryMutation = payload.IdGame === 0 ? tablesGameApi.create : tablesGameApi.update;
