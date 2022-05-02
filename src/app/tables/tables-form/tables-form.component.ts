@@ -1,3 +1,4 @@
+import { EPaymentInstrument } from './../../operations/shared/models/operation.model';
 import { IPayments } from './../../payments/shared/models/payments.model';
 import { PaymentsService } from './../../payments/shared/services/payments.service';
 import { TablesGameService } from './../../tables-game/shared/services/tables-game.service';
@@ -57,7 +58,7 @@ export class TablesFormComponent implements OnInit {
       return new Promise(resolve => this._tablesSvc.subscription.push(this._paymentsSvc.getAll().subscribe({
         next: result => {
           this.payments = cloneDeep(result.getPayments);
-          this.paymentsValues = this.payments.map(c => {
+          this.paymentsValues = this.payments.filter(p => p.IdPayInstr === EPaymentInstrument.CHIPS).map(c => {
             return {
               value: c.IdPayment,
               label: c.PaymentName
