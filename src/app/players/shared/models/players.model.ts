@@ -5,7 +5,6 @@ export interface IPlayers {
     LastName: string;
     StartDate: Date;
     Personal_Id: string;
-    Passport_Number?: string;
     Note?: string;
     CellPhone?: string;
     DateOfBirth?: Date;

@@ -122,7 +122,6 @@ export class ListPlayersComponent implements OnInit, AfterViewInit, OnDestroy {
           name: selectedPlayer.Name,
           lastName: selectedPlayer.LastName,
           personalId: selectedPlayer.Personal_Id,
-          passportNumber: selectedPlayer.Passport_Number,
           note: selectedPlayer.Note,
           cellPhone: selectedPlayer.CellPhone,
           dateOfBirth: moment(selectedPlayer.DateOfBirth).toDate(),

@@ -4,7 +4,6 @@ mutation UpdatePlayer($playerInput: PlayerInput!) {
         Name
         LastName
         Personal_Id
-        Passport_Number
         Note
         CellPhone
         Enabled

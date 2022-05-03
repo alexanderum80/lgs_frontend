@@ -16,7 +16,6 @@ export class PlayersService {
     name: new FormControl(''),
     lastName: new FormControl(''),
     personalId: new FormControl(''),
-    passportNumber: new FormControl(''),
     note: new FormControl(''),
     cellPhone: new FormControl(''),
     dateOfBirth: new FormControl(new Date()),

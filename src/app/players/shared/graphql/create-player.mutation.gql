@@ -5,7 +5,6 @@ mutation CreatePlayer($playerInput: PlayerInput!) {
         LastName
         StartDate
         Personal_Id
-        Passport_Number
         Note
         CellPhone
         Enabled

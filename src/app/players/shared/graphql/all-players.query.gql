@@ -5,7 +5,6 @@ query GetPlayers {
         LastName
         StartDate
         Personal_Id
-        Passport_Number
         Note
         CellPhone
         DateOfBirth
