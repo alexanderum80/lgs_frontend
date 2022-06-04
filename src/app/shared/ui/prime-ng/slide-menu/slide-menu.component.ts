@@ -2,12 +2,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 
 @Component({
-  // tslint:disable-next-line: component-selector
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'png-slide-menu',
   templateUrl: './slide-menu.component.html',
   styleUrls: ['./slide-menu.component.scss'],
 })
-export class SlideMenuComponent implements OnInit {
+export class SlideMenuComponent {
   @Input() items: MenuItem[];
   @Input() popup = true;
   @Input() label: string;
@@ -15,6 +15,4 @@ export class SlideMenuComponent implements OnInit {
   @Input() height = 120;
 
   constructor() {}
-
-  ngOnInit(): void {}
 }

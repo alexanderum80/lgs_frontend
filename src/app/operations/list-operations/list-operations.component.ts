@@ -49,7 +49,7 @@ export class ListOperationsComponent
     private _msgSvc: MessageService,
     private _sweetAlertSvc: SweetalertService,
     private _socketSvc: SocketService,
-    private _casinoInfoSvc: CasinoInfoService
+    private _casinoInfoSvc: CasinoInfoService,
   ) {}
 
   ngOnInit(): void {
@@ -118,7 +118,7 @@ export class ListOperationsComponent
               this.loading = false;
               this._sweetAlertSvc.error(err);
             },
-          })
+          }),
       );
     } catch (err: any) {
       this._sweetAlertSvc.error(err);
@@ -135,7 +135,7 @@ export class ListOperationsComponent
           error: err => {
             this._sweetAlertSvc.error(err);
           },
-        })
+        }),
       );
     } catch (err: any) {
       this._sweetAlertSvc.error(err);
@@ -200,7 +200,7 @@ export class ListOperationsComponent
     this._dinamicDialogSvc.open(
       `Add ${this.title}`,
       OperationsFormComponent,
-      '90%'
+      '90%',
     );
     this._operationSvc.subscription.push(
       this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
@@ -211,7 +211,7 @@ export class ListOperationsComponent
             detail: message,
           });
         }
-      })
+      }),
     );
   }
 
@@ -236,7 +236,7 @@ export class ListOperationsComponent
           this._dinamicDialogSvc.open(
             `Edit ${this.title}`,
             OperationsFormComponent,
-            '90%'
+            '90%',
           );
           this._operationSvc.subscription.push(
             this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
@@ -247,13 +247,13 @@ export class ListOperationsComponent
                   detail: message,
                 });
               }
-            })
+            }),
           );
         },
         error: err => {
           this._sweetAlertSvc.error(err);
         },
-      })
+      }),
     );
   }
 
@@ -284,7 +284,7 @@ export class ListOperationsComponent
                 error: err => {
                   this._sweetAlertSvc.error(err);
                 },
-              })
+              }),
             );
           }
         });
@@ -309,7 +309,7 @@ export class ListOperationsComponent
                 error: err => {
                   this._sweetAlertSvc.error(err);
                 },
-              })
+              }),
             );
           }
         });
@@ -337,7 +337,7 @@ export class ListOperationsComponent
                 error: err => {
                   this._sweetAlertSvc.error(err);
                 },
-              })
+              }),
             );
           }
         });
@@ -367,7 +367,7 @@ export class ListOperationsComponent
                   this.finishing = false;
                   this._sweetAlertSvc.error(err);
                 },
-              })
+              }),
             );
           }
         });
@@ -397,7 +397,7 @@ export class ListOperationsComponent
                   this.finishing = false;
                   this._sweetAlertSvc.error(err);
                 },
-              })
+              }),
             );
           }
         });

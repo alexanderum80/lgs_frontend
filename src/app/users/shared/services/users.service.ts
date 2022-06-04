@@ -4,9 +4,9 @@ import { UsersMutationResponse } from './../models/users.model';
 import { Router } from '@angular/router';
 import { userApi } from '../graphql/userActions.gql';
 import { UsersQueryResponse } from '../models/users.model';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { IUser } from '../../../shared/models/users';
-import { BehaviorSubject, Observable, timeout } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 
 import { User } from '../../../shared/models';
@@ -145,7 +145,7 @@ export class UsersService {
           error: error => {
             subscriber.error(error.message);
           },
-        })
+        }),
       );
     });
   }
@@ -162,7 +162,7 @@ export class UsersService {
             error: error => {
               subscriber.error(error.message);
             },
-          })
+          }),
       );
     });
   }
@@ -193,7 +193,7 @@ export class UsersService {
             error: err => {
               subscriber.error(err);
             },
-          })
+          }),
       );
     });
   }
@@ -205,7 +205,7 @@ export class UsersService {
           .mutation<UsersMutationResponse>(
             userApi.delete,
             { IDs: IDsToRemove },
-            ['GetAllUsers']
+            ['GetAllUsers'],
           )
           .subscribe({
             next: response => {
@@ -214,7 +214,7 @@ export class UsersService {
             error: error => {
               subscriber.error(error.message);
             },
-          })
+          }),
       );
     });
   }
@@ -233,7 +233,7 @@ export class UsersService {
             error: error => {
               subscriber.error(error.message);
             },
-          })
+          }),
       );
     });
   }

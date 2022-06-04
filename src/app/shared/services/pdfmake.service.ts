@@ -90,7 +90,7 @@ export class PdfmakeService {
         resolve(dataURL);
       };
 
-      img.onerror = (error) => {
+      img.onerror = error => {
         reject(error);
       };
 

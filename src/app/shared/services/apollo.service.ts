@@ -65,7 +65,7 @@ export class ApolloService {
   mutation<T>(
     mutation: any,
     variables?: any,
-    refetchQueries?: string[]
+    refetchQueries?: string[],
   ): Observable<T> {
     const definition: IApolloMutationOptions = {
       mutation: mutation,

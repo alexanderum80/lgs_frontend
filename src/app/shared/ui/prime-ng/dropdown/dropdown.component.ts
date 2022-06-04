@@ -9,7 +9,7 @@ import { FormGroup } from '@angular/forms';
 import { SelectItem } from 'primeng/api';
 
 @Component({
-  // tslint:disable-next-line: component-selector
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'png-dropdown',
   templateUrl: './dropdown.component.html',
   styleUrls: ['./dropdown.component.scss'],

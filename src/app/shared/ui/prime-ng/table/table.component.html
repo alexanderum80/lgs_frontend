@@ -8,8 +8,7 @@
       class="p-button-success mr-2"
       pTooltip="Add new item"
       tooltipPosition="bottom"
-      (click)="onActionClicked('add')"
-    ></button>
+      (click)="onActionClicked('add')"></button>
     <button
       pButton
       pRipple
@@ -19,8 +18,7 @@
       pTooltip="Delete selected items"
       tooltipPosition="bottom"
       (click)="onActionClicked('delete')"
-      [disabled]="!selectedRow || !selectedRow.length"
-    ></button>
+      [disabled]="!selectedRow || !selectedRow.length"></button>
   </ng-template>
   <ng-template pTemplate="right">
     <button
@@ -32,8 +30,7 @@
       [class]="button.class"
       [pTooltip]="button.tooltip!"
       [tooltipPosition]="button.tooltipPosition!"
-      (click)="onActionClicked(button.id)"
-    ></button>
+      (click)="onActionClicked(button.id)"></button>
   </ng-template>
 </p-toolbar>
 
@@ -58,8 +55,7 @@
   [showCurrentPageReport]="true"
   [globalFilterFields]="getFields()"
   [scrollable]="scrollable"
-  [scrollHeight]="scrollHeight"
->
+  [scrollHeight]="scrollHeight">
   <ng-template pTemplate="header" let-columns>
     <tr>
       <th *ngIf="canEditDelete || canSelect">
@@ -72,8 +68,7 @@
           [pSortableColumn]="col.field"
           [ngStyle]="{ width: col.width || 'auto' }"
           [style.width]="col.type === 'boolean' ? '100px' : 'auto'"
-          pResizableColumn
-        >
+          pResizableColumn>
           {{ col.header }}
           <p-sortIcon [field]="col.field"></p-sortIcon>
         </th>
@@ -83,8 +78,7 @@
           [pSortableColumn]="col.field"
           [ngStyle]="{ width: col.width || 'auto' }"
           [style.width]="col.type === 'boolean' ? '100px' : 'auto'"
-          pResizableColumn
-        >
+          pResizableColumn>
           {{ col.header }}
           <p-sortIcon [field]="col.field"></p-sortIcon>
         </th>
@@ -97,20 +91,17 @@
         <th
           *ngIf="groupMode === 'rowspan'"
           [ngSwitch]="col.type"
-          [ngStyle]="{ width: col.width || 'auto' }"
-        >
+          [ngStyle]="{ width: col.width || 'auto' }">
           <p-columnFilter
             *ngSwitchCase="'date'"
             type="date"
             [field]="col.field"
             matchMode="is"
-            class="w-full"
-          >
+            class="w-full">
             <ng-template pTemplate="filter" let-filter="filterCallback">
               <p-calendar
                 (onSelect)="filter($event)"
-                dateFormat="mm/dd/yy"
-              ></p-calendar>
+                dateFormat="mm/dd/yy"></p-calendar>
             </ng-template>
           </p-columnFilter>
           <p-columnFilter
@@ -118,33 +109,28 @@
             type="boolean"
             [field]="col.field"
             matchMode="is"
-            class="w-full"
-          ></p-columnFilter>
+            class="w-full"></p-columnFilter>
           <p-columnFilter
             *ngSwitchDefault
             type="text"
             [field]="col.field"
             matchMode="contains"
-            class="w-full"
-          ></p-columnFilter>
+            class="w-full"></p-columnFilter>
         </th>
         <th
           *ngIf="groupMode !== 'rowspan' && col.field !== groupField"
           [ngSwitch]="col.type"
-          [ngStyle]="{ width: col.width || 'auto' }"
-        >
+          [ngStyle]="{ width: col.width || 'auto' }">
           <p-columnFilter
             *ngSwitchCase="'date'"
             type="date"
             [field]="col.field"
             matchMode="is"
-            class="w-full"
-          >
+            class="w-full">
             <ng-template pTemplate="filter" let-filter="filterCallback">
               <p-calendar
                 (onSelect)="filter($event)"
-                dateFormat="mm/dd/yy"
-              ></p-calendar>
+                dateFormat="mm/dd/yy"></p-calendar>
             </ng-template>
           </p-columnFilter>
           <p-columnFilter
@@ -152,15 +138,13 @@
             type="boolean"
             [field]="col.field"
             matchMode="is"
-            class="w-full"
-          ></p-columnFilter>
+            class="w-full"></p-columnFilter>
           <p-columnFilter
             *ngSwitchDefault
             type="text"
             [field]="col.field"
             matchMode="contains"
-            class="w-full"
-          ></p-columnFilter>
+            class="w-full"></p-columnFilter>
         </th>
       </ng-container>
       <th *ngIf="canEditDelete" class="menu-items-cell"></th>
@@ -171,8 +155,7 @@
     *ngIf="groupField"
     pTemplate="groupheader"
     let-rowData
-    let-expanded="expanded"
-  >
+    let-expanded="expanded">
     <tr pRowGroupHeader>
       <td colspan="12" class="relative">
         <button
@@ -182,8 +165,9 @@
           pRipple
           [pRowToggler]="rowData"
           class="p-button-text p-button-rounded p-button-plain mr-2"
-          [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
-        ></button>
+          [icon]="
+            expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'
+          "></button>
         <span [ngClass]="{ 'absolute mt-2': expandible }" class="font-bold">{{
           _(rowData, groupField)
         }}</span>
@@ -198,8 +182,7 @@
     let-rowData
     let-columns="columns"
     let-rowgroup="rowgroup"
-    let-rowspan="rowspan"
-  >
+    let-rowspan="rowspan">
     <tr>
       <td *ngIf="canEditDelete || canSelect">
         <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
@@ -211,10 +194,9 @@
         <td
           *ngIf="groupMode === 'rowspan' && col.field !== groupField"
           [ngSwitch]="col.type"
-          [class.text-right]="col.type === 'number' || col.type === 'decimal'"
-        >
+          [class.text-right]="col.type === 'number' || col.type === 'decimal'">
           <span *ngSwitchCase="'date'">
-            {{ rowData[col.field] | date: "MM/dd/yyyy" }}</span
+            {{ rowData[col.field] | date: 'MM/dd/yyyy' }}</span
           >
           <span *ngSwitchCase="'decimal'">
             {{ rowData[col.field] | currency }}</span
@@ -225,17 +207,15 @@
             [ngClass]="{
               'true-icon pi-check-circle text-green-500': rowData[col.field],
               'false-icon pi-times-circle text-pink-500': !rowData[col.field]
-            }"
-          ></i>
+            }"></i>
           <span *ngSwitchDefault> {{ _(rowData, col.field) }}</span>
         </td>
         <td
           *ngIf="groupMode !== 'rowspan' && col.field !== groupField"
           [ngSwitch]="col.type"
-          [class.text-right]="col.type === 'number' || col.type === 'decimal'"
-        >
+          [class.text-right]="col.type === 'number' || col.type === 'decimal'">
           <span *ngSwitchCase="'date'">
-            {{ rowData[col.field] | date: "MM/dd/yyyy" }}</span
+            {{ rowData[col.field] | date: 'MM/dd/yyyy' }}</span
           >
           <span *ngSwitchCase="'decimal'">
             {{ rowData[col.field] | currency }}</span
@@ -246,16 +226,14 @@
             [ngClass]="{
               'true-icon pi-check-circle text-green-500': rowData[col.field],
               'false-icon pi-times-circle text-pink-500': !rowData[col.field]
-            }"
-          ></i>
+            }"></i>
           <span *ngSwitchDefault> {{ _(rowData, col.field) }}</span>
         </td>
       </ng-container>
       <td
         *ngIf="canEditDelete"
         class="menu-items-cell"
-        style="padding: 0 !important"
-      >
+        style="padding: 0 !important">
         <button
           pButton
           pRipple
@@ -263,8 +241,7 @@
           class="p-button-rounded p-button-text p-button-warning"
           pTooltip="Edit"
           tooltipPosition="left"
-          (click)="onActionClicked('edit', rowData)"
-        ></button>
+          (click)="onActionClicked('edit', rowData)"></button>
         <button
           pButton
           pRipple
@@ -272,8 +249,7 @@
           class="p-button-rounded p-button-text p-button-danger"
           pTooltip="Delete"
           tooltipPosition="left"
-          (click)="onActionClicked('delete', rowData)"
-        ></button>
+          (click)="onActionClicked('delete', rowData)"></button>
         <button
           pButton
           pRipple
@@ -282,8 +258,7 @@
           class="p-button-rounded p-button-text p-button-success"
           pTooltip="Finish"
           tooltipPosition="left"
-          (click)="onActionClicked('finish', rowData)"
-        ></button>
+          (click)="onActionClicked('finish', rowData)"></button>
         <button
           pButton
           pRipple
@@ -292,8 +267,7 @@
           class="p-button-rounded p-button-text p-button-danger"
           pTooltip="Cancel"
           tooltipPosition="left"
-          (click)="onActionClicked('cancel', rowData)"
-        ></button>
+          (click)="onActionClicked('cancel', rowData)"></button>
       </td>
     </tr>
   </ng-template>

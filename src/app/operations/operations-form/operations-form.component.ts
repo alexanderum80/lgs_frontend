@@ -46,7 +46,7 @@ export class OperationsFormComponent implements OnInit {
     private _sweetAlertSvc: SweetalertService,
     private _paymentsSvc: PaymentsService,
     private _playerSvc: PlayersService,
-    private _tablesSvc: TablesService
+    private _tablesSvc: TablesService,
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -73,7 +73,7 @@ export class OperationsFormComponent implements OnInit {
             const op = cloneDeep(
               result.getOperationDetails.map(({ __typename, ...rest }) => {
                 return rest;
-              })
+              }),
             );
             this.operationReceived = op.filter(o => o.Qty > 0);
             this.operationDelivered = op
@@ -86,7 +86,7 @@ export class OperationsFormComponent implements OnInit {
           error: err => {
             this._sweetAlertSvc.error(err);
           },
-        })
+        }),
       );
     } catch (err: any) {
       this._sweetAlertSvc.error(err.message || err);
@@ -99,7 +99,7 @@ export class OperationsFormComponent implements OnInit {
         next: result => {
           this.playersValues = sortBy(
             result.getPlayers.filter(f => f.IdPlayer !== 0),
-            'IdPlayer'
+            'IdPlayer',
           ).map(p => {
             return {
               value: p.IdPlayer,
@@ -124,9 +124,9 @@ export class OperationsFormComponent implements OnInit {
             result.getTables.filter(f =>
               this._operationSvc.idOperationType === EOperations.CLOSED
                 ? f.IdTable == f.IdTable
-                : f.IdTable !== 0
+                : f.IdTable !== 0,
             ),
-            'IdTable'
+            'IdTable',
           ).map(p => {
             return {
               value: p.IdTable,
@@ -156,7 +156,7 @@ export class OperationsFormComponent implements OnInit {
                       value: t.IdPayInstr,
                       label: t.Name,
                     };
-                  }
+                  },
                 );
               switch (this._operationSvc.idOperationType) {
                 case EOperations.INITIALIZING:
@@ -166,28 +166,28 @@ export class OperationsFormComponent implements OnInit {
                 case EOperations.DEPOSIT:
                 case EOperations.CREDIT:
                   this.instrumentsReceiptValues = instruments.filter(
-                    p => p.value === EPaymentInstrument.CASH
+                    p => p.value === EPaymentInstrument.CASH,
                   );
                   this.instrumentsDeliveryValues = instruments.filter(
-                    p => p.value !== EPaymentInstrument.CASH
+                    p => p.value !== EPaymentInstrument.CASH,
                   );
                   break;
                 case EOperations.EXTRACTION:
                   this.instrumentsReceiptValues = instruments.filter(
                     p =>
                       p.value !== EPaymentInstrument.CASH &&
-                      p.value !== EPaymentInstrument.BONUS
+                      p.value !== EPaymentInstrument.BONUS,
                   );
                   this.instrumentsDeliveryValues = instruments.filter(
-                    p => p.value === EPaymentInstrument.CASH
+                    p => p.value === EPaymentInstrument.CASH,
                   );
                   break;
                 case EOperations.REFUND:
                   this.instrumentsReceiptValues = instruments.filter(
-                    p => p.value === EPaymentInstrument.CASH
+                    p => p.value === EPaymentInstrument.CASH,
                   );
                   this.instrumentsDeliveryValues = instruments.filter(
-                    p => p.value === EPaymentInstrument.CASH
+                    p => p.value === EPaymentInstrument.CASH,
                   );
                   break;
                 default:
@@ -201,8 +201,8 @@ export class OperationsFormComponent implements OnInit {
               this._sweetAlertSvc.error(err);
               resolve();
             },
-          })
-        )
+          }),
+        ),
       );
     } catch (err: any) {
       this._sweetAlertSvc.error(err.message || err);
@@ -225,8 +225,8 @@ export class OperationsFormComponent implements OnInit {
               this._sweetAlertSvc.error(err);
               resolve();
             },
-          })
-        )
+          }),
+        ),
       );
     } catch (err: any) {
       this._sweetAlertSvc.error(err.message || err);
@@ -354,32 +354,33 @@ export class OperationsFormComponent implements OnInit {
     if (operationR.IdOperationType === EOperations.DEPOSIT) {
       const haveBonus =
         operationD.findIndex(
-          d => d.IdInstrument === EPaymentInstrument.BONUS
+          d => d.IdInstrument === EPaymentInstrument.BONUS,
         ) !== -1;
 
       if (totalReceived > 10000) {
         const maxValueOfOperation = Math.max(
           ...operationD.map(o => o.IdOperationDetail),
-          0
+          0,
         );
         const idPayment = this.payments.find(
           p =>
-            p.IdPayInstr === EPaymentInstrument.BONUS && p.Denomination === 1000
+            p.IdPayInstr === EPaymentInstrument.BONUS &&
+            p.Denomination === 1000,
         )?.IdPayment;
         if (!idPayment) {
           this._sweetAlertSvc.error(
-            'There are not defined a Bonus with an amount of 1000. Please cancel this operation and add the bonus to can continue.'
+            'There are not defined a Bonus with an amount of 1000. Please cancel this operation and add the bonus to can continue.',
           );
           return;
         }
 
         if (!haveBonus) {
           this._sweetAlertSvc.info(
-            'The total amount deposited by the player is greater than 10000, so a bonus with value of 1000 will be added.'
+            'The total amount deposited by the player is greater than 10000, so a bonus with value of 1000 will be added.',
           );
         } else {
           operationD = operationD.filter(
-            d => d.IdInstrument !== EPaymentInstrument.BONUS
+            d => d.IdInstrument !== EPaymentInstrument.BONUS,
           );
         }
 
@@ -395,11 +396,11 @@ export class OperationsFormComponent implements OnInit {
       } else {
         if (haveBonus) {
           operationD = operationD.filter(
-            d => d.IdInstrument !== EPaymentInstrument.BONUS
+            d => d.IdInstrument !== EPaymentInstrument.BONUS,
           );
 
           this._sweetAlertSvc.info(
-            'The total amount deposited by the player is less than 10000, so the bonus has been removed.'
+            'The total amount deposited by the player is less than 10000, so the bonus has been removed.',
           );
         }
       }
@@ -411,7 +412,7 @@ export class OperationsFormComponent implements OnInit {
       totalReceived !== totalDelivered
     ) {
       this._sweetAlertSvc.warning(
-        'Received Amount do not match with Delivered Amount. Fix it.'
+        'Received Amount do not match with Delivered Amount. Fix it.',
       );
       return;
     }
@@ -433,7 +434,7 @@ export class OperationsFormComponent implements OnInit {
         error: err => {
           this._sweetAlertSvc.error(err);
         },
-      })
+      }),
     );
   }
 

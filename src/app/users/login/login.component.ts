@@ -1,6 +1,5 @@
 import { NavigationService } from './../../shared/services/navigation.service';
 import { SweetalertService } from './../../shared/services/sweetalert.service';
-import { User } from '../../shared/models/users';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -19,7 +18,7 @@ export class LoginComponent implements OnInit {
     private _route: ActivatedRoute,
     private _userSvc: UsersService,
     private _navigateSvc: NavigationService,
-    private _swalSvc: SweetalertService
+    private _swalSvc: SweetalertService,
   ) {}
 
   ngOnInit(): void {
@@ -42,12 +41,12 @@ export class LoginComponent implements OnInit {
       };
 
       this._userSvc.autenticate(authVariables).subscribe({
-        next: (response) => {
+        next: response => {
           this.autenticando = false;
 
           this._navigateSvc.navigateTo(this._navigateSvc.continueURL);
         },
-        error: (err) => {
+        error: err => {
           this.autenticando = false;
           this._swalSvc.error(err);
         },

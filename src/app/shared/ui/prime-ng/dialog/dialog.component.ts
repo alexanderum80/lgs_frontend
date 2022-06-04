@@ -5,7 +5,7 @@ import { Component, Input, OnInit } from '@angular/core';
   templateUrl: './dialog.component.html',
   styleUrls: ['./dialog.component.scss'],
 })
-export class DialogComponent implements OnInit {
+export class DialogComponent {
   @Input() showDialog = false;
   @Input() header: string;
   @Input() modal = true;
@@ -16,8 +16,6 @@ export class DialogComponent implements OnInit {
   @Input() closable = false;
 
   constructor() {}
-
-  ngOnInit(): void {}
 
   confirm(): void {}
 

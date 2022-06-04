@@ -2,8 +2,7 @@
   <span
     [ngClass]="{ 'p-float-label mt-3': floatLabel }"
     class="p-field"
-    [formGroup]="fg"
-  >
+    [formGroup]="fg">
     <label
       *ngIf="!floatLabel"
       [for]="control"
@@ -25,8 +24,7 @@
       [suffix]="suffix"
       [prefix]="prefix"
       [required]="required"
-      [disabled]="disabled"
-    >
+      [disabled]="disabled">
     </p-inputNumber>
     <label
       *ngIf="floatLabel"

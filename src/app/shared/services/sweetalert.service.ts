@@ -35,7 +35,7 @@ export class SweetalertService {
       confirmButtonText: 'Yes',
       showCancelButton: true,
       cancelButtonText: 'No',
-    }).then((result) => {
+    }).then(result => {
       if (result.isConfirmed) {
         return ActionClicked.Yes;
       } else {

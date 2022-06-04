@@ -18,7 +18,7 @@ import { isArray } from 'lodash';
   templateUrl: './list-users.component.html',
   styleUrls: ['./list-users.component.scss'],
 })
-export class ListUsersComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ListUsersComponent implements AfterViewInit, OnDestroy {
   columns: ITableColumns[] = [
     { header: 'User Name', field: 'UserName', type: 'string' },
     { header: 'Name', field: 'Name', type: 'string' },
@@ -33,30 +33,28 @@ export class ListUsersComponent implements OnInit, AfterViewInit, OnDestroy {
     private _dinamicDialogSvc: DinamicDialogService,
     private _userSvc: UsersService,
     private _msgSvc: MessageService,
-    private _sweetAlertSvc: SweetalertService
+    private _sweetAlertSvc: SweetalertService,
   ) {}
-
-  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
     this._getUsers();
   }
 
   ngOnDestroy(): void {
-    this._userSvc.subscription.forEach((subs) => subs.unsubscribe());
+    this._userSvc.subscription.forEach(subs => subs.unsubscribe());
   }
 
   private _getUsers(): void {
     try {
       this._userSvc.subscription.push(
         this._userSvc.getAll().subscribe({
-          next: (response) => {
+          next: response => {
             this.users = cloneDeep(response.getAllUsers);
           },
-          error: (err) => {
+          error: err => {
             this._sweetAlertSvc.error(err);
           },
-        })
+        }),
       );
     } catch (err: any) {
       this._sweetAlertSvc.error(err);
@@ -98,7 +96,7 @@ export class ListUsersComponent implements OnInit, AfterViewInit, OnDestroy {
             detail: message,
           });
         }
-      })
+      }),
     );
   }
 
@@ -107,11 +105,11 @@ export class ListUsersComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (data.Deleted) {
       const res = await this._sweetAlertSvc.question(
-        'The selected User is Deleted, cannot be edited. Do you wich to recover this User?'
+        'The selected User is Deleted, cannot be edited. Do you wich to recover this User?',
       );
       if (res === ActionClicked.Yes) {
         this._userSvc.recover(id).subscribe({
-          error: (err) => {
+          error: err => {
             this._sweetAlertSvc.error(err);
           },
         });
@@ -122,9 +120,9 @@ export class ListUsersComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this._userSvc.subscription.push(
       this._userSvc.getOne(id).subscribe({
-        next: (response) => {
+        next: response => {
           const selectedUser = response.getUserById;
-          const roles = selectedUser.UserRoles?.map((r) => r.IdRole) || [];
+          const roles = selectedUser.UserRoles?.map(r => r.IdRole) || [];
 
           const inputData = {
             id: selectedUser.Id,
@@ -147,13 +145,13 @@ export class ListUsersComponent implements OnInit, AfterViewInit, OnDestroy {
                   detail: message,
                 });
               }
-            })
+            }),
           );
         },
-        error: (err) => {
+        error: err => {
           this._sweetAlertSvc.error(err);
         },
-      })
+      }),
     );
   }
 
@@ -164,17 +162,17 @@ export class ListUsersComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this._sweetAlertSvc
       .question('Are you sure you want to delete selected Users?')
-      .then((res) => {
+      .then(res => {
         if (res === ActionClicked.Yes) {
           const IDsToRemove: number[] = !isArray(data)
             ? [data.Id]
-            : data.map((d) => {
+            : data.map(d => {
                 return d.Id;
               });
 
           this._userSvc.subscription.push(
             this._userSvc.delete(IDsToRemove).subscribe({
-              next: (response) => {
+              next: response => {
                 const result = response.deleteUser;
 
                 this._msgSvc.add({
@@ -183,10 +181,10 @@ export class ListUsersComponent implements OnInit, AfterViewInit, OnDestroy {
                   detail: 'The User was deleted successfully.',
                 });
               },
-              error: (err) => {
+              error: err => {
                 this._sweetAlertSvc.error(err);
               },
-            })
+            }),
           );
         }
       });

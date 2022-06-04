@@ -17,6 +17,7 @@ import { TableService } from './table.service';
 import { IAdditionalButtons } from '../button/button.model';
 
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'png-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
@@ -50,7 +51,7 @@ export class TableComponent implements OnInit {
   }
 
   getFields(): string[] {
-    return this.columns.map((c) => c.field);
+    return this.columns.map(c => c.field);
   }
 
   get selectedRow(): any[] {

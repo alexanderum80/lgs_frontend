@@ -23,7 +23,7 @@ export class UserFormComponent implements OnInit {
     private _userSvc: UsersService,
     private _dinamicDialogSvc: DinamicDialogService,
     private _apollo: Apollo,
-    private _sweetAlertSvc: SweetalertService
+    private _sweetAlertSvc: SweetalertService,
   ) {}
 
   ngOnInit(): void {
@@ -47,20 +47,20 @@ export class UserFormComponent implements OnInit {
           fetchPolicy: 'network-only',
         })
         .subscribe({
-          next: (response) => {
+          next: response => {
             this.rolesValues = response.data.getRoles.map(
               (r: { IdRole: number; Role: string }) => {
                 return {
                   label: r.Role,
                   value: r.IdRole,
                 };
-              }
+              },
             );
           },
-          error: (err) => {
+          error: err => {
             this._sweetAlertSvc.error(err);
           },
-        })
+        }),
     );
   }
 
@@ -83,7 +83,7 @@ export class UserFormComponent implements OnInit {
 
     this._userSvc.subscription.push(
       this._userSvc.save().subscribe({
-        next: (response) => {
+        next: response => {
           let txtMessage;
 
           if (action === ActionClicked.Add) {
@@ -94,10 +94,10 @@ export class UserFormComponent implements OnInit {
 
           this._closeModal(txtMessage);
         },
-        error: (err) => {
+        error: err => {
           this._sweetAlertSvc.error(err);
         },
-      })
+      }),
     );
   }
 

@@ -71,8 +71,6 @@ const modules = [
   imports: [CommonModule, modules],
   exports: [modules],
 })
-export class PrimeNgModule implements OnInit {
+export class PrimeNgModule {
   constructor() {}
-
-  ngOnInit(): void {}
 }

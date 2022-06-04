@@ -356,7 +356,7 @@ export function parsePredefinedDate(textDate: string): IDateRange | undefined {
 
 export function parseComparisonDateRange(
   value: string[],
-  customDateRange?: IDateRange
+  customDateRange?: IDateRange,
 ): IDateRange {
   const comparisonTokens = value;
 
@@ -472,7 +472,7 @@ export function parseComparisonDateRange(
       if (comparisonTokens[1].endsWith('YearsAgo')) {
         const timeBack = comparisonTokens[1].substr(
           0,
-          comparisonTokens[1].indexOf('YearsAgo')
+          comparisonTokens[1].indexOf('YearsAgo'),
         );
         return backInTime(firstDateRange, timeBack, 'year');
       } else {
@@ -487,7 +487,7 @@ export function parseComparisonDateRange(
 export function backInTime(
   dateRange: IDateRange,
   amount: any,
-  timespan: string
+  timespan: string,
 ): IDateRange {
   return {
     from: moment(dateRange.from).subtract(amount, timespan).toDate(),
@@ -556,7 +556,7 @@ export interface IStringChartDateRange {
 }
 
 export function convertDateRangeToStringDateRange(
-  dateRange: IChartDateRange
+  dateRange: IChartDateRange,
 ): IStringChartDateRange {
   const newDateRange: IStringChartDateRange = {
     predefined: dateRange.predefined || '',

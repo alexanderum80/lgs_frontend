@@ -34,8 +34,7 @@ import { Component, Input } from '@angular/core';
   template: `<img
     class="bg animated fadeIn"
     src="{image}"
-    [ngStyle]="setStyles()"
-  />`,
+    [ngStyle]="setStyles()" />`,
 })
 export class BackgroundComponent {
   @Input() image: string;

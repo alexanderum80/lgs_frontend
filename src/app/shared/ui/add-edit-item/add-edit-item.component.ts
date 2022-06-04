@@ -7,15 +7,13 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   templateUrl: './add-edit-item.component.html',
   styleUrls: ['./add-edit-item.component.scss'],
 })
-export class AddEditItemComponent implements OnInit {
+export class AddEditItemComponent {
   @Input() fg: FormGroup;
   @Output() actionClicked = new EventEmitter<ActionClicked>();
 
   formGroup: FormGroup;
 
   constructor() {}
-
-  ngOnInit(): void {}
 
   get isFinished(): boolean {
     return (

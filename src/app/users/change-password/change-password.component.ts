@@ -24,7 +24,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
     private _userSvc: UsersService,
     private _apollo: Apollo,
     private _navigationSvc: NavigationService,
-    private _dinamicDialogSvc: DinamicDialogService
+    private _dinamicDialogSvc: DinamicDialogService,
   ) {}
 
   ngOnInit(): void {
@@ -32,7 +32,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscription.map((subs) => {
+    this.subscription.map(subs => {
       subs.unsubscribe();
     });
   }
@@ -62,12 +62,12 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
           variables: { idUser: _idUser, password: _password },
         })
         .subscribe({
-          next: (response) => {
+          next: response => {
             this._dinamicDialogSvc.close();
 
             this._navigationSvc.navigateTo(this._navigationSvc.continueURL);
           },
-          error: (err) => {
+          error: err => {
             SweetAlert.fire({
               icon: 'error',
               title: 'Error al Validar',
@@ -76,7 +76,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
               confirmButtonText: 'OK',
             });
           },
-        })
+        }),
     );
   }
 }

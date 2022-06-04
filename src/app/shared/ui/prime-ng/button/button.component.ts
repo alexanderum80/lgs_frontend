@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'png-button',
   templateUrl: './button.component.html',
   styleUrls: ['./button.component.scss'],
