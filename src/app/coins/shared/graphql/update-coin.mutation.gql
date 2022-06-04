@@ -1,8 +1,0 @@
-mutation UpdateCoin($coinInput: CoinInput!) {
-    updateCoin(coinInput: $coinInput) {
-        IdCoin
-        Coin
-        Rate
-        Enabled
-    }
-}

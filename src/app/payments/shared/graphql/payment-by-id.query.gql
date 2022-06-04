@@ -1,10 +1,10 @@
 query GetPayment($id: Int!) {
     getPayment(id: $id) {
         IdPayment
-        Description
         Denomination
         IdPayInstr
-        IdCoin
+        IdCurrency
         Enabled
+        Picture
     }
 }

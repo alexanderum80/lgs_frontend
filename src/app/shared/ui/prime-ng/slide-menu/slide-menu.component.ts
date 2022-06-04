@@ -5,7 +5,7 @@ import { MenuItem } from 'primeng/api';
   // tslint:disable-next-line: component-selector
   selector: 'png-slide-menu',
   templateUrl: './slide-menu.component.html',
-  styleUrls: ['./slide-menu.component.scss']
+  styleUrls: ['./slide-menu.component.scss'],
 })
 export class SlideMenuComponent implements OnInit {
   @Input() items: MenuItem[];
@@ -14,9 +14,7 @@ export class SlideMenuComponent implements OnInit {
   @Input() icon: 'mdi mdi-dots-vertical';
   @Input() height = 120;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

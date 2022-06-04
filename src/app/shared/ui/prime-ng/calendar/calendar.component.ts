@@ -1,11 +1,19 @@
-import { ChangeDetectorRef, Component, Input, OnInit, AfterContentChecked, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnInit,
+  AfterContentChecked,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 @Component({
   // tslint:disable-next-line: component-selector
   selector: 'png-calendar',
   templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.scss']
+  styleUrls: ['./calendar.component.scss'],
 })
 export class CalendarComponent implements OnInit {
   @Input() fg: FormGroup;
@@ -22,7 +30,8 @@ export class CalendarComponent implements OnInit {
   @Input() disabledDays: number[] = [];
   @Input() monthNavigator = true;
   @Input() yearNavigator = true;
-  @Input() yearRange: string = (new Date()).getFullYear() - 10 + ':' + (new Date()).getFullYear();
+  @Input() yearRange: string =
+    new Date().getFullYear() - 10 + ':' + new Date().getFullYear();
   @Input() showTime = false;
   @Input() timeOnly = false;
   @Input() selectionMode: 'single' | 'multiple' | 'range' = 'single';
@@ -30,12 +39,9 @@ export class CalendarComponent implements OnInit {
   @Input() required = false;
   @Input() disabled = false;
 
-  constructor(
-    private cd: ChangeDetectorRef
-  ) { }
+  constructor(private cd: ChangeDetectorRef) {}
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.cd.detectChanges();
   }
-
 }

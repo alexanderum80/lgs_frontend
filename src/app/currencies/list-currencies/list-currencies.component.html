@@ -1,0 +1,14 @@
+<app-list-item title="Currencies">
+  <png-table
+    [columns]="columns"
+    [data]="currencies"
+    [canEditDelete]="true"
+    [scrollable]="true"
+    scrollHeight="calc(100vh - 220px)"
+    (actionClicked)="actionClicked($event)"
+  ></png-table>
+</app-list-item>
+
+<p-toast></p-toast>
+
+<!-- <png-data-view header="List of Countries" [data]="countries"></png-data-view> -->

@@ -1,0 +1,8 @@
+mutation UpdateCurrency($currencyInput: CurrencyInput!) {
+    updateCurrency(currencyInput: $currencyInput) {
+        IdCurrency
+        Currency
+        Rate
+        Enabled
+    }
+}

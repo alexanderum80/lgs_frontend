@@ -1,30 +1,30 @@
-import { ICoins } from './../../../coins/shared/models/coins.model';
+import { ICurrencies } from './../../../currencies/shared/models/currencies.model';
 
 export interface IPayments {
-    IdPayment: number;
-    Description: string;
-    Denomination: number;
-    IdPayInstr: number;
-    IdCoin: number;
-    Enabled: boolean;
-    Coin: string | ICoins;
-    Rate: number;
-    PaymentName?: string;
+  IdPayment: number;
+  Denomination: number;
+  IdPayInstr: number;
+  IdCurrency: number;
+  Enabled: boolean;
+  Currency: string | ICurrencies;
+  Rate: number;
+  PaymentName?: string;
+  Picture?: Buffer;
 }
 
 export interface IPaymentInstruments {
-    IdPayInstr: number;
-    Name: string;
+  IdPayInstr: number;
+  Name: string;
 }
 
 export interface PaymentsQueryResponse {
-    getPayments: IPayments[];
-    getPayment: IPayments;
-    getPaymentInstruments: IPaymentInstruments[];
+  getPayments: IPayments[];
+  getPayment: IPayments;
+  getPaymentInstruments: IPaymentInstruments[];
 }
 
 export interface PaymentsMutationResponse {
-    createPayment: IPayments;
-    updatePayment: IPayments;
-    deletePayment: IPayments;
+  createPayment: IPayments;
+  updatePayment: IPayments;
+  deletePayment: IPayments;
 }

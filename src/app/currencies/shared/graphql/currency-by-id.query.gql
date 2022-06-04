@@ -1,0 +1,8 @@
+query GetCurrency($id: Int!) {
+    getCurrency(id: $id) {
+        IdCurrency
+        Currency
+        Rate
+        Enabled
+    }
+}

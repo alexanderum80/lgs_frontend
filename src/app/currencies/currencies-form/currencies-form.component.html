@@ -1,0 +1,32 @@
+<app-add-edit-item [fg]="fg" (actionClicked)="onActionClicked($event)">
+  <form [formGroup]="fg">
+    <div class="form__group">
+      <png-input-text
+        class="w-full mt-1"
+        label="Currency"
+        labelWidth="90"
+        [fg]="fg"
+        control="currency"
+        [required]="true"
+        autocomplete="off"></png-input-text>
+    </div>
+    <div class="form__group">
+      <png-input-number
+        class="w-full mt-1"
+        label="Rate"
+        labelWidth="90"
+        [fg]="fg"
+        control="rate"
+        [required]="true"
+        mode="currency"></png-input-number>
+    </div>
+    <div class="form__group">
+      <png-input-switch
+        class="w-full mt-1"
+        label="Enabled"
+        labelWidth="70"
+        [fg]="fg"
+        control="enabled"></png-input-switch>
+    </div>
+  </form>
+</app-add-edit-item>

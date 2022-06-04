@@ -10,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-notifications',
   templateUrl: './notifications.component.html',
-  styleUrls: ['./notifications.component.scss']
+  styleUrls: ['./notifications.component.scss'],
 })
 export class NotificationsComponent implements OnInit {
   notifications: any[] = [];
@@ -51,26 +51,32 @@ export class NotificationsComponent implements OnInit {
     private _apolloSvc: ApolloService,
     private _sweetAlertSvc: SweetalertService,
     private _messageSvc: MessageService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-    if (this._userSvc.user.UserRoles?.findIndex(r => r.IdRole === ERole['Table Manager'] || r.IdRole === ERole['General Manager']) !== -1) {
+    if (
+      this._userSvc.user.UserRoles?.findIndex(
+        r =>
+          r.IdRole === ERole['Table Manager'] ||
+          r.IdRole === ERole['General Manager']
+      ) !== -1
+    ) {
       this._getNotifications();
     }
   }
 
   private _getNotifications(): void {
     this._apolloSvc.watchQuery<any>(this.notificationsQuery).subscribe({
-      next: (response) => {
+      next: response => {
         this.notifications = response.pendingCreditsRequest;
 
         setTimeout(() => {
           this._getNotifications();
         }, 60000);
       },
-      error: (error) => { 
+      error: error => {
         this._sweetAlertSvc.error(error.message);
-      }
+      },
     });
   }
 
@@ -81,44 +87,59 @@ export class NotificationsComponent implements OnInit {
   showConfirm(): void {
     this._messageSvc.clear();
     this.notifications.map(n => {
-      this._messageSvc.add({ id: n.IdCredit, key: 'c', sticky: true, severity:'info', 
-        summary: `Player ${ n.Player.Name } ${ n.Player.LastName} requested a credit of ${ n.Amount } SRD`
+      this._messageSvc.add({
+        id: n.IdCredit,
+        key: 'c',
+        sticky: true,
+        severity: 'info',
+        summary: `Player ${n.Player.Name} ${n.Player.LastName} requested a credit of ${n.Amount} SRD`,
       });
-    })
+    });
   }
 
   onConfirm(idCredit: number): void {
-    this._sweetAlertSvc.question('Are you sure you want to Approve the credit?').then(res => {
-      if (res === ActionClicked.Yes) {
-        this._apolloSvc.mutation<any>(this.approveCreditRequestMutation, { idCredit }, ['PendingCreditsRequest']).subscribe({
-          next: () => {
-            setTimeout(() => {
-              this.showConfirm();
-            }, 2000);
-          },
-          error: (error) => { 
-            this._sweetAlertSvc.error(error.message);
-          }
-        });
-      }
-    });
+    this._sweetAlertSvc
+      .question('Are you sure you want to Approve the credit?')
+      .then(res => {
+        if (res === ActionClicked.Yes) {
+          this._apolloSvc
+            .mutation<any>(this.approveCreditRequestMutation, { idCredit }, [
+              'PendingCreditsRequest',
+            ])
+            .subscribe({
+              next: () => {
+                setTimeout(() => {
+                  this.showConfirm();
+                }, 2000);
+              },
+              error: error => {
+                this._sweetAlertSvc.error(error.message);
+              },
+            });
+        }
+      });
   }
 
   onDeny(idCredit: number): void {
-    this._sweetAlertSvc.question('Are you sure you want to Deny the credit?').then(res => {
-      if (res === ActionClicked.Yes) {
-        this._apolloSvc.mutation<any>(this.denyRequestMutation, { idCredit }, ['PendingCreditsRequest']).subscribe({
-          next: () => {
-            setTimeout(() => {
-              this.showConfirm();
-            }, 2000);
-          },
-          error: (error) => { 
-            this._sweetAlertSvc.error(error.message);
-          }
-        });
-      }
-    });
+    this._sweetAlertSvc
+      .question('Are you sure you want to Deny the credit?')
+      .then(res => {
+        if (res === ActionClicked.Yes) {
+          this._apolloSvc
+            .mutation<any>(this.denyRequestMutation, { idCredit }, [
+              'PendingCreditsRequest',
+            ])
+            .subscribe({
+              next: () => {
+                setTimeout(() => {
+                  this.showConfirm();
+                }, 2000);
+              },
+              error: error => {
+                this._sweetAlertSvc.error(error.message);
+              },
+            });
+        }
+      });
   }
-
 }

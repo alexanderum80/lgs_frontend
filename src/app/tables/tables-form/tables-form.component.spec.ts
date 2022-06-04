@@ -8,9 +8,8 @@ describe('TablesFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TablesFormComponent ]
-    })
-    .compileComponents();
+      declarations: [TablesFormComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

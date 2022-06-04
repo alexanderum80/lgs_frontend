@@ -68,12 +68,11 @@ const modules = [
 ];
 
 @NgModule({
-  imports: [ CommonModule, modules ],
-  exports: [ modules ],
+  imports: [CommonModule, modules],
+  exports: [modules],
 })
 export class PrimeNgModule implements OnInit {
   constructor() {}
 
-   ngOnInit(): void {
-   }
- }
+  ngOnInit(): void {}
+}

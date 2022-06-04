@@ -1,89 +1,191 @@
 <app-list-item title="Player Tracking">
-    <div class="p-card h-full p-2">
-        <form [formGroup]="fg" class="flex">
-            <div class="flex flex-column">
-                <div class="flex">
-                    <div class="form__group w-18rem m-1">
-                        <png-dropdown class="w-full mt-1" [fg]="fg" control="initSession" label="Initial Date" [floatLabel]="true" labelWidth="100" [optionsValues]="sessionsValues" [required]="true" [filter]="true" [showClear]="true"></png-dropdown>
-                    </div>
-                    <div class="form__group w-18rem m-1">
-                        <png-dropdown class="w-full mt-1" [fg]="fg" control="finalSession" label="Final Date" [floatLabel]="true" labelWidth="100" [optionsValues]="sessionsValues" [required]="true" [filter]="true" [showClear]="true"></png-dropdown>
-                    </div>
-                </div>
-                <div class="form__group w-38rem m-1">
-                    <png-dropdown class="w-full mt-1" [fg]="fg" control="idPlayer" [floatLabel]="true" labelWidth="100" [optionsValues]="playersValues" placeholder="All Players" [filter]="true" [showClear]="true"></png-dropdown>
-                </div>
-            </div>
-            <div class="form__group ml-5">
-                <png-button class="mr-2 mb-2" label="Get Tracking" [style]="'primary'" [raised]="true" [disabled]="fg && !fg.valid" (clicked)="calculateReport()"></png-button>
-            </div>
-        </form>
-        <p-table #dt2 [value]="masterTracking" dataKey="IdSession"
-            [rows]="25" [showCurrentPageReport]="true" [rowsPerPageOptions]="[25,50,100]" [loading]="loading"
-            [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-            rowGroupMode="subheader" groupRowsBy="IdSession"
-            [scrollable]="true" scrollHeight="calc(100vh - 255px)">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th pSortableColumn="PlayerName">Player<p-sortIcon field="PlayerName"></p-sortIcon></th>
-                    <th pSortableColumn="TimeIn">Time IN<p-sortIcon field="TimeIn"></p-sortIcon></th>
-                    <th pSortableColumn="TimeOut">Time OUT<p-sortIcon field="TimeOut"></p-sortIcon></th>
-                    <th pSortableColumn="SRD" class="text-right">SRD<p-sortIcon field="SRD"></p-sortIcon></th>
-                    <th pSortableColumn="USD" class="text-right">USD<p-sortIcon field="USD"></p-sortIcon></th>
-                    <th pSortableColumn="EUR" class="text-right">EUR<p-sortIcon field="EUR"></p-sortIcon></th>
-                    <th pSortableColumn="TotalSRD" class="text-right">Total Buy IN (SRD)<p-sortIcon field="TotalSRD"></p-sortIcon></th>
-                    <th pSortableColumn="TotalOutSRD" class="text-right">Total Cash Out (SRD)<p-sortIcon field="TotalOutSRD"></p-sortIcon></th>
-                    <th pSortableColumn="WinLoss" class="text-right"><span class="text-green-500">Win</span> / <span class="text-pink-500">Loss</span><p-sortIcon field="WinLoss"></p-sortIcon></th>
-                    <th pSortableColumn="TotalCreditsSRD" class="text-right">Total Credits (SRD)<p-sortIcon field="TotalCreditsSRD"></p-sortIcon></th>
-                </tr>
-                <tr>
-                    <th><p-columnFilter type="text" field="PlayerName"></p-columnFilter></th>
-                    <th><p-columnFilter type="date" field="TimeIn"></p-columnFilter></th>
-                    <th><p-columnFilter type="date" field="TimeOut"></p-columnFilter></th>
-                    <th class="text-right"><p-columnFilter type="text" field="SRD"></p-columnFilter></th>
-                    <th class="text-right"><p-columnFilter type="text" field="USD"></p-columnFilter></th>
-                    <th class="text-right"><p-columnFilter type="text" field="EUR"></p-columnFilter></th>
-                    <th class="text-right"><p-columnFilter type="text" field="TotalSRD"></p-columnFilter></th>
-                    <th class="text-right"><p-columnFilter type="text" field="TotalOutSRD"></p-columnFilter></th>
-                    <th class="text-right"><p-columnFilter type="text" field="WinLoss"></p-columnFilter></th>
-                    <th class="text-right"><p-columnFilter type="text" field="TotalCreditsSRD"></p-columnFilter></th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="groupheader" let-tracking>
-                <tr pRowGroupHeader>
-                    <td colspan="12">
-                        <span class="font-bold ml-2">Session: {{tracking.OpenDate | date: 'MM-dd-yyyy HH:mm:ss'}} - {{tracking.CloseDate | date: 'MM-dd-yyyy HH:mm:ss'}}</span>
-                    </td>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="groupfooter" let-tracking>
-                <tr class="flex p-rowgroup-footer">
-                    <td colspan="8">
-                        <div class="text-align-right w-full font-bold">Total Result</div>
-                    </td>
-                    <td style="text-align: end;" colspan="1" class="font-bold">{{calculateCustomerTotal(tracking.IdSession) | currency}}</td>
-                    <td colspan="1"></td>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-tracking>
-                <tr>
-                    <td>{{tracking.PlayerName}}</td>
-                    <td>{{tracking.TimeIn | date: 'MM-dd-yyyy HH:mm:ss'}}</td>
-                    <td>{{tracking.TimeOut | date: 'MM-dd-yyyy HH:mm:ss'}}</td>
-                    <td class="text-right" >{{tracking.SRD | currency}}</td>
-                    <td class="text-right" >{{tracking.USD | currency}}</td>
-                    <td class="text-right" >{{tracking.EUR | currency}}</td>
-                    <td class="text-right" >{{tracking.TotalSRD | currency}}</td>
-                    <td class="text-right" >{{tracking.TotalOutSRD | currency}}</td>
-                    <td class="text-right" [ngClass]="tracking.WinLoss >= 0 ? 'text-green-500' : 'text-pink-500'">{{tracking.WinLoss | currency}}</td>
-                    <td class="text-right" >{{tracking.TotalCreditsSRD | currency}}</td>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="emptymessage">
-                <tr>
-                    <td colspan="5">No results found.</td>
-                </tr>
-            </ng-template>
-        </p-table>
-    </div>
+  <div class="p-card h-full p-2">
+    <form [formGroup]="fg" class="flex">
+      <div class="flex flex-column">
+        <div class="flex">
+          <div class="form__group w-18rem m-1">
+            <png-dropdown
+              class="w-full mt-1"
+              [fg]="fg"
+              control="initSession"
+              label="Initial Date"
+              [floatLabel]="true"
+              labelWidth="100"
+              [optionsValues]="sessionsValues"
+              [required]="true"
+              [filter]="true"
+              [showClear]="true"
+            ></png-dropdown>
+          </div>
+          <div class="form__group w-18rem m-1">
+            <png-dropdown
+              class="w-full mt-1"
+              [fg]="fg"
+              control="finalSession"
+              label="Final Date"
+              [floatLabel]="true"
+              labelWidth="100"
+              [optionsValues]="sessionsValues"
+              [required]="true"
+              [filter]="true"
+              [showClear]="true"
+            ></png-dropdown>
+          </div>
+        </div>
+        <div class="form__group w-38rem m-1">
+          <png-dropdown
+            class="w-full mt-1"
+            [fg]="fg"
+            control="idPlayer"
+            [floatLabel]="true"
+            labelWidth="100"
+            [optionsValues]="playersValues"
+            placeholder="All Players"
+            [filter]="true"
+            [showClear]="true"
+          ></png-dropdown>
+        </div>
+      </div>
+      <div class="form__group ml-5">
+        <png-button
+          class="mr-2 mb-2"
+          label="Get Tracking"
+          [style]="'primary'"
+          [raised]="true"
+          [disabled]="fg && !fg.valid"
+          (clicked)="calculateReport()"
+        ></png-button>
+      </div>
+    </form>
+    <p-table
+      #dt2
+      [value]="masterTracking"
+      dataKey="IdSession"
+      [rows]="25"
+      [showCurrentPageReport]="true"
+      [rowsPerPageOptions]="[25, 50, 100]"
+      [loading]="loading"
+      [paginator]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      rowGroupMode="subheader"
+      groupRowsBy="IdSession"
+      [scrollable]="true"
+      scrollHeight="calc(100vh - 255px)"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="PlayerName">
+            Player<p-sortIcon field="PlayerName"></p-sortIcon>
+          </th>
+          <th pSortableColumn="TimeIn">
+            Time IN<p-sortIcon field="TimeIn"></p-sortIcon>
+          </th>
+          <th pSortableColumn="TimeOut">
+            Time OUT<p-sortIcon field="TimeOut"></p-sortIcon>
+          </th>
+          <th pSortableColumn="SRD" class="text-right">
+            SRD<p-sortIcon field="SRD"></p-sortIcon>
+          </th>
+          <th pSortableColumn="USD" class="text-right">
+            USD<p-sortIcon field="USD"></p-sortIcon>
+          </th>
+          <th pSortableColumn="EUR" class="text-right">
+            EUR<p-sortIcon field="EUR"></p-sortIcon>
+          </th>
+          <th pSortableColumn="TotalSRD" class="text-right">
+            Total Buy IN (SRD)<p-sortIcon field="TotalSRD"></p-sortIcon>
+          </th>
+          <th pSortableColumn="TotalOutSRD" class="text-right">
+            Total Cash Out (SRD)<p-sortIcon field="TotalOutSRD"></p-sortIcon>
+          </th>
+          <th pSortableColumn="WinLoss" class="text-right">
+            <span class="text-green-500">Win</span> /
+            <span class="text-pink-500">Loss</span
+            ><p-sortIcon field="WinLoss"></p-sortIcon>
+          </th>
+          <th pSortableColumn="TotalCreditsSRD" class="text-right">
+            Total Credits (SRD)<p-sortIcon field="TotalCreditsSRD"></p-sortIcon>
+          </th>
+        </tr>
+        <tr>
+          <th>
+            <p-columnFilter type="text" field="PlayerName"></p-columnFilter>
+          </th>
+          <th><p-columnFilter type="date" field="TimeIn"></p-columnFilter></th>
+          <th><p-columnFilter type="date" field="TimeOut"></p-columnFilter></th>
+          <th class="text-right">
+            <p-columnFilter type="text" field="SRD"></p-columnFilter>
+          </th>
+          <th class="text-right">
+            <p-columnFilter type="text" field="USD"></p-columnFilter>
+          </th>
+          <th class="text-right">
+            <p-columnFilter type="text" field="EUR"></p-columnFilter>
+          </th>
+          <th class="text-right">
+            <p-columnFilter type="text" field="TotalSRD"></p-columnFilter>
+          </th>
+          <th class="text-right">
+            <p-columnFilter type="text" field="TotalOutSRD"></p-columnFilter>
+          </th>
+          <th class="text-right">
+            <p-columnFilter type="text" field="WinLoss"></p-columnFilter>
+          </th>
+          <th class="text-right">
+            <p-columnFilter
+              type="text"
+              field="TotalCreditsSRD"
+            ></p-columnFilter>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="groupheader" let-tracking>
+        <tr pRowGroupHeader>
+          <td colspan="12">
+            <span class="font-bold ml-2"
+              >Session: {{ tracking.OpenDate | date: "MM-dd-yyyy HH:mm:ss" }} -
+              {{ tracking.CloseDate | date: "MM-dd-yyyy HH:mm:ss" }}</span
+            >
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="groupfooter" let-tracking>
+        <tr class="flex p-rowgroup-footer">
+          <td colspan="8">
+            <div class="text-align-right w-full font-bold">Total Result</div>
+          </td>
+          <td style="text-align: end" colspan="1" class="font-bold">
+            {{ calculateCustomerTotal(tracking.IdSession) | currency }}
+          </td>
+          <td colspan="1"></td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-tracking>
+        <tr>
+          <td>{{ tracking.PlayerName }}</td>
+          <td>{{ tracking.TimeIn | date: "MM-dd-yyyy HH:mm:ss" }}</td>
+          <td>{{ tracking.TimeOut | date: "MM-dd-yyyy HH:mm:ss" }}</td>
+          <td class="text-right">{{ tracking.SRD | currency }}</td>
+          <td class="text-right">{{ tracking.USD | currency }}</td>
+          <td class="text-right">{{ tracking.EUR | currency }}</td>
+          <td class="text-right">{{ tracking.TotalSRD | currency }}</td>
+          <td class="text-right">{{ tracking.TotalOutSRD | currency }}</td>
+          <td
+            class="text-right"
+            [ngClass]="
+              tracking.WinLoss >= 0 ? 'text-green-500' : 'text-pink-500'
+            "
+          >
+            {{ tracking.WinLoss | currency }}
+          </td>
+          <td class="text-right">{{ tracking.TotalCreditsSRD | currency }}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="5">No results found.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
 </app-list-item>

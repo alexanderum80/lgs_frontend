@@ -30,8 +30,8 @@ import { MasterTrackingComponent } from './master-tracking/master-tracking.compo
     SharedModule,
     PrimeDropdownModule,
     PrimeButtonModule,
-    TableModule
+    TableModule,
   ],
-  providers: [ReportsService, PlayersService]
+  providers: [ReportsService, PlayersService],
 })
-export class ReportsModule { }
+export class ReportsModule {}

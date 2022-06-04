@@ -8,9 +8,8 @@ describe('ListTablesGameComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ListTablesGameComponent ]
-    })
-    .compileComponents();
+      declarations: [ListTablesGameComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -5,7 +5,7 @@ import { Component, Input, OnInit } from '@angular/core';
   // tslint:disable-next-line: component-selector
   selector: 'png-panel',
   templateUrl: './panel.component.html',
-  styleUrls: ['./panel.component.scss']
+  styleUrls: ['./panel.component.scss'],
 })
 export class PanelComponent implements OnInit {
   @Input() header: string;
@@ -13,15 +13,11 @@ export class PanelComponent implements OnInit {
   @Input() toggleable = false;
   @Input() closeButton = true;
 
-  constructor(
-    private _navigationSvc: NavigationService
-  ) { }
+  constructor(private _navigationSvc: NavigationService) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   close(): void {
     this._navigationSvc.navigateTo('/');
   }
-
 }

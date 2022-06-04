@@ -1,8 +1,0 @@
-mutation CreateCoin($coinInput: CoinInput!) {
-    createCoin(coinInput: $coinInput) {
-        IdCoin
-        Coin
-        Rate
-        Enabled
-    }
-}

@@ -6,18 +6,17 @@ import { BehaviorSubject, Observable } from 'rxjs';
 const socket = io(environment.apiServer);
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SocketService {
   private _stateSubject = new BehaviorSubject<boolean>(false);
 
-  constructor(
-  ) {
+  constructor() {
     this._watchEvents();
   }
 
   private _watchEvents() {
-    socket.on('status-change', status => {
+    socket.on('status-change', (status) => {
       this._stateSubject.next(status);
     });
   }
@@ -29,5 +28,4 @@ export class SocketService {
   get casinoStatus$(): Observable<boolean> {
     return this._stateSubject.asObservable();
   }
-
 }

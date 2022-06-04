@@ -10,12 +10,8 @@ import { ListPlayersComponent } from './list-players/list-players.component';
 import { PlayersFormComponent } from './players-form/players-form.component';
 import { PlayersService } from './shared/services/players.service';
 
-
 @NgModule({
-  declarations: [
-    ListPlayersComponent,
-    PlayersFormComponent
-  ],
+  declarations: [ListPlayersComponent, PlayersFormComponent],
   imports: [
     CommonModule,
     PlayersRoutingModule,
@@ -23,8 +19,8 @@ import { PlayersService } from './shared/services/players.service';
     ReactiveFormsModule,
     SharedModule,
     PrimeNgModule,
-    CountriesModule
+    CountriesModule,
   ],
-  providers: [PlayersService]
+  providers: [PlayersService],
 })
-export class PlayersModule { }
+export class PlayersModule {}

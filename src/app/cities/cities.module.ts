@@ -10,12 +10,8 @@ import { ListCitiesComponent } from './list-cities/list-cities.component';
 import { CitiesFormComponent } from './cities-form/cities-form.component';
 import { CitiesService } from './shared/services/cities.service';
 
-
 @NgModule({
-  declarations: [
-    ListCitiesComponent,
-    CitiesFormComponent
-  ],
+  declarations: [ListCitiesComponent, CitiesFormComponent],
   imports: [
     CommonModule,
     CitiesRoutingModule,
@@ -23,10 +19,8 @@ import { CitiesService } from './shared/services/cities.service';
     ReactiveFormsModule,
     PrimeNgModule,
     SharedModule,
-    CountriesModule
+    CountriesModule,
   ],
-  providers: [
-    CitiesService
-  ]
+  providers: [CitiesService],
 })
-export class CitiesModule { }
+export class CitiesModule {}

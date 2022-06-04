@@ -12,7 +12,7 @@ import { Table } from 'primeng/table';
 @Component({
   selector: 'app-detail-form',
   templateUrl: './detail-form.component.html',
-  styleUrls: ['./detail-form.component.scss']
+  styleUrls: ['./detail-form.component.scss'],
 })
 export class DetailFormComponent implements OnInit {
   @ViewChild('dt') table: Table;
@@ -22,14 +22,14 @@ export class DetailFormComponent implements OnInit {
   @Input() payments: IPayments[] = [];
 
   denominationsValues: SelectItem[] = [];
-  clonedOperation: { [s: string]: any; } = {};
+  clonedOperation: { [s: string]: any } = {};
 
   fg: FormGroup;
 
   constructor(
     private _sweetAlertSvc: SweetalertService,
     private _operationsSvc: OperationService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.fg = this._operationsSvc.fg;
@@ -38,14 +38,16 @@ export class DetailFormComponent implements OnInit {
   get isFinished(): boolean {
     return this.fg.controls['finished']!.value || false;
   }
-  
+
   getInstrumentDescription(idInstrument: number): string {
-    const instrument = this.instrumentsValues.find(p => p.value === (idInstrument || 0));
+    const instrument = this.instrumentsValues.find(
+      (p) => p.value === (idInstrument || 0)
+    );
     return instrument ? instrument.label! : '';
   }
-  
+
   getPaymentDescription(idPayment: number): string {
-    const payment = this.payments.find(c => c.IdPayment === (idPayment || 0));
+    const payment = this.payments.find((c) => c.IdPayment === (idPayment || 0));
     return payment ? payment.PaymentName! : '';
   }
 
@@ -69,14 +71,16 @@ export class DetailFormComponent implements OnInit {
       Denomination: null,
       IdInstrument: null,
       Rate: 0,
-      Qty: 0
+      Qty: 0,
     });
 
-    this.table.initRowEdit(this.operationDetails[this.operationDetails.length -1]);
+    this.table.initRowEdit(
+      this.operationDetails[this.operationDetails.length - 1]
+    );
   }
 
   onRowEditInit(operation: IOperationD): void {
-    this.clonedOperation[operation.IdOperationDetail] = {...operation};
+    this.clonedOperation[operation.IdOperationDetail] = { ...operation };
 
     this._updateDenominationsValues(operation.IdInstrument!);
   }
@@ -86,16 +90,19 @@ export class DetailFormComponent implements OnInit {
   }
 
   onRowEditCancel(operation: any, index: number): void {
-    this.operationDetails[index] = this.clonedOperation[operation.IdOperationDetail];
+    this.operationDetails[index] =
+      this.clonedOperation[operation.IdOperationDetail];
     delete this.clonedOperation[operation.IdOperationDetail];
   }
-  
+
   onRowDelete(index: any): void {
-    this._sweetAlertSvc.question('Do you wish to delete selected detail?').then(result => {
-      if (result === ActionClicked.Yes) {
-        this.operationDetails.splice(index, 1);
-      }
-    });
+    this._sweetAlertSvc
+      .question('Do you wish to delete selected detail?')
+      .then((result) => {
+        if (result === ActionClicked.Yes) {
+          this.operationDetails.splice(index, 1);
+        }
+      });
   }
 
   onChangeInstrument(event: any, ri: any): void {
@@ -106,18 +113,19 @@ export class DetailFormComponent implements OnInit {
 
   private _updateDenominationsValues(idInstrument: number): void {
     this.denominationsValues = [];
-    this.denominationsValues = this.payments.filter(f => f.IdPayInstr === idInstrument).map(c => {
-      return {
-        value: c.IdPayment,
-        label: c.PaymentName
-      }
-    }); 
+    this.denominationsValues = this.payments
+      .filter((f) => f.IdPayInstr === idInstrument)
+      .map((c) => {
+        return {
+          value: c.IdPayment,
+          label: c.PaymentName,
+        };
+      });
   }
 
   onChangeDenomination(event: any, ri: any): void {
-    const payment = this.payments.find(p => p.IdPayment === event.value);
+    const payment = this.payments.find((p) => p.IdPayment === event.value);
     this.operationDetails[ri].Denomination = payment?.Denomination || 1;
     this.operationDetails[ri].Rate = payment?.Rate || 1;
   }
-
 }

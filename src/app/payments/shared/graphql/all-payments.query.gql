@@ -1,12 +1,11 @@
 query GetPayments {
     getPayments {
         IdPayment
-        Description
         Denomination
         IdPayInstr
-        IdCoin
+        IdCurrency
         PayInstrument
-      	Coin
+      	Currency
       	Rate
       	PaymentName
         Enabled

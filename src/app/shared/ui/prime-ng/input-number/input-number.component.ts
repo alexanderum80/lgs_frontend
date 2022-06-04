@@ -2,9 +2,10 @@ import { FormGroup } from '@angular/forms';
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'png-input-number',
   templateUrl: './input-number.component.html',
-  styleUrls: ['./input-number.component.scss']
+  styleUrls: ['./input-number.component.scss'],
 })
 export class InputNumberComponent implements OnInit {
   @Input() public fg: FormGroup;
@@ -12,7 +13,7 @@ export class InputNumberComponent implements OnInit {
   @Input() public label: string;
   @Input() public floatLabel = false;
   @Input() public labelWidth: string;
-  @Input() public mode: 'decimal' | 'currency' = 'currency';
+  @Input() public mode: 'decimal' | 'currency' = 'decimal';
   @Input() public currency = 'USD';
   @Input() public locale = 'en-US';
   @Input() public minFractionDigits = 2;
@@ -20,14 +21,10 @@ export class InputNumberComponent implements OnInit {
   @Input() public prefix = '';
   @Input() public required = false;
   @Input() public disabled = false;
-  @Input() public autocomplete: 'off' | 'on' = 'on';
 
-  constructor(
-    private cd: ChangeDetectorRef
-  ) { }
+  constructor(private cd: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.cd.detectChanges();
   }
-
 }

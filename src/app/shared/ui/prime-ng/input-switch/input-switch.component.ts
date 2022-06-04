@@ -4,7 +4,7 @@ import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'png-input-switch',
   templateUrl: './input-switch.component.html',
-  styleUrls: ['./input-switch.component.scss']
+  styleUrls: ['./input-switch.component.scss'],
 })
 export class InputSwitchComponent implements OnInit {
   @Input() public fg: FormGroup;
@@ -15,9 +15,7 @@ export class InputSwitchComponent implements OnInit {
   @Input() public required = false;
   @Input() public disabled = false;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

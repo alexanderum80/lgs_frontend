@@ -1,4 +1,4 @@
-import { CoinsService } from './../../coins/shared/services/coin.service';
+import { CurrenciesService } from './../../currencies/shared/services/currency.service';
 import { SelectItem } from 'primeng/api';
 import { PaymentsService } from './../shared/services/payments.service';
 import { ActionClicked } from './../../shared/models/list-items';
@@ -11,72 +11,78 @@ import { Component, OnInit } from '@angular/core';
   selector: 'app-payment-form',
   templateUrl: './payment-form.component.html',
   styleUrls: ['./payment-form.component.scss'],
-  providers: [CoinsService]
+  providers: [CurrenciesService],
 })
 export class PaymentFormComponent implements OnInit {
   fg: FormGroup;
 
   instrumentsValues: SelectItem[] = [];
-  coinsValues: SelectItem[] = [];
+  currenciesValues: SelectItem[] = [];
 
   constructor(
     private _dinamicDialogSvc: DinamicDialogService,
     private _sweetAlertSvc: SweetalertService,
     private _paymentsSvc: PaymentsService,
-    private _coinsSvc: CoinsService,
-  ) { }
+    private _currenciesSvc: CurrenciesService
+  ) {}
 
   ngOnInit(): void {
     this.fg = this._paymentsSvc.fg;
 
     this._getPaymentInstruments();
-    this._getCoins();
+    this._getCurrencies();
   }
 
   private _getPaymentInstruments(): void {
     try {
-      this._paymentsSvc.subscription.push(this._paymentsSvc.getInstruments().subscribe({
-        next: result => {
-          this.instrumentsValues = result.getPaymentInstruments.map((t: { IdPayInstr: any; Name: any; }) => {
-            return {
-              value: t.IdPayInstr,
-              label: t.Name,
-            }
-          });
-        },
-        error: err => {
-          this._sweetAlertSvc.error(err);
-        }
-      }));
+      this._paymentsSvc.subscription.push(
+        this._paymentsSvc.getInstruments().subscribe({
+          next: result => {
+            this.instrumentsValues = result.getPaymentInstruments.map(
+              (t: { IdPayInstr: any; Name: any }) => {
+                return {
+                  value: t.IdPayInstr,
+                  label: t.Name,
+                };
+              }
+            );
+          },
+          error: err => {
+            this._sweetAlertSvc.error(err);
+          },
+        })
+      );
     } catch (err: any) {
       this._sweetAlertSvc.error(err.message || err);
     }
   }
 
-  private _getCoins(): void {
+  private _getCurrencies(): void {
     try {
-      this._paymentsSvc.subscription.push(this._coinsSvc.getCoins().subscribe({
-        next: result => {
-          this.coinsValues = result.getCoins.map(c => {
-            return {
-              value: c.IdCoin,
-              label: c.Coin,
-            }
-          });
-        },
-        error: err => {
-          this._sweetAlertSvc.error(err);
-        }
-      }));
+      this._paymentsSvc.subscription.push(
+        this._currenciesSvc.getCurrencies().subscribe({
+          next: result => {
+            this.currenciesValues = result.getCurrencies.map(c => {
+              return {
+                value: c.IdCurrency,
+                label: c.Currency,
+              };
+            });
+          },
+          error: err => {
+            this._sweetAlertSvc.error(err);
+          },
+        })
+      );
     } catch (err: any) {
       this._sweetAlertSvc.error(err.message || err);
     }
   }
-  
+
   onActionClicked(action: ActionClicked) {
     switch (action) {
       case ActionClicked.Save:
-        this._save();        
+        this._save();
         break;
       case ActionClicked.Cancel:
         this._closeModal();
@@ -85,28 +91,32 @@ export class PaymentFormComponent implements OnInit {
   }
 
   private _save(): void {
-    const action = this.fg.controls['id'].value === 0 ? ActionClicked.Add : ActionClicked.Edit;
+    const action =
+      this.fg.controls['id'].value === 0
+        ? ActionClicked.Add
+        : ActionClicked.Edit;
 
-    this._paymentsSvc.subscription.push(this._paymentsSvc.save().subscribe({
-      next: response => {
-        let txtMessage;
+    this._paymentsSvc.subscription.push(
+      this._paymentsSvc.save().subscribe({
+        next: response => {
+          let txtMessage;
 
-        if (action === ActionClicked.Add) {
-          txtMessage = 'The Payment was created successfully.';
-        } else {
-          txtMessage = 'The Payment was updated successfully.';
-        }
+          if (action === ActionClicked.Add) {
+            txtMessage = 'The Payment was created successfully.';
+          } else {
+            txtMessage = 'The Payment was updated successfully.';
+          }
 
-        this._closeModal(txtMessage);
-      },
-      error: err => {
-        this._sweetAlertSvc.error(err);
-      }
-    }));
+          this._closeModal(txtMessage);
+        },
+        error: err => {
+          this._sweetAlertSvc.error(err);
+        },
+      })
+    );
   }
 
   private _closeModal(message?: string): void {
     this._dinamicDialogSvc.close(message);
   }
-
 }

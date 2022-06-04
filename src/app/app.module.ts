@@ -31,7 +31,7 @@ import { BadgeModule } from 'primeng/badge';
     LoginComponent,
     UserInfoComponent,
     NotificationsComponent,
-    UnauthorizedComponent
+    UnauthorizedComponent,
   ],
   imports: [
     BrowserModule,
@@ -63,12 +63,10 @@ import { BadgeModule } from 'primeng/badge';
     DialogService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {
-
   constructor() {
-
     // tslint:disable-next-line: no-string-literal
     // window['_rollupMoment__default'] = null;
   }

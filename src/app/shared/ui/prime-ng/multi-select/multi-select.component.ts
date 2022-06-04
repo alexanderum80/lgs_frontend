@@ -5,7 +5,7 @@ import { SelectItem } from 'primeng/api';
 @Component({
   selector: 'png-multi-select',
   templateUrl: './multi-select.component.html',
-  styleUrls: ['./multi-select.component.scss']
+  styleUrls: ['./multi-select.component.scss'],
 })
 export class MultiSelectComponent implements OnInit {
   @Input() fg: FormGroup;
@@ -19,9 +19,7 @@ export class MultiSelectComponent implements OnInit {
   @Input() filter = false;
   @Input() optionsValues: SelectItem[] = [];
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

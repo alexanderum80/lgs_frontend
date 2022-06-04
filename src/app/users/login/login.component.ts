@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
     private _userSvc: UsersService,
     private _navigateSvc: NavigationService,
     private _swalSvc: SweetalertService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.fg = new FormGroup({
@@ -28,7 +28,8 @@ export class LoginComponent implements OnInit {
       password: new FormControl(''),
     });
 
-    this._navigateSvc.continueURL = this._route.snapshot.queryParams['continue'] || '/';
+    this._navigateSvc.continueURL =
+      this._route.snapshot.queryParams['continue'] || '/';
   }
 
   iniciar(): void {
@@ -37,7 +38,7 @@ export class LoginComponent implements OnInit {
 
       const authVariables = {
         User: this.fg.controls['user'].value,
-        Password: this.fg.controls['password'].value
+        Password: this.fg.controls['password'].value,
       };
 
       this._userSvc.autenticate(authVariables).subscribe({
@@ -49,8 +50,8 @@ export class LoginComponent implements OnInit {
         error: (err) => {
           this.autenticando = false;
           this._swalSvc.error(err);
-        }}
-      );
+        },
+      });
     } catch (err: any) {
       this.autenticando = false;
       this._swalSvc.error(err);
@@ -58,7 +59,9 @@ export class LoginComponent implements OnInit {
   }
 
   isFormValid(): boolean {
-    return this.fg.controls['user'].value !== '' && this.fg.controls['password'].value !== '';
+    return (
+      this.fg.controls['user'].value !== '' &&
+      this.fg.controls['password'].value !== ''
+    );
   }
-
 }

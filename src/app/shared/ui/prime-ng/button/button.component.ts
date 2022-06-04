@@ -1,16 +1,31 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 
 @Component({
   selector: 'png-button',
   templateUrl: './button.component.html',
-  styleUrls: ['./button.component.scss']
+  styleUrls: ['./button.component.scss'],
 })
 export class ButtonComponent implements OnInit {
   @Input() label: string;
   @Input() icon: string;
   @Input() iconPos: 'left' | 'right' = 'left';
   @Input() disabled = false;
-  @Input() style: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'help' | 'danger' | 'link' = 'primary';
+  @Input() style:
+    | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'info'
+    | 'warning'
+    | 'help'
+    | 'danger'
+    | 'link' = 'primary';
   @Input() raised = false;
   @Input() rounded = false;
   @Input() text = false;
@@ -22,9 +37,7 @@ export class ButtonComponent implements OnInit {
 
   @Output() clicked = new EventEmitter();
 
-  constructor(
-    private cd: ChangeDetectorRef
-  ) { }
+  constructor(private cd: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.cd.detectChanges();
@@ -35,7 +48,6 @@ export class ButtonComponent implements OnInit {
   }
 
   get iconType(): string {
-    return this.icon || this.loading ? `pi ${ this.icon }` : '';
+    return this.icon || this.loading ? `pi ${this.icon}` : '';
   }
-
 }

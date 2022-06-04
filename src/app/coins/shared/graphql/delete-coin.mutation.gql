@@ -1,3 +1,0 @@
-mutation DeleteCoin($IDs: [Int!]!) {
-    deleteCoin(IDs: $IDs)
-}

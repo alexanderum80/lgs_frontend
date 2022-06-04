@@ -8,9 +8,8 @@ describe('CasinoInfoFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CasinoInfoFormComponent ]
-    })
-    .compileComponents();
+      declarations: [CasinoInfoFormComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -11,7 +11,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-master-tracking',
   templateUrl: './master-tracking.component.html',
-  styleUrls: ['./master-tracking.component.scss']
+  styleUrls: ['./master-tracking.component.scss'],
 })
 export class MasterTrackingComponent implements OnInit {
   fg: FormGroup = new FormGroup({
@@ -27,12 +27,12 @@ export class MasterTrackingComponent implements OnInit {
 
   loading = false;
 
-  constructor(    
+  constructor(
     private _reportsSvc: ReportsService,
     private _sweetAlertSvc: SweetalertService,
     private _playerSvc: PlayersService,
     private _sessionsSvc: SessionsService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this._getSessions();
@@ -43,24 +43,32 @@ export class MasterTrackingComponent implements OnInit {
   private _subscribeToFgChange(): void {
     this.fg.valueChanges.subscribe(() => {
       this.masterTracking = [];
-    })
+    });
   }
 
   private _getSessions(): void {
     try {
       this._sessionsSvc.getSessions().subscribe({
-        next: result => {
-          this.sessionsValues = sortBy(result.getSessions, 'IdSession').map((s: { IdSession: number, OpenDate: Date, CloseDate: Date }) => {
-            return {
-              value: s.IdSession,
-              label: new Date(s.OpenDate).toLocaleDateString() + ' ' + new Date(s.OpenDate).toLocaleTimeString() + 
-                    ' - ' + new Date(s.CloseDate).toLocaleDateString() + ' ' + new Date(s.CloseDate).toLocaleTimeString()
+        next: (result) => {
+          this.sessionsValues = sortBy(result.getSessions, 'IdSession').map(
+            (s: { IdSession: number; OpenDate: Date; CloseDate: Date }) => {
+              return {
+                value: s.IdSession,
+                label:
+                  new Date(s.OpenDate).toLocaleDateString() +
+                  ' ' +
+                  new Date(s.OpenDate).toLocaleTimeString() +
+                  ' - ' +
+                  new Date(s.CloseDate).toLocaleDateString() +
+                  ' ' +
+                  new Date(s.CloseDate).toLocaleTimeString(),
+              };
             }
-          });
+          );
         },
-        error: err => {
+        error: (err) => {
           this._sweetAlertSvc.error(err);
-        }
+        },
       });
     } catch (err: any) {
       this._sweetAlertSvc.error(err);
@@ -70,17 +78,20 @@ export class MasterTrackingComponent implements OnInit {
   private _getPlayers(): void {
     try {
       this._playerSvc.getAllPlayers().subscribe({
-        next: result => {
-          this.playersValues = sortBy(result.getPlayers.filter(f => f.IdPlayer !== 0), 'IdPlayer').map(p => {
+        next: (result) => {
+          this.playersValues = sortBy(
+            result.getPlayers.filter((f) => f.IdPlayer !== 0),
+            'IdPlayer'
+          ).map((p) => {
             return {
               value: p.IdPlayer,
-              label: p.Name + ' ' + p.LastName
-            }
+              label: p.Name + ' ' + p.LastName,
+            };
           });
         },
-        error: err => {
+        error: (err) => {
           this._sweetAlertSvc.error(err);
-        }
+        },
       });
     } catch (err: any) {
       this._sweetAlertSvc.error(err);
@@ -91,11 +102,11 @@ export class MasterTrackingComponent implements OnInit {
     let total = 0;
 
     if (this.masterTracking) {
-        for (let tracking of this.masterTracking) {
-            if (tracking.IdSession === idSession) {
-                total += tracking.WinLoss;
-            }
+      for (let tracking of this.masterTracking) {
+        if (tracking.IdSession === idSession) {
+          total += tracking.WinLoss;
         }
+      }
     }
 
     return total;
@@ -104,7 +115,7 @@ export class MasterTrackingComponent implements OnInit {
   calculateReport(): void {
     this._getMasterTracking();
   }
-  
+
   private _getMasterTracking(): void {
     try {
       this.loading = true;
@@ -112,20 +123,21 @@ export class MasterTrackingComponent implements OnInit {
       const finalSession = this.fg.controls['finalSession'].value;
       const idPlayer = this.fg.controls['idPlayer'].value;
 
-      this._reportsSvc.getMasterTracking(initSession, finalSession, idPlayer).subscribe({
-        next: result => {
-          this.loading = false;
-          this.masterTracking = cloneDeep(result.masterTracking);
-        },
-        error: err => {
-          this.loading = false;
-          this._sweetAlertSvc.error(err);
-        }
-      });
+      this._reportsSvc
+        .getMasterTracking(initSession, finalSession, idPlayer)
+        .subscribe({
+          next: (result) => {
+            this.loading = false;
+            this.masterTracking = cloneDeep(result.masterTracking);
+          },
+          error: (err) => {
+            this.loading = false;
+            this._sweetAlertSvc.error(err);
+          },
+        });
     } catch (err: any) {
       this.loading = false;
       this._sweetAlertSvc.error(err);
     }
   }
-
 }

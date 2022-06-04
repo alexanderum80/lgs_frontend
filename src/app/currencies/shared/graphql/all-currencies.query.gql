@@ -1,0 +1,8 @@
+query GetCurrencies {
+    getCurrencies {
+        IdCurrency
+        Currency
+        Rate
+        Enabled
+    }
+}

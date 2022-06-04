@@ -1,10 +1,10 @@
 mutation CreatePayment($paymentInput: PaymentInput!) {
     createPayment(paymentInput: $paymentInput) {
         IdPayment
-        Description
         Denomination
         IdPayInstr
-        IdCoin
+        IdCurrency
         Enabled
+        Picture
     }
 }

@@ -1,6 +1,9 @@
 import { PlayersFormComponent } from './../players-form/players-form.component';
 import { cloneDeep } from '@apollo/client/utilities';
-import { IActionItemClickedArgs, ActionClicked } from './../../shared/models/list-items';
+import {
+  IActionItemClickedArgs,
+  ActionClicked,
+} from './../../shared/models/list-items';
 import { SweetalertService } from './../../shared/services/sweetalert.service';
 import { MessageService } from 'primeng/api';
 import { DinamicDialogService } from './../../shared/ui/prime-ng/dinamic-dialog/dinamic-dialog.service';
@@ -13,13 +16,15 @@ import * as moment from 'moment';
 @Component({
   selector: 'app-list-players',
   templateUrl: './list-players.component.html',
-  styleUrls: ['./list-players.component.scss']
+  styleUrls: ['./list-players.component.scss'],
 })
-export class ListPlayersComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ListPlayersComponent implements AfterViewInit, OnDestroy {
   columns: ITableColumns[] = [
     { header: 'ID', field: 'IdPlayer', type: 'string' },
     { header: 'Name', field: 'Name', type: 'string' },
     { header: 'Last Name', field: 'LastName', type: 'string' },
+    { header: 'Country', field: 'Country.Name', type: 'string' },
+    { header: 'Category', field: 'Category.Description', type: 'string' },
     { header: 'Status', field: 'StatusInfo.OperationName', type: 'string' },
     { header: 'Enabled', field: 'Enabled', type: 'boolean' },
     { header: 'Deleted', field: 'Deleted', type: 'boolean' },
@@ -32,11 +37,8 @@ export class ListPlayersComponent implements OnInit, AfterViewInit, OnDestroy {
     private _msgSvc: MessageService,
     private _sweetAlertSvc: SweetalertService,
     private _playerSvc: PlayersService
-  ) { }
+  ) {}
 
-  ngOnInit(): void {
-  }
-  
   ngAfterViewInit(): void {
     this._getPlayers();
   }
@@ -49,11 +51,16 @@ export class ListPlayersComponent implements OnInit, AfterViewInit, OnDestroy {
     try {
       this._playerSvc.getAllPlayers().subscribe({
         next: result => {
-          this.players = cloneDeep(sortBy(result.getPlayers.filter(f => f.IdPlayer !== 0), 'IdPlayer'));
+          this.players = cloneDeep(
+            sortBy(
+              result.getPlayers.filter(f => f.IdPlayer !== 0),
+              'IdPlayer'
+            )
+          );
         },
         error: err => {
           this._sweetAlertSvc.error(err);
-        }
+        },
       });
     } catch (err: any) {
       this._sweetAlertSvc.error(err);
@@ -66,10 +73,10 @@ export class ListPlayersComponent implements OnInit, AfterViewInit, OnDestroy {
         this._add();
         break;
       case ActionClicked.Edit:
-        this._edit(event.item)
-        break;    
+        this._edit(event.item);
+        break;
       case ActionClicked.Delete:
-        this._delete(event.item)
+        this._delete(event.item);
         break;
     }
   }
@@ -80,68 +87,85 @@ export class ListPlayersComponent implements OnInit, AfterViewInit, OnDestroy {
       name: '',
       lastName: '',
       personalId: '',
-      passportNumber: '',
       note: '',
       cellPhone: '',
       dateOfBirth: new Date(),
       enabled: true,
-      idCountry: null
+      idCountry: null,
+      idCategory: 1,
     };
     this._playerSvc.fg.patchValue(inputData);
-    
+
     this._dinamicDialogSvc.open('Add Player', PlayersFormComponent);
-    this._playerSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
-      if (message) {
-          this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: message })
-      }
-    }));
+    this._playerSvc.subscription.push(
+      this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
+        if (message) {
+          this._msgSvc.add({
+            severity: 'success',
+            summary: 'Successfully',
+            detail: message,
+          });
+        }
+      })
+    );
   }
 
   private async _edit(data: any): Promise<void> {
     const id = data.IdPlayer;
 
     if (data.Deleted) {
-      const res = await this._sweetAlertSvc.question('The selected Player is Deleted, cannot be edited. Do you wich to recover this Player?');
+      const res = await this._sweetAlertSvc.question(
+        'The selected Player is Deleted, cannot be edited. Do you wich to recover this Player?'
+      );
       if (res === ActionClicked.Yes) {
         this._playerSvc.recoverPlayer(id).subscribe({
           error: err => {
             this._sweetAlertSvc.error(err);
-          }
+          },
         });
       } else {
         return;
       }
     }
 
-    this._playerSvc.subscription.push(this._playerSvc.getPlayer(id).subscribe({
-      next: response => {
-        const selectedPlayer = response.getPlayer;
+    this._playerSvc.subscription.push(
+      this._playerSvc.getPlayer(id).subscribe({
+        next: response => {
+          const selectedPlayer = response.getPlayer;
 
-        const inputData = {
-          id: selectedPlayer.IdPlayer,
-          name: selectedPlayer.Name,
-          lastName: selectedPlayer.LastName,
-          personalId: selectedPlayer.Personal_Id,
-          note: selectedPlayer.Note,
-          cellPhone: selectedPlayer.CellPhone,
-          dateOfBirth: moment(selectedPlayer.DateOfBirth).toDate(),
-          enabled: selectedPlayer.Enabled,
-          idCountry: selectedPlayer.IdCountry,
-        };
+          const inputData = {
+            id: selectedPlayer.IdPlayer,
+            name: selectedPlayer.Name,
+            lastName: selectedPlayer.LastName,
+            personalId: selectedPlayer.Personal_Id,
+            note: selectedPlayer.Note,
+            cellPhone: selectedPlayer.CellPhone,
+            dateOfBirth: moment(selectedPlayer.DateOfBirth).toDate(),
+            enabled: selectedPlayer.Enabled,
+            idCountry: selectedPlayer.IdCountry,
+            idCategory: selectedPlayer.IdCategory,
+          };
 
-        this._playerSvc.fg.patchValue(inputData);
+          this._playerSvc.fg.patchValue(inputData);
 
-        this._dinamicDialogSvc.open('Edit Player', PlayersFormComponent);
-        this._playerSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
-          if (message) {
-              this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: message })
-          }
-        }));    
-      },
-      error: err => {
-        this._sweetAlertSvc.error(err);
-      }  
-    }));
+          this._dinamicDialogSvc.open('Edit Player', PlayersFormComponent);
+          this._playerSvc.subscription.push(
+            this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
+              if (message) {
+                this._msgSvc.add({
+                  severity: 'success',
+                  summary: 'Successfully',
+                  detail: message,
+                });
+              }
+            })
+          );
+        },
+        error: err => {
+          this._sweetAlertSvc.error(err);
+        },
+      })
+    );
   }
 
   private _delete(data: any): void {
@@ -149,20 +173,31 @@ export class ListPlayersComponent implements OnInit, AfterViewInit, OnDestroy {
       return this._sweetAlertSvc.warning('This Player is already deleted.');
     }
 
-    this._sweetAlertSvc.question('Are you sure you want to delete selected Players?').then(res => {
-      if (res === ActionClicked.Yes) {
-        const IDsToRemove: number[] = !isArray(data) ? [data.IdPlayer] : data.map(d => { return d.IdPlayer });
+    this._sweetAlertSvc
+      .question('Are you sure you want to delete selected Players?')
+      .then(res => {
+        if (res === ActionClicked.Yes) {
+          const IDsToRemove: number[] = !isArray(data)
+            ? [data.IdPlayer]
+            : data.map(d => {
+                return d.IdPlayer;
+              });
 
-        this._playerSvc.subscription.push(this._playerSvc.deletePlayer(IDsToRemove).subscribe({
-          next: () => {
-            this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: 'The Player(s) was(were) deleted successfully.' })
-          },
-          error: err => {
-            this._sweetAlertSvc.error(err);
-          }
-        }));
-      }
-    });
+          this._playerSvc.subscription.push(
+            this._playerSvc.deletePlayer(IDsToRemove).subscribe({
+              next: () => {
+                this._msgSvc.add({
+                  severity: 'success',
+                  summary: 'Successfully',
+                  detail: 'The Player(s) was(were) deleted successfully.',
+                });
+              },
+              error: err => {
+                this._sweetAlertSvc.error(err);
+              },
+            })
+          );
+        }
+      });
   }
-
 }

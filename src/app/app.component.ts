@@ -8,20 +8,16 @@ import { UsersService } from './users/shared/services/users.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-
   menu: MenuItem[] = cloneDeep(MenuItems);
 
   authenticated: boolean;
 
   displayMenu = false;
 
-  constructor(
-    private _router: Router,
-    private _userSvc: UsersService,
-  ) {}
+  constructor(private _router: Router, private _userSvc: UsersService) {}
 
   ngOnInit(): void {
     this._userSvc.authenticated$.subscribe(auth => {
@@ -30,7 +26,7 @@ export class AppComponent implements OnInit {
 
     this._router.events.subscribe(() => {
       this.displayMenu = false;
-    })
+    });
   }
 
   switchMenu(): void {

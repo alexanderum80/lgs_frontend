@@ -9,22 +9,16 @@ import { TablesGameRoutingModule } from './tables-game-routing.module';
 import { ListTablesGameComponent } from './list-tables-game/list-tables-game.component';
 import { TablesGameFormComponent } from './tables-game-form/tables-game-form.component';
 
-
 @NgModule({
-  declarations: [
-    ListTablesGameComponent,
-    TablesGameFormComponent
-  ],
+  declarations: [ListTablesGameComponent, TablesGameFormComponent],
   imports: [
     CommonModule,
     TablesGameRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     PrimeNgModule,
-    SharedModule
+    SharedModule,
   ],
-  providers: [
-    TablesGameService
-  ]
+  providers: [TablesGameService],
 })
-export class TablesGameModule { }
+export class TablesGameModule {}

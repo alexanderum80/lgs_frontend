@@ -1,13 +1,32 @@
 <p-card class="login">
   <form [formGroup]="fg" class="form__login" (ngSubmit)="iniciar()">
     <div class="form__group">
-      <png-input-text class="w-full" [fg]="fg" control="user" label="User" [floatLabel]="true"></png-input-text>
+      <png-input-text
+        class="w-full"
+        [fg]="fg"
+        control="user"
+        label="User"
+        [floatLabel]="true"
+      ></png-input-text>
     </div>
     <div class="form__group">
-      <png-password class="w-full" [fg]="fg" control="password" label="Password" [floatLabel]="true"></png-password>
+      <png-password
+        class="w-full"
+        [fg]="fg"
+        control="password"
+        label="Password"
+        [floatLabel]="true"
+      ></png-password>
     </div>
     <div class="pt-2">
-      <button pButton type="submit" label="Sign in" [disabled]="!isFormValid() || autenticando" [loading]="autenticando" class="w-full"></button>
+      <button
+        pButton
+        type="submit"
+        label="Sign in"
+        [disabled]="!isFormValid() || autenticando"
+        [loading]="autenticando"
+        class="w-full"
+      ></button>
     </div>
   </form>
 </p-card>

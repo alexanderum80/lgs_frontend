@@ -1,95 +1,138 @@
 <app-list-item title="Today's player tracking">
-    <div class="p-card h-full p-2">
-        <form [formGroup]="fg" class="flex">
-            <div class="form__group w-20rem m-1">
-                <png-dropdown class="w-full mt-1" [fg]="fg" control="idPlayer" [floatLabel]="true" labelWidth="100" [optionsValues]="playersValues" placeholder="All Players" [filter]="true" [showClear]="true"></png-dropdown>
-            </div>
-            <div class="form__group">
-                <png-button class="mr-2 mb-2" label="Get tracking" [style]="'primary'" [raised]="true" (clicked)="calculateReport()"></png-button>
-            </div>
-        </form>
-        <p-table #dt2 [value]="playersTracking" dataKey="IdTracking"
-            [rows]="25" [showCurrentPageReport]="true" [rowsPerPageOptions]="[25,50,100]" [loading]="loading"
-            [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-            [scrollable]="true" scrollHeight="calc(100vh - 220px)">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th pSortableColumn="Description">Table<p-sortIcon field="Description"></p-sortIcon></th>
-                    <th pSortableColumn="Name">Player<p-sortIcon field="Name"></p-sortIcon></th>
-                    <th pSortableColumn="OperationName">Operation<p-sortIcon field="OperationName"></p-sortIcon></th>
-                    <th pSortableColumn="Date">Date<p-sortIcon field="Date"></p-sortIcon></th>
-                    <th pSortableColumn="PayDescription">Payment<p-sortIcon field="PayDescription"></p-sortIcon></th>
-                    <th pSortableColumn="PayInstrument">Instrument<p-sortIcon field="PayInstrument"></p-sortIcon></th>
-                    <th pSortableColumn="Denomination" class="text-right">Denomination<p-sortIcon field="Denomination"></p-sortIcon></th>
-                    <th pSortableColumn="Qty" class="text-right">Quantity<p-sortIcon field="Qty"></p-sortIcon></th>
-                    <th pSortableColumn="Amount" class="text-right">Amount<p-sortIcon field="Amount"></p-sortIcon></th>
-                </tr>
-                <tr>
-                    <th>
-                        <p-columnFilter type="text" field="Description"></p-columnFilter>
-                    </th>
-                    <th>
-                        <p-columnFilter type="text" field="Name"></p-columnFilter>
-                    </th>
-                    <th>
-                        <p-columnFilter type="text" field="OperationName"></p-columnFilter>
-                    </th>
-                    <th>
-                        <p-columnFilter type="date" field="Date"></p-columnFilter>
-                    </th>
-                    <th>
-                        <p-columnFilter type="text" field="PayDescription"></p-columnFilter>
-                    </th>
-                    <th>
-                        <p-columnFilter type="text" field="PayInstrument"></p-columnFilter>
-                    </th>
-                    <th class="text-right">
-                        <p-columnFilter type="text" field="Denomination"></p-columnFilter>
-                    </th>
-                    <th class="text-right">
-                        <p-columnFilter type="text" field="Qty"></p-columnFilter>
-                    </th>                
-                    <th class="text-right">
-                        <p-columnFilter type="text" field="Amount"></p-columnFilter>
-                    </th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-tracking>
-                <tr>
-                    <td>
-                        {{tracking.Description}}
-                    </td>
-                    <td>
-                        {{tracking.Name}}
-                    </td>
-                    <td>
-                        {{tracking.OperationName}}
-                    </td>
-                    <td>
-                        {{tracking.Date | date}}
-                    </td>
-                    <td>
-                        {{tracking.PayDescription}}
-                    </td>
-                    <td>
-                        {{tracking.PayInstrument}}
-                    </td>
-                    <td class="text-right">
-                        {{tracking.Denomination | currency}}
-                    </td>
-                    <td class="text-right">
-                        {{tracking.Qty}}
-                    </td>
-                    <td class="text-right">
-                        {{tracking.Amount | currency}}
-                    </td>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="emptymessage">
-                <tr>
-                    <td colspan="5">No trackings found.</td>
-                </tr>
-            </ng-template>
-        </p-table>
-    </div>
+  <div class="p-card h-full p-2">
+    <form [formGroup]="fg" class="flex">
+      <div class="form__group w-20rem m-1">
+        <png-dropdown
+          class="w-full mt-1"
+          [fg]="fg"
+          control="idPlayer"
+          [floatLabel]="true"
+          labelWidth="100"
+          [optionsValues]="playersValues"
+          placeholder="All Players"
+          [filter]="true"
+          [showClear]="true"
+        ></png-dropdown>
+      </div>
+      <div class="form__group">
+        <png-button
+          class="mr-2 mb-2"
+          label="Get tracking"
+          [style]="'primary'"
+          [raised]="true"
+          (clicked)="calculateReport()"
+        ></png-button>
+      </div>
+    </form>
+    <p-table
+      #dt2
+      [value]="playersTracking"
+      dataKey="IdTracking"
+      [rows]="25"
+      [showCurrentPageReport]="true"
+      [rowsPerPageOptions]="[25, 50, 100]"
+      [loading]="loading"
+      [paginator]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [scrollable]="true"
+      scrollHeight="calc(100vh - 220px)"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="Description">
+            Table<p-sortIcon field="Description"></p-sortIcon>
+          </th>
+          <th pSortableColumn="Name">
+            Player<p-sortIcon field="Name"></p-sortIcon>
+          </th>
+          <th pSortableColumn="OperationName">
+            Operation<p-sortIcon field="OperationName"></p-sortIcon>
+          </th>
+          <th pSortableColumn="Date">
+            Date<p-sortIcon field="Date"></p-sortIcon>
+          </th>
+          <th pSortableColumn="PayDescription">
+            Payment<p-sortIcon field="PayDescription"></p-sortIcon>
+          </th>
+          <th pSortableColumn="PayInstrument">
+            Instrument<p-sortIcon field="PayInstrument"></p-sortIcon>
+          </th>
+          <th pSortableColumn="Denomination" class="text-right">
+            Denomination<p-sortIcon field="Denomination"></p-sortIcon>
+          </th>
+          <th pSortableColumn="Qty" class="text-right">
+            Quantity<p-sortIcon field="Qty"></p-sortIcon>
+          </th>
+          <th pSortableColumn="Amount" class="text-right">
+            Amount<p-sortIcon field="Amount"></p-sortIcon>
+          </th>
+        </tr>
+        <tr>
+          <th>
+            <p-columnFilter type="text" field="Description"></p-columnFilter>
+          </th>
+          <th>
+            <p-columnFilter type="text" field="Name"></p-columnFilter>
+          </th>
+          <th>
+            <p-columnFilter type="text" field="OperationName"></p-columnFilter>
+          </th>
+          <th>
+            <p-columnFilter type="date" field="Date"></p-columnFilter>
+          </th>
+          <th>
+            <p-columnFilter type="text" field="PayDescription"></p-columnFilter>
+          </th>
+          <th>
+            <p-columnFilter type="text" field="PayInstrument"></p-columnFilter>
+          </th>
+          <th class="text-right">
+            <p-columnFilter type="text" field="Denomination"></p-columnFilter>
+          </th>
+          <th class="text-right">
+            <p-columnFilter type="text" field="Qty"></p-columnFilter>
+          </th>
+          <th class="text-right">
+            <p-columnFilter type="text" field="Amount"></p-columnFilter>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-tracking>
+        <tr>
+          <td>
+            {{ tracking.Description }}
+          </td>
+          <td>
+            {{ tracking.Name }}
+          </td>
+          <td>
+            {{ tracking.OperationName }}
+          </td>
+          <td>
+            {{ tracking.Date | date }}
+          </td>
+          <td>
+            {{ tracking.PayDescription }}
+          </td>
+          <td>
+            {{ tracking.PayInstrument }}
+          </td>
+          <td class="text-right">
+            {{ tracking.Denomination | currency }}
+          </td>
+          <td class="text-right">
+            {{ tracking.Qty }}
+          </td>
+          <td class="text-right">
+            {{ tracking.Amount | currency }}
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="5">No trackings found.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
 </app-list-item>

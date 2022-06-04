@@ -1,9 +1,29 @@
 {
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
+  "compounds": [
+    {
+      "name": "Attach Client+Server",
+      "configurations": ["NestJS Debug", "Launch Client"]
+    }
+  ],
   "configurations": [
     {
-      "name": "ng serve",
+      "type": "node",
+      "request": "launch",
+      "name": "NestJS Debug",
+      "localRoot": "${workspaceFolder}/api",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+          "run",
+          "start:dev",
+      ],
+      "console": "integratedTerminal",
+      "restart": true,
+      "autoAttachChildProcesses": true
+    },
+    {
+      "name": "Launch Client",
       "type": "pwa-chrome",
       "request": "launch",
       "preLaunchTask": "npm: start",
@@ -16,5 +36,6 @@
       "preLaunchTask": "npm: test",
       "url": "http://localhost:9876/debug.html"
     }
-  ]
+  ],
+
 }

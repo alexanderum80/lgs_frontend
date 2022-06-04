@@ -9,22 +9,16 @@ import { ListPaymentsComponent } from './list-payments/list-payments.component';
 import { PaymentFormComponent } from './payment-form/payment-form.component';
 import { SharedModule } from '../shared/shared.module';
 
-
 @NgModule({
-  declarations: [
-    ListPaymentsComponent,
-    PaymentFormComponent,
-  ],
+  declarations: [ListPaymentsComponent, PaymentFormComponent],
   imports: [
     CommonModule,
     PaymentsRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     PrimeNgModule,
-    SharedModule
+    SharedModule,
   ],
-  providers: [
-    PaymentsService
-  ]
+  providers: [PaymentsService],
 })
-export class PaymentsModule { }
+export class PaymentsModule {}

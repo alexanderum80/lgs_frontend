@@ -1,5 +1,12 @@
 <app-list-item title="Players">
-    <png-table [columns]="columns" [data]="players" [canEditDelete]="true" [scrollable]="true" scrollHeight="calc(100vh - 220px)" (actionClicked)="actionClicked($event)"></png-table>
+  <png-table
+    [columns]="columns"
+    [data]="players"
+    [canEditDelete]="true"
+    [scrollable]="true"
+    scrollHeight="calc(100vh - 220px)"
+    (actionClicked)="actionClicked($event)"
+  ></png-table>
 </app-list-item>
 
 <p-toast></p-toast>

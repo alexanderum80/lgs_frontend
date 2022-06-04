@@ -1,22 +1,58 @@
 <app-add-edit-item [fg]="fg" (actionClicked)="onActionClicked($event)">
-    <form [formGroup]="fg">
-        <div class="form__group">
-            <png-input-text class="w-full mt-1" label="Description" labelWidth="100" [fg]="fg" control="description" [required]="true" autocomplete="off"></png-input-text>
-        </div>
-        <div class="form__group">
-            <png-input-number class="w-full mt-1" label="Denomination" labelWidth="100" [fg]="fg" control="denomination" [required]="true" autocomplete="off"></png-input-number>
-        </div>
-        <div class="form__group">
-            <png-dropdown class="w-full mt-1" [fg]="fg" control="idPayInstr" label="Instrument" labelWidth="100" [optionsValues]="instrumentsValues" placeholder="Select an Instrument" [filter]="true" [showClear]="true"></png-dropdown>
-        </div>
-        <div class="form__group">
-            <png-dropdown class="w-full mt-1" [fg]="fg" control="idCoin" label="Coin" labelWidth="100" [optionsValues]="coinsValues" placeholder="Select a Coin" [filter]="true" [showClear]="true"></png-dropdown>
-        </div>
-        <div class="form__group">
-            <png-input-switch class="w-full mt-1" label="Enabled" labelWidth="100" [fg]="fg" control="enabled"></png-input-switch>
-        </div>
-        <!-- <div class="form__group">
-            <png-file-upload class="w-full mt-1" label="Image" labelWidth="100" [fg]="fg" control="image"></png-file-upload>
-        </div> -->
-    </form>
-  </app-add-edit-item>
+  <form [formGroup]="fg">
+    <div class="form__group">
+      <png-input-number
+        class="w-full mt-1"
+        label="Denomination"
+        labelWidth="100"
+        [fg]="fg"
+        control="denomination"
+        [required]="true"
+        mode="currency"></png-input-number>
+    </div>
+    <div class="form__group">
+      <png-dropdown
+        class="w-full mt-1"
+        [fg]="fg"
+        control="idPayInstr"
+        label="Instrument"
+        labelWidth="100"
+        [optionsValues]="instrumentsValues"
+        placeholder="Select an Instrument"
+        [filter]="true"
+        [required]="true"
+        [showClear]="true"></png-dropdown>
+    </div>
+    <div class="form__group">
+      <png-dropdown
+        class="w-full mt-1"
+        [fg]="fg"
+        control="idCurrency"
+        label="Currency"
+        labelWidth="100"
+        [optionsValues]="currenciesValues"
+        placeholder="Select a Currency"
+        [filter]="true"
+        [required]="true"
+        [showClear]="true"></png-dropdown>
+    </div>
+    <div class="form__group">
+      <png-input-switch
+        class="w-full mt-1"
+        label="Enabled"
+        labelWidth="100"
+        [fg]="fg"
+        control="enabled"></png-input-switch>
+    </div>
+    <!-- <div class="form__group">
+      <png-file-upload
+        class="w-full mt-1"
+        label="Picture"
+        labelWidth="100"
+        [fg]="fg"
+        control="picture"
+        mode="advanced"
+        chooseLabel="Select Picture"></png-file-upload>
+    </div> -->
+  </form>
+</app-add-edit-item>

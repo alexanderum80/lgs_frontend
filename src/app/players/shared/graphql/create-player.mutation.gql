@@ -9,5 +9,6 @@ mutation CreatePlayer($playerInput: PlayerInput!) {
         CellPhone
         Enabled
         IdCountry
+        IdCategory
     }
 }

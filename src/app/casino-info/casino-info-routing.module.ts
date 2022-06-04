@@ -2,12 +2,10 @@ import { CasinoInfoComponent } from './casino-info.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-const routes: Routes = [
-  { path: '', component: CasinoInfoComponent }
-];
+const routes: Routes = [{ path: '', component: CasinoInfoComponent }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class CasinoInfoRoutingModule { }
+export class CasinoInfoRoutingModule {}

@@ -8,9 +8,8 @@ describe('DataViewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DataViewComponent ]
-    })
-    .compileComponents();
+      declarations: [DataViewComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

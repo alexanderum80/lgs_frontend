@@ -1,0 +1,6 @@
+query GetPlayersCategory {
+    getPlayersCategory {
+      IdCategory
+      Description
+    }
+}

@@ -1,22 +1,25 @@
-<div  class="unauthorized-container">
-     <!-- image -->
-    <div class="p-5 flex justify-content-center align-content-center">
-        <img src="./assets/img/stop.png" alt="Unauhotized">
-    </div>
-    
-     <!-- header -->
-    <div class="mt-2 flex justify-content-center align-content-center">
-        <h1>Unauthorized</h1> 
-    </div>
+<div class="unauthorized-container">
+  <!-- image -->
+  <div class="p-5 flex justify-content-center align-content-center">
+    <img src="./assets/img/stop.png" alt="Unauhotized" />
+  </div>
 
-     <!-- error message -->
-    <div class="mt-2 flex justify-content-center align-content-center">
-        <h2 class="lead">You do not have access to perform this action</h2>
-    </div>
+  <!-- header -->
+  <div class="mt-2 flex justify-content-center align-content-center">
+    <h1>Unauthorized</h1>
+  </div>
 
-     <!-- actions -->
-    <div class="mt-2 flex justify-content-center align-content-center">
-        <!-- <button class="mdi mdi-back" (click)="goBack()">Go Back</button> -->
-        <png-button label="Go Back" (clicked)="goBack()" [raised]="true"></png-button>
-    </div>
+  <!-- error message -->
+  <div class="mt-2 flex justify-content-center align-content-center">
+    <h2 class="lead">You do not have access to perform this action</h2>
+  </div>
+
+  <!-- actions -->
+  <div class="mt-2 flex justify-content-center align-content-center">
+    <!-- <button class="mdi mdi-back" (click)="goBack()">Go Back</button> -->
+    <png-button
+      label="Go Back"
+      (clicked)="goBack()"
+      [raised]="true"></png-button>
+  </div>
 </div>

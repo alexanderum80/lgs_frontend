@@ -13,7 +13,7 @@ import { userApi } from '../shared/graphql/userActions.gql';
 @Component({
   selector: 'app-change-password',
   templateUrl: './change-password.component.html',
-  styleUrls: ['./change-password.component.scss']
+  styleUrls: ['./change-password.component.scss'],
 })
 export class ChangePasswordComponent implements OnInit, OnDestroy {
   fg: FormGroup;
@@ -24,27 +24,30 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
     private _userSvc: UsersService,
     private _apollo: Apollo,
     private _navigationSvc: NavigationService,
-    private _dinamicDialogSvc: DinamicDialogService,
-  ) { }
+    private _dinamicDialogSvc: DinamicDialogService
+  ) {}
 
   ngOnInit(): void {
     this.fg = this._userSvc.fg;
   }
 
   ngOnDestroy(): void {
-    this.subscription.map(subs => {
+    this.subscription.map((subs) => {
       subs.unsubscribe();
     });
   }
 
   changePassword(): void {
-    if (this.fg.controls['contrasena'].value !== this.fg.controls['contrasenaConfirm'].value) {
+    if (
+      this.fg.controls['contrasena'].value !==
+      this.fg.controls['contrasenaConfirm'].value
+    ) {
       SweetAlert.fire({
         icon: 'error',
         title: 'Error al Validar',
-        text: 'Las contraseñas introducidas no coinciden. Rectifique.',
+        text: 'Las contraseñas introducidas no currencyciden. Rectifique.',
         showConfirmButton: true,
-        confirmButtonText: 'OK'
+        confirmButtonText: 'OK',
       });
       return;
     }
@@ -52,25 +55,28 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
     const _idUser = toNumber(this.fg.controls['idUser'].value);
     const _password = this.fg.controls['contrasena'].value;
 
-    this.subscription.push(this._apollo.mutate<IUser>({
-      mutation: userApi.changePassword,
-      variables: { idUser: _idUser, password: _password },
-    }).subscribe({ 
-      next: response => {
-        this._dinamicDialogSvc.close();
+    this.subscription.push(
+      this._apollo
+        .mutate<IUser>({
+          mutation: userApi.changePassword,
+          variables: { idUser: _idUser, password: _password },
+        })
+        .subscribe({
+          next: (response) => {
+            this._dinamicDialogSvc.close();
 
-        this._navigationSvc.navigateTo(this._navigationSvc.continueURL);
-      },
-      error: err => {
-        SweetAlert.fire({
-          icon: 'error',
-          title: 'Error al Validar',
-          text: err,
-          showConfirmButton: true,
-          confirmButtonText: 'OK'
-        });
-      }
-    }));
+            this._navigationSvc.navigateTo(this._navigationSvc.continueURL);
+          },
+          error: (err) => {
+            SweetAlert.fire({
+              icon: 'error',
+              title: 'Error al Validar',
+              text: err,
+              showConfirmButton: true,
+              confirmButtonText: 'OK',
+            });
+          },
+        })
+    );
   }
-
 }

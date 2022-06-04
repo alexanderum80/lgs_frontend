@@ -9,22 +9,16 @@ import { SharedModule } from '../shared/shared.module';
 import { CountriesService } from './shared/services/countries.service';
 import { CountriesFormComponent } from './countries-form/countries-form.component';
 
-
 @NgModule({
-  declarations: [
-    ListCountriesComponent,
-    CountriesFormComponent
-  ],
+  declarations: [ListCountriesComponent, CountriesFormComponent],
   imports: [
     CommonModule,
     CountriesRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    PrimeNgModule
+    PrimeNgModule,
   ],
-  providers: [
-    CountriesService
-  ],
+  providers: [CountriesService],
 })
-export class CountriesModule { }
+export class CountriesModule {}

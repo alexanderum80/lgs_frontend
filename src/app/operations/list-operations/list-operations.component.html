@@ -1,7 +1,16 @@
 <png-progress-spinner *ngIf="finishing"></png-progress-spinner>
 
 <app-list-item [title]="title">
-    <png-table [columns]="columns" [data]="operations" [loading]="loading" [canEditDelete]="canEditDelete" [additionalButtons]="additionalButtons" [operations]="true" [scrollable]="true" scrollHeight="calc(100vh - 220px)" (actionClicked)="actionClicked($event)"></png-table>
+  <png-table
+    [columns]="columns"
+    [data]="operations"
+    [loading]="loading"
+    [canEditDelete]="canEditDelete"
+    [additionalButtons]="additionalButtons"
+    [operations]="true"
+    [scrollable]="true"
+    scrollHeight="calc(100vh - 220px)"
+    (actionClicked)="actionClicked($event)"></png-table>
 </app-list-item>
 
 <p-toast></p-toast>

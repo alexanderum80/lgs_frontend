@@ -5,7 +5,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 @Component({
   selector: 'app-add-edit-item',
   templateUrl: './add-edit-item.component.html',
-  styleUrls: ['./add-edit-item.component.scss']
+  styleUrls: ['./add-edit-item.component.scss'],
 })
 export class AddEditItemComponent implements OnInit {
   @Input() fg: FormGroup;
@@ -13,13 +13,15 @@ export class AddEditItemComponent implements OnInit {
 
   formGroup: FormGroup;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   get isFinished(): boolean {
-    return (this.fg.controls['finished'] && this.fg.controls['finished']!.value) || false;
+    return (
+      (this.fg.controls['finished'] && this.fg.controls['finished']!.value) ||
+      false
+    );
   }
 
   save(): void {
@@ -29,5 +31,4 @@ export class AddEditItemComponent implements OnInit {
   cancel(): void {
     this.actionClicked.emit(ActionClicked.Cancel);
   }
-
 }

@@ -6,29 +6,32 @@ import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'app-casino-info',
-  template: '<div></div>'
+  template: '<div></div>',
 })
 export class CasinoInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private _dinamicDialogSvc: DinamicDialogService,
     private _navigationSvc: NavigationService,
-    private _casinoSvc: CasinoInfoService,
-  ) { }
+    private _casinoSvc: CasinoInfoService
+  ) {}
 
   ngOnInit(): void {
     this._setFgValues();
 
     this._dinamicDialogSvc.open('Casino Information', CasinoInfoFormComponent);
-    this._casinoSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe(() => this._navigationSvc.navigateTo('')));
+    this._casinoSvc.subscription.push(
+      this._dinamicDialogSvc.ref.onClose.subscribe(() =>
+        this._navigationSvc.navigateTo('')
+      )
+    );
   }
 
-  ngAfterViewInit(): void {
-  }
+  ngAfterViewInit(): void {}
 
   ngOnDestroy(): void {
-      this._casinoSvc.dispose();
+    this._casinoSvc.dispose();
   }
-  
+
   private _setFgValues(): void {
     const payload = {
       id: 0,
@@ -37,9 +40,8 @@ export class CasinoInfoComponent implements OnInit, AfterViewInit, OnDestroy {
       phone: '',
       idCountry: null,
       idCity: null,
-    }
+    };
 
     this._casinoSvc.fg.patchValue(payload);
   }
-
 }

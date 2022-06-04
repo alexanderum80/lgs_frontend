@@ -1,15 +1,15 @@
 export interface ITablesGame {
-    IdGame: number;
-    Name: string;
+  IdGame: number;
+  Name: string;
 }
 
 export interface TablesGameQueryResponse {
-    getTablesGame: ITablesGame[];
-    getTableGame: ITablesGame;
+  getTablesGame: ITablesGame[];
+  getTableGame: ITablesGame;
 }
 
 export interface TablesGameMutationResponse {
-    createTableGame: ITablesGame;
-    updateTableGame: ITablesGame;
-    deleteTableGame: number;
+  createTableGame: ITablesGame;
+  updateTableGame: ITablesGame;
+  deleteTableGame: number;
 }

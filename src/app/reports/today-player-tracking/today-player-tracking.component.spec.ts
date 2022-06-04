@@ -8,9 +8,8 @@ describe('TodayPlayerTrackingComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TodayPlayerTrackingComponent ]
-    })
-    .compileComponents();
+      declarations: [TodayPlayerTrackingComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

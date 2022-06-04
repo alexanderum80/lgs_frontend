@@ -18,7 +18,7 @@ import { OperationsFormComponent } from './operations-form/operations-form.compo
   declarations: [
     DetailFormComponent,
     ListOperationsComponent,
-    OperationsFormComponent
+    OperationsFormComponent,
   ],
   imports: [
     CommonModule,
@@ -29,11 +29,8 @@ import { OperationsFormComponent } from './operations-form/operations-form.compo
     PrimeNgModule,
     TablesModule,
     PaymentsModule,
-    CasinoInfoModule
+    CasinoInfoModule,
   ],
-  providers: [
-    OperationService,
-    PlayersService
-  ]
+  providers: [OperationService, PlayersService],
 })
-export class OperationsModule { }
+export class OperationsModule {}

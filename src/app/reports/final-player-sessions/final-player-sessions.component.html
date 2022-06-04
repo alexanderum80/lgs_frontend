@@ -1,72 +1,134 @@
 <app-list-item title="Final player by Sessions">
-    <div class="p-card h-full p-2">
-        <form [formGroup]="fg" class="flex">
-            <div class="flex flex-column">
-                <div class="flex">
-                    <div class="form__group w-10rem m-1">
-                        <png-dropdown class="w-full mt-1" [fg]="fg" control="initSession" label="Initial Date" [floatLabel]="true" labelWidth="100" [optionsValues]="sessionsValues" [required]="true" [filter]="true" [showClear]="true"></png-dropdown>
-                    </div>
-                    <div class="form__group w-10rem m-1">
-                        <png-dropdown class="w-full mt-1" [fg]="fg" control="finalSession" label="Final Date" [floatLabel]="true" labelWidth="100" [optionsValues]="sessionsValues" [required]="true" [filter]="true" [showClear]="true"></png-dropdown>
-                    </div>
-                </div>
-                <div class="form__group w-20rem m-1">
-                    <png-dropdown class="w-full mt-1" [fg]="fg" control="idPlayer" [floatLabel]="true" labelWidth="100" [optionsValues]="playersValues" placeholder="All Players" [filter]="true" [showClear]="true"></png-dropdown>
-                </div>
-            </div>
-            <div class="form__group ml-5">
-                <png-button class="mr-2 mb-2" label="Get Players Info" [style]="'primary'" [raised]="true" [disabled]="fg && !fg.valid" (clicked)="calculateReport()"></png-button>
-            </div>
-        </form>
-        <p-table #dt2 [value]="playersSessions" dataKey="IdPlayer"
-            [rows]="25" [showCurrentPageReport]="true" [rowsPerPageOptions]="[25,50,100]" [loading]="loading"
-            [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-            rowGroupMode="subheader" groupRowsBy="Player"
-            [scrollable]="true" scrollHeight="calc(100vh - 255px)">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th pSortableColumn="OpenDate">Date<p-sortIcon field="OpenDate"></p-sortIcon></th>
-                    <th pSortableColumn="Result" class="text-right">Result<p-sortIcon field="Result"></p-sortIcon></th>
-                </tr>
-                <tr>
-                    <th>
-                        <p-columnFilter type="date" field="OpenDate"></p-columnFilter>
-                    </th>
-                    <th class="text-right">
-                        <p-columnFilter type="text" field="Result"></p-columnFilter>
-                    </th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="groupheader" let-playerSession>
-                <tr pRowGroupHeader>
-                    <td colspan="12">
-                        <span class="font-bold ml-2">Player: {{playerSession.Player}}</span>
-                    </td>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="groupfooter" let-playerSession>
-                <tr class="p-rowgroup-footer">
-                    <td class="w-6">
-                        <div class="text-align-right w-full font-bold">Total Result</div>
-                    </td>
-                    <td style="text-align: end;" class="w-6 font-bold">{{calculateCustomerTotal(playerSession.IdPlayer) | currency}}</td>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-playerSession>
-                <tr>
-                    <td>
-                        {{playerSession.OpenDate | date}}
-                    </td>
-                    <td class="text-right" [ngClass]="playerSession.Result >= 0 ? 'text-green-500' : 'text-pink-500'">
-                        {{playerSession.Result | currency}}
-                    </td>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="emptymessage">
-                <tr>
-                    <td colspan="5">No results found.</td>
-                </tr>
-            </ng-template>
-        </p-table>
-    </div>
+  <div class="p-card h-full p-2">
+    <form [formGroup]="fg" class="flex">
+      <div class="flex flex-column">
+        <div class="flex">
+          <div class="form__group w-10rem m-1">
+            <png-dropdown
+              class="w-full mt-1"
+              [fg]="fg"
+              control="initSession"
+              label="Initial Date"
+              [floatLabel]="true"
+              labelWidth="100"
+              [optionsValues]="sessionsValues"
+              [required]="true"
+              [filter]="true"
+              [showClear]="true"
+            ></png-dropdown>
+          </div>
+          <div class="form__group w-10rem m-1">
+            <png-dropdown
+              class="w-full mt-1"
+              [fg]="fg"
+              control="finalSession"
+              label="Final Date"
+              [floatLabel]="true"
+              labelWidth="100"
+              [optionsValues]="sessionsValues"
+              [required]="true"
+              [filter]="true"
+              [showClear]="true"
+            ></png-dropdown>
+          </div>
+        </div>
+        <div class="form__group w-20rem m-1">
+          <png-dropdown
+            class="w-full mt-1"
+            [fg]="fg"
+            control="idPlayer"
+            [floatLabel]="true"
+            labelWidth="100"
+            [optionsValues]="playersValues"
+            placeholder="All Players"
+            [filter]="true"
+            [showClear]="true"
+          ></png-dropdown>
+        </div>
+      </div>
+      <div class="form__group ml-5">
+        <png-button
+          class="mr-2 mb-2"
+          label="Get Players Info"
+          [style]="'primary'"
+          [raised]="true"
+          [disabled]="fg && !fg.valid"
+          (clicked)="calculateReport()"
+        ></png-button>
+      </div>
+    </form>
+    <p-table
+      #dt2
+      [value]="playersSessions"
+      dataKey="IdPlayer"
+      [rows]="25"
+      [showCurrentPageReport]="true"
+      [rowsPerPageOptions]="[25, 50, 100]"
+      [loading]="loading"
+      [paginator]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      rowGroupMode="subheader"
+      groupRowsBy="Player"
+      [scrollable]="true"
+      scrollHeight="calc(100vh - 255px)"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="OpenDate">
+            Date<p-sortIcon field="OpenDate"></p-sortIcon>
+          </th>
+          <th pSortableColumn="Result" class="text-right">
+            Result<p-sortIcon field="Result"></p-sortIcon>
+          </th>
+        </tr>
+        <tr>
+          <th>
+            <p-columnFilter type="date" field="OpenDate"></p-columnFilter>
+          </th>
+          <th class="text-right">
+            <p-columnFilter type="text" field="Result"></p-columnFilter>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="groupheader" let-playerSession>
+        <tr pRowGroupHeader>
+          <td colspan="12">
+            <span class="font-bold ml-2"
+              >Player: {{ playerSession.Player }}</span
+            >
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="groupfooter" let-playerSession>
+        <tr class="p-rowgroup-footer">
+          <td class="w-6">
+            <div class="text-align-right w-full font-bold">Total Result</div>
+          </td>
+          <td style="text-align: end" class="w-6 font-bold">
+            {{ calculateCustomerTotal(playerSession.IdPlayer) | currency }}
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-playerSession>
+        <tr>
+          <td>
+            {{ playerSession.OpenDate | date }}
+          </td>
+          <td
+            class="text-right"
+            [ngClass]="
+              playerSession.Result >= 0 ? 'text-green-500' : 'text-pink-500'
+            "
+          >
+            {{ playerSession.Result | currency }}
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="5">No results found.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
 </app-list-item>

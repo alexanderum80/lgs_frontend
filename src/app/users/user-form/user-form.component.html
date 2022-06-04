@@ -1,22 +1,70 @@
 <app-add-edit-item [fg]="fg" (actionClicked)="onActionClicked($event)">
   <form [formGroup]="fg">
     <div class="form__group">
-      <png-input-text class="w-full mt-1" label="User Name" labelWidth="90" [fg]="fg" control="userName" [required]="true" autocomplete="off"></png-input-text>
+      <png-input-text
+        class="w-full mt-1"
+        label="User Name"
+        labelWidth="90"
+        [fg]="fg"
+        control="userName"
+        [required]="true"
+        autocomplete="off"
+      ></png-input-text>
     </div>
     <div class="form__group">
-      <png-input-text class="w-full mt-1" label="Name" labelWidth="90" [fg]="fg" control="name" [required]="true" autocomplete="off"></png-input-text>
+      <png-input-text
+        class="w-full mt-1"
+        label="Name"
+        labelWidth="90"
+        [fg]="fg"
+        control="name"
+        [required]="true"
+        autocomplete="off"
+      ></png-input-text>
     </div>
     <div class="form__group">
-      <png-input-text class="w-full mt-1" label="Last Name" labelWidth="90" [fg]="fg" control="lastName" [required]="true" autocomplete="off"></png-input-text>
+      <png-input-text
+        class="w-full mt-1"
+        label="Last Name"
+        labelWidth="90"
+        [fg]="fg"
+        control="lastName"
+        [required]="true"
+        autocomplete="off"
+      ></png-input-text>
     </div>
     <div class="form__group">
-      <png-password class="w-full mt-1" label="Password" labelWidth="90" [fg]="fg" control="password" [required]="true" autocomplete="off"></png-password>
+      <png-password
+        class="w-full mt-1"
+        label="Password"
+        labelWidth="90"
+        [fg]="fg"
+        control="password"
+        [required]="true"
+        autocomplete="off"
+      ></png-password>
     </div>
     <div class="form__group">
-      <png-multi-select class="w-full mt-1" label="Role" labelWidth="90" [fg]="fg" control="roles" placeholder="Role" [optionsValues]="rolesValues" [required]="true"></png-multi-select>
+      <png-multi-select
+        class="w-full mt-1"
+        label="Role"
+        labelWidth="90"
+        [fg]="fg"
+        control="roles"
+        placeholder="Role"
+        [optionsValues]="rolesValues"
+        [required]="true"
+      ></png-multi-select>
     </div>
     <div class="form__group">
-      <png-input-switch class="w-full mt-1" label="Enabled" labelWidth="70" [fg]="fg" control="enabled" [required]="true"></png-input-switch>
+      <png-input-switch
+        class="w-full mt-1"
+        label="Enabled"
+        labelWidth="70"
+        [fg]="fg"
+        control="enabled"
+        [required]="true"
+      ></png-input-switch>
     </div>
   </form>
 </app-add-edit-item>

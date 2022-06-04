@@ -1,6 +1,9 @@
 import { isArray } from 'lodash';
 import { CitiesFormComponent } from './../cities-form/cities-form.component';
-import { IActionItemClickedArgs, ActionClicked } from './../../shared/models/list-items';
+import {
+  IActionItemClickedArgs,
+  ActionClicked,
+} from './../../shared/models/list-items';
 import { cloneDeep } from '@apollo/client/utilities';
 import { SweetalertService } from './../../shared/services/sweetalert.service';
 import { MessageService } from 'primeng/api';
@@ -13,7 +16,7 @@ import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 @Component({
   selector: 'app-list-cities',
   templateUrl: './list-cities.component.html',
-  styleUrls: ['./list-cities.component.scss']
+  styleUrls: ['./list-cities.component.scss'],
 })
 export class ListCitiesComponent implements OnInit, AfterViewInit, OnDestroy {
   columns: ITableColumns[] = [
@@ -29,28 +32,28 @@ export class ListCitiesComponent implements OnInit, AfterViewInit, OnDestroy {
     private _dinamicDialogSvc: DinamicDialogService,
     private _msgSvc: MessageService,
     private _sweetAlertSvc: SweetalertService
-  ) { }
+  ) {}
 
-  ngOnInit(): void {
-  }
-  
+  ngOnInit(): void {}
+
   ngAfterViewInit(): void {
     this._getCities();
   }
 
   ngOnDestroy(): void {
-    this._citiesSvc.subscription.forEach(subs => subs.unsubscribe());
+    this._citiesSvc.subscription.forEach((subs) => subs.unsubscribe());
   }
 
   private _getCities(): void {
     try {
-      this._citiesSvc.subscription.push(this._citiesSvc.getCities().subscribe({
-          next: response => {
+      this._citiesSvc.subscription.push(
+        this._citiesSvc.getCities().subscribe({
+          next: (response) => {
             this.cities = cloneDeep(response.getCities);
           },
-          error: err => {
+          error: (err) => {
             this._sweetAlertSvc.error(err);
-          }
+          },
         })
       );
     } catch (err: any) {
@@ -64,10 +67,10 @@ export class ListCitiesComponent implements OnInit, AfterViewInit, OnDestroy {
         this._add();
         break;
       case ActionClicked.Edit:
-        this._edit(event.item)
-        break;    
+        this._edit(event.item);
+        break;
       case ActionClicked.Delete:
-        this._delete(event.item)
+        this._delete(event.item);
         break;
     }
   }
@@ -80,59 +83,84 @@ export class ListCitiesComponent implements OnInit, AfterViewInit, OnDestroy {
       enabled: true,
     };
     this._citiesSvc.fg.patchValue(inputData);
-    
+
     this._dinamicDialogSvc.open('Add City', CitiesFormComponent);
-    this._citiesSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
-      if (message) {
-          this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: message })
-      }
-    }));
+    this._citiesSvc.subscription.push(
+      this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
+        if (message) {
+          this._msgSvc.add({
+            severity: 'success',
+            summary: 'Successfully',
+            detail: message,
+          });
+        }
+      })
+    );
   }
 
   private _edit(data: any): void {
     const id = data.IdCity;
 
-    this._citiesSvc.subscription.push(this._citiesSvc.getCity(id).subscribe({
-      next: response => {
-        const selectedData = response.getCity;
+    this._citiesSvc.subscription.push(
+      this._citiesSvc.getCity(id).subscribe({
+        next: (response) => {
+          const selectedData = response.getCity;
 
-        const inputData = {
-          id: selectedData.IdCity,
-          name: selectedData.City,
-          idCountry: selectedData.IdCountry,
-          enabled: selectedData.Enabled,
-        };
+          const inputData = {
+            id: selectedData.IdCity,
+            name: selectedData.City,
+            idCountry: selectedData.IdCountry,
+            enabled: selectedData.Enabled,
+          };
 
-        this._citiesSvc.fg.patchValue(inputData);
+          this._citiesSvc.fg.patchValue(inputData);
 
-        this._dinamicDialogSvc.open('Edit City', CitiesFormComponent);
-        this._citiesSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
-          if (message) {
-              this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: message })
-          }
-        }));    
-      },
-      error: err => {
-        this._sweetAlertSvc.error(err);
-      }  
-    }));
+          this._dinamicDialogSvc.open('Edit City', CitiesFormComponent);
+          this._citiesSvc.subscription.push(
+            this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
+              if (message) {
+                this._msgSvc.add({
+                  severity: 'success',
+                  summary: 'Successfully',
+                  detail: message,
+                });
+              }
+            })
+          );
+        },
+        error: (err) => {
+          this._sweetAlertSvc.error(err);
+        },
+      })
+    );
   }
 
   private _delete(data: any): void {
-    this._sweetAlertSvc.question('Are you sure you want to delete selected Cities?').then(res => {
-      if (res === ActionClicked.Yes) {
-        const IDsToRemove: number[] = !isArray(data) ? [data.IdCity] : data.map(d => { return d.IdCity });
+    this._sweetAlertSvc
+      .question('Are you sure you want to delete selected Cities?')
+      .then((res) => {
+        if (res === ActionClicked.Yes) {
+          const IDsToRemove: number[] = !isArray(data)
+            ? [data.IdCity]
+            : data.map((d) => {
+                return d.IdCity;
+              });
 
-        this._citiesSvc.subscription.push(this._citiesSvc.delete(IDsToRemove).subscribe({
-          next: response => {
-            this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: 'The City(ies) was(were) deleted successfully.' })
-          },
-          error: err => {
-            this._sweetAlertSvc.error(err);
-          }
-        }));
-      }
-    });
+          this._citiesSvc.subscription.push(
+            this._citiesSvc.delete(IDsToRemove).subscribe({
+              next: (response) => {
+                this._msgSvc.add({
+                  severity: 'success',
+                  summary: 'Successfully',
+                  detail: 'The City(ies) was(were) deleted successfully.',
+                });
+              },
+              error: (err) => {
+                this._sweetAlertSvc.error(err);
+              },
+            })
+          );
+        }
+      });
   }
-
 }

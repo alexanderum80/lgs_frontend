@@ -11,9 +11,11 @@ import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 @Component({
   selector: 'app-casino-info-form',
   templateUrl: './casino-info-form.component.html',
-  styleUrls: ['./casino-info-form.component.scss']
+  styleUrls: ['./casino-info-form.component.scss'],
 })
-export class CasinoInfoFormComponent implements OnInit, OnDestroy, AfterViewInit {
+export class CasinoInfoFormComponent
+  implements OnInit, OnDestroy, AfterViewInit
+{
   fg: FormGroup;
 
   countriesValues: SelectItem[] = [];
@@ -25,7 +27,7 @@ export class CasinoInfoFormComponent implements OnInit, OnDestroy, AfterViewInit
     private _sweetAlertSvc: SweetalertService,
     private _countriesSvc: CountriesService,
     private _citiesSvc: CitiesService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.fg = this._casinoSvc.fg;
@@ -38,19 +40,19 @@ export class CasinoInfoFormComponent implements OnInit, OnDestroy, AfterViewInit
 
     this._loadCountries();
   }
-  
+
   private _subscribeToFgChange(): void {
-    this.fg.controls['idCountry'].valueChanges.subscribe(idCountry => {
+    this.fg.controls['idCountry'].valueChanges.subscribe((idCountry) => {
       this.fg.controls['idCity'].setValue(null);
       this.citiesValues = [];
-      
+
       if (idCountry) {
-        this._citiesSvc.getCitiesByIdCountry(idCountry).subscribe(res => {
-          this.citiesValues = res.getCitiesByCountry.map(c=> {
+        this._citiesSvc.getCitiesByIdCountry(idCountry).subscribe((res) => {
+          this.citiesValues = res.getCitiesByCountry.map((c) => {
             return {
               label: c.City,
-              value: c.IdCity
-            }
+              value: c.IdCity,
+            };
           });
         });
       }
@@ -59,7 +61,7 @@ export class CasinoInfoFormComponent implements OnInit, OnDestroy, AfterViewInit
 
   private _loadCasinoInfo(): void {
     this._casinoSvc.loadCasinoInfo().subscribe({
-      next: result => {
+      next: (result) => {
         const casinoInfo = result.getCasinoInfo;
 
         const payload = {
@@ -69,30 +71,30 @@ export class CasinoInfoFormComponent implements OnInit, OnDestroy, AfterViewInit
           phone: casinoInfo.Phone,
           idCountry: casinoInfo.IdCountry,
           idCity: casinoInfo.IdCity,
-        }
-    
+        };
+
         this.fg.patchValue(payload);
       },
-      error: err => {
+      error: (err) => {
         this._sweetAlertSvc.error(err);
-      }
-    })
+      },
+    });
   }
-  
+
   private _loadCountries(): void {
     this._countriesSvc.getCountries().subscribe({
-      next: result => {
-        this.countriesValues = result.getCountries.map(c => {
+      next: (result) => {
+        this.countriesValues = result.getCountries.map((c) => {
           return {
             label: c.Name,
-            value: c.IdCountry
-          }
+            value: c.IdCountry,
+          };
         });
       },
-      error: err => {
+      error: (err) => {
         this._sweetAlertSvc.error(err);
-      }
-    })
+      },
+    });
   }
 
   ngOnDestroy(): void {
@@ -102,7 +104,7 @@ export class CasinoInfoFormComponent implements OnInit, OnDestroy, AfterViewInit
   onActionClicked(action: ActionClicked) {
     switch (action) {
       case ActionClicked.Save:
-        this._save();        
+        this._save();
         break;
       case ActionClicked.Cancel:
         this._closeModal();
@@ -112,14 +114,16 @@ export class CasinoInfoFormComponent implements OnInit, OnDestroy, AfterViewInit
 
   private _save(): void {
     try {
-      this._casinoSvc.subscription.push(this._casinoSvc.save().subscribe({
-        next: response => {
-          this._dinamicDialogSvc.close();
-        },
-        error: err => {
-          this._sweetAlertSvc.error(err);
-        }
-      }));
+      this._casinoSvc.subscription.push(
+        this._casinoSvc.save().subscribe({
+          next: (response) => {
+            this._dinamicDialogSvc.close();
+          },
+          error: (err) => {
+            this._sweetAlertSvc.error(err);
+          },
+        })
+      );
     } catch (err: any) {
       this._sweetAlertSvc.error(err);
     }
@@ -128,5 +132,4 @@ export class CasinoInfoFormComponent implements OnInit, OnDestroy, AfterViewInit
   private _closeModal(message?: string): void {
     this._dinamicDialogSvc.close(message);
   }
-
 }

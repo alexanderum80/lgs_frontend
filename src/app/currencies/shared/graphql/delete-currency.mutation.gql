@@ -1,0 +1,3 @@
+mutation DeleteCurrency($IDs: [Int!]!) {
+    deleteCurrency(IDs: $IDs)
+}

@@ -10,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-user-form',
   templateUrl: './user-form.component.html',
-  styleUrls: ['./user-form.component.scss']
+  styleUrls: ['./user-form.component.scss'],
 })
 export class UserFormComponent implements OnInit {
   action: ActionClicked;
@@ -24,7 +24,7 @@ export class UserFormComponent implements OnInit {
     private _dinamicDialogSvc: DinamicDialogService,
     private _apollo: Apollo,
     private _sweetAlertSvc: SweetalertService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.fg = this._userSvc.fg;
@@ -33,35 +33,41 @@ export class UserFormComponent implements OnInit {
   }
 
   private _getRoles(): void {
-    this._userSvc.subscription.push(this._apollo.query<any>({
-      query: gql`
-        query GetRoles {
-          getRoles {
-            IdRole
-            Role
-          }
-        }`
-      ,
-      fetchPolicy: 'network-only'
-    }).subscribe({
-      next: response => {
-        this.rolesValues = response.data.getRoles.map((r: { IdRole: number, Role: string }) => {
-          return {
-            label: r.Role,
-            value: r.IdRole
-          }
+    this._userSvc.subscription.push(
+      this._apollo
+        .query<any>({
+          query: gql`
+            query GetRoles {
+              getRoles {
+                IdRole
+                Role
+              }
+            }
+          `,
+          fetchPolicy: 'network-only',
         })
-      },
-      error: err => {
-        this._sweetAlertSvc.error(err);
-      }
-    }));
+        .subscribe({
+          next: (response) => {
+            this.rolesValues = response.data.getRoles.map(
+              (r: { IdRole: number; Role: string }) => {
+                return {
+                  label: r.Role,
+                  value: r.IdRole,
+                };
+              }
+            );
+          },
+          error: (err) => {
+            this._sweetAlertSvc.error(err);
+          },
+        })
+    );
   }
 
   onActionClicked(action: ActionClicked) {
     switch (action) {
       case ActionClicked.Save:
-        this._save();        
+        this._save();
         break;
       case ActionClicked.Cancel:
         this._closeModal();
@@ -70,28 +76,32 @@ export class UserFormComponent implements OnInit {
   }
 
   private _save(): void {
-    const action = this.fg.controls['id'].value === 0 ? ActionClicked.Add : ActionClicked.Edit;
+    const action =
+      this.fg.controls['id'].value === 0
+        ? ActionClicked.Add
+        : ActionClicked.Edit;
 
-    this._userSvc.subscription.push(this._userSvc.save().subscribe({
-      next: response => {
-        let txtMessage;
+    this._userSvc.subscription.push(
+      this._userSvc.save().subscribe({
+        next: (response) => {
+          let txtMessage;
 
-        if (action === ActionClicked.Add) {
-          txtMessage = 'The user was created successfully.';
-        } else {
-          txtMessage = 'The user was updated successfully.';
-        }
+          if (action === ActionClicked.Add) {
+            txtMessage = 'The user was created successfully.';
+          } else {
+            txtMessage = 'The user was updated successfully.';
+          }
 
-        this._closeModal(txtMessage);
-      },
-      error: err => {
-        this._sweetAlertSvc.error(err);
-      }
-    }));
+          this._closeModal(txtMessage);
+        },
+        error: (err) => {
+          this._sweetAlertSvc.error(err);
+        },
+      })
+    );
   }
 
   private _closeModal(message?: string): void {
     this._dinamicDialogSvc.close(message);
   }
-
 }

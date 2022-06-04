@@ -11,12 +11,8 @@ import { CasinoInfoRoutingModule } from './casino-info-routing.module';
 import { CasinoInfoComponent } from './casino-info.component';
 import { CasinoInfoFormComponent } from './casino-info-form/casino-info-form.component';
 
-
 @NgModule({
-  declarations: [
-    CasinoInfoComponent,
-    CasinoInfoFormComponent
-  ],
+  declarations: [CasinoInfoComponent, CasinoInfoFormComponent],
   imports: [
     CommonModule,
     CasinoInfoRoutingModule,
@@ -25,10 +21,8 @@ import { CasinoInfoFormComponent } from './casino-info-form/casino-info-form.com
     PrimeNgModule,
     SharedModule,
     CountriesModule,
-    CitiesModule
+    CitiesModule,
   ],
-  providers: [
-    CasinoInfoService
-  ]
+  providers: [CasinoInfoService],
 })
-export class CasinoInfoModule { }
+export class CasinoInfoModule {}

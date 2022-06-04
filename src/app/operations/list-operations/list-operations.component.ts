@@ -1,7 +1,10 @@
 import { OperationsFormComponent } from './../operations-form/operations-form.component';
 import { ActivatedRoute } from '@angular/router';
 import { IAdditionalButtons } from './../../shared/ui/prime-ng/button/button.model';
-import { IActionItemClickedArgs, ActionClicked } from './../../shared/models/list-items';
+import {
+  IActionItemClickedArgs,
+  ActionClicked,
+} from './../../shared/models/list-items';
 import { cloneDeep, isArray } from 'lodash';
 import { CasinoInfoService } from './../../casino-info/shared/services/casino-info.service';
 import { SocketService } from './../../shared/services/socket.service';
@@ -16,9 +19,11 @@ import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 @Component({
   selector: 'app-list-operations',
   templateUrl: './list-operations.component.html',
-  styleUrls: ['./list-operations.component.scss']
+  styleUrls: ['./list-operations.component.scss'],
 })
-export class ListOperationsComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ListOperationsComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   columns: ITableColumns[] = [
     { header: 'Table', field: 'Table', type: 'string' },
     { header: 'Player', field: 'Player', type: 'string' },
@@ -30,8 +35,7 @@ export class ListOperationsComponent implements OnInit, AfterViewInit, OnDestroy
 
   operations: IOperationR[] = [];
 
-  additionalButtons: IAdditionalButtons[] = [
-  ];
+  additionalButtons: IAdditionalButtons[] = [];
 
   loading = true;
   finishing = false;
@@ -46,7 +50,7 @@ export class ListOperationsComponent implements OnInit, AfterViewInit, OnDestroy
     private _sweetAlertSvc: SweetalertService,
     private _socketSvc: SocketService,
     private _casinoInfoSvc: CasinoInfoService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(data => {
@@ -55,9 +59,12 @@ export class ListOperationsComponent implements OnInit, AfterViewInit, OnDestroy
       switch (this._operationSvc.idOperationType) {
         case EOperations.INITIALIZING:
           this.title = 'Initialization';
-          this.additionalButtons.push(
-            { id: 'open', label: 'Finish Initialization', tooltip: 'Finish day Initialization', tooltipPosition: 'bottom' }
-          );
+          this.additionalButtons.push({
+            id: 'open',
+            label: 'Finish Initialization',
+            tooltip: 'Finish day Initialization',
+            tooltipPosition: 'bottom',
+          });
           break;
         case EOperations.DEPOSIT:
           this.title = 'Deposit';
@@ -73,21 +80,24 @@ export class ListOperationsComponent implements OnInit, AfterViewInit, OnDestroy
           break;
         case EOperations.CLOSED:
           this.title = 'Closing';
-          this.additionalButtons.push(
-            { id: 'close', label: 'Finish Closing', tooltip: 'Finish day Closing', tooltipPosition: 'bottom' }
-          );
+          this.additionalButtons.push({
+            id: 'close',
+            label: 'Finish Closing',
+            tooltip: 'Finish day Closing',
+            tooltipPosition: 'bottom',
+          });
           break;
       }
     });
   }
-  
+
   ngAfterViewInit(): void {
     this._getOperations();
-    
+
     this._getCasinoState();
     this._socketSvc.casinoStatus$.subscribe(() => {
       this._getCasinoState();
-    })
+    });
   }
 
   ngOnDestroy(): void {
@@ -96,16 +106,19 @@ export class ListOperationsComponent implements OnInit, AfterViewInit, OnDestroy
 
   private _getOperations(): void {
     try {
-      this._operationSvc.subscription.push(this._operationSvc.getTodayOperation(this._operationSvc.idOperationType).subscribe({
-          next: response => {
-            this.loading = false;
-            this.operations = cloneDeep(response.getOperationsToday);
-          },
-          error: err => {
-            this.loading = false;
-            this._sweetAlertSvc.error(err);
-          },
-        })
+      this._operationSvc.subscription.push(
+        this._operationSvc
+          .getTodayOperation(this._operationSvc.idOperationType)
+          .subscribe({
+            next: response => {
+              this.loading = false;
+              this.operations = cloneDeep(response.getOperationsToday);
+            },
+            error: err => {
+              this.loading = false;
+              this._sweetAlertSvc.error(err);
+            },
+          })
       );
     } catch (err: any) {
       this._sweetAlertSvc.error(err);
@@ -114,13 +127,14 @@ export class ListOperationsComponent implements OnInit, AfterViewInit, OnDestroy
 
   private _getCasinoState(): void {
     try {
-      this._operationSvc.subscription.push(this._casinoInfoSvc.loadCasinoState().subscribe({
+      this._operationSvc.subscription.push(
+        this._casinoInfoSvc.loadCasinoState().subscribe({
           next: response => {
             this._operationSvc.casinoState = cloneDeep(response.getCasinoState);
           },
           error: err => {
             this._sweetAlertSvc.error(err);
-          }
+          },
         })
       );
     } catch (err: any) {
@@ -153,16 +167,16 @@ export class ListOperationsComponent implements OnInit, AfterViewInit, OnDestroy
         this._add();
         break;
       case ActionClicked.Edit:
-        this._edit(event.item)
-        break;    
+        this._edit(event.item);
+        break;
       case ActionClicked.Delete:
-        this._delete(event.item)
+        this._delete(event.item);
         break;
       case ActionClicked.Finish:
-        this._finish(event.item)
+        this._finish(event.item);
         break;
       case ActionClicked.Cancel:
-        this._cancel(event.item)
+        this._cancel(event.item);
         break;
       case ActionClicked.Open:
         this._finishInit();
@@ -179,143 +193,214 @@ export class ListOperationsComponent implements OnInit, AfterViewInit, OnDestroy
       consecutive: 0,
       idTable: null,
       idPlayer: null,
-      finished: false
+      finished: false,
     };
     this._operationSvc.fg.patchValue(inputData);
-        
-    this._dinamicDialogSvc.open(`Add ${ this.title }`, OperationsFormComponent, '90%');
-    this._operationSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
-      if (message) {
-        this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: message })
-      }
-    }));
+
+    this._dinamicDialogSvc.open(
+      `Add ${this.title}`,
+      OperationsFormComponent,
+      '90%'
+    );
+    this._operationSvc.subscription.push(
+      this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
+        if (message) {
+          this._msgSvc.add({
+            severity: 'success',
+            summary: 'Successfully',
+            detail: message,
+          });
+        }
+      })
+    );
   }
 
   private _edit(data: any): void {
     const id = data.IdOperation;
 
-    this._operationSvc.subscription.push(this._operationSvc.getOperation(id).subscribe({
-      next: response => {
-        const selectedData = response.getOperation;
+    this._operationSvc.subscription.push(
+      this._operationSvc.getOperation(id).subscribe({
+        next: response => {
+          const selectedData = response.getOperation;
 
-        const inputData = {
-          id: selectedData.IdOperation,
-          consecutive: selectedData.Consecutive,
-          idTable: selectedData.IdTable,
-          idPlayer: selectedData.IdPlayer,
-          finished: selectedData.Finished
-        };
+          const inputData = {
+            id: selectedData.IdOperation,
+            consecutive: selectedData.Consecutive,
+            idTable: selectedData.IdTable,
+            idPlayer: selectedData.IdPlayer,
+            finished: selectedData.Finished,
+          };
 
-        this._operationSvc.fg.patchValue(inputData);
+          this._operationSvc.fg.patchValue(inputData);
 
-        this._dinamicDialogSvc.open(`Edit ${ this.title }`, OperationsFormComponent, '90%');
-        this._operationSvc.subscription.push(this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
-          if (message) {
-            this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: message })
-          }
-        }));    
-      },
-      error: err => {
-        this._sweetAlertSvc.error(err);
-      }  
-    }));
+          this._dinamicDialogSvc.open(
+            `Edit ${this.title}`,
+            OperationsFormComponent,
+            '90%'
+          );
+          this._operationSvc.subscription.push(
+            this._dinamicDialogSvc.ref.onClose.subscribe((message: string) => {
+              if (message) {
+                this._msgSvc.add({
+                  severity: 'success',
+                  summary: 'Successfully',
+                  detail: message,
+                });
+              }
+            })
+          );
+        },
+        error: err => {
+          this._sweetAlertSvc.error(err);
+        },
+      })
+    );
   }
 
   private _delete(data: IOperationR): void {
-    if (!data.Finished && this._operationSvc.idOperationType !== EOperations.CREDIT) {
-      this._sweetAlertSvc.question(`Are you sure you want to delete selected ${ this.title }(s)?`).then(res => {
-        if (res === ActionClicked.Yes) {
-          const IDsToRemove: number[] = !isArray(data) ? [data.IdOperation] : data.map(d => { return d.IdOperation });
+    if (
+      !data.Finished &&
+      this._operationSvc.idOperationType !== EOperations.CREDIT
+    ) {
+      this._sweetAlertSvc
+        .question(`Are you sure you want to delete selected ${this.title}(s)?`)
+        .then(res => {
+          if (res === ActionClicked.Yes) {
+            const IDsToRemove: number[] = !isArray(data)
+              ? [data.IdOperation]
+              : data.map(d => {
+                  return d.IdOperation;
+                });
 
-          this._operationSvc.subscription.push(this._operationSvc.deleteOperation(IDsToRemove).subscribe({
-            next: response => {
-              this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: `The ${ this.title }(s) was(were) deleted successfully.` })
-            },
-            error: err => {
-              this._sweetAlertSvc.error(err);
-            }
-          }));
-        }
-      });
+            this._operationSvc.subscription.push(
+              this._operationSvc.deleteOperation(IDsToRemove).subscribe({
+                next: () => {
+                  this._msgSvc.add({
+                    severity: 'success',
+                    summary: 'Successfully',
+                    detail: `The ${this.title}(s) was(were) deleted successfully.`,
+                  });
+                },
+                error: err => {
+                  this._sweetAlertSvc.error(err);
+                },
+              })
+            );
+          }
+        });
     }
   }
-  
+
   private _finish(data: IOperationR): void {
     if (!data.Finished) {
-      this._sweetAlertSvc.question(`Are you sure you want to Finish selected ${ this.title }?`).then(res => {
-        if (res === ActionClicked.Yes) {
-          this._operationSvc.subscription.push(this._operationSvc.finishOperation(data.IdOperation).subscribe({
-            next: response => {
-              this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: `The ${ this.title } was finished successfully.` })
-            },
-            error: err => {
-              this._sweetAlertSvc.error(err);
-            }
-          }));
-        }
-      });
+      this._sweetAlertSvc
+        .question(`Are you sure you want to Finish selected ${this.title}?`)
+        .then(res => {
+          if (res === ActionClicked.Yes) {
+            this._operationSvc.subscription.push(
+              this._operationSvc.finishOperation(data.IdOperation).subscribe({
+                next: () => {
+                  this._msgSvc.add({
+                    severity: 'success',
+                    summary: 'Successfully',
+                    detail: `The ${this.title} was finished successfully.`,
+                  });
+                },
+                error: err => {
+                  this._sweetAlertSvc.error(err);
+                },
+              })
+            );
+          }
+        });
     }
   }
 
   private _cancel(data: IOperationR): void {
-    if (data.Finished && !data.Cancelled || (data.IdOperationType === EOperations.CREDIT && !data.Cancelled)) {
-      this._sweetAlertSvc.question(`Are you sure you want to Cancel selected ${ this.title }?`).then(res => {
-        if (res === ActionClicked.Yes) {
-          this._operationSvc.subscription.push(this._operationSvc.cancelOperation(data.IdOperation).subscribe({
-            next: response => {
-              this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: `The ${ this.title } was cancelled successfully.` })
-            },
-            error: err => {
-              this._sweetAlertSvc.error(err);
-            }
-          }));
-        }
-      });
+    if (
+      (data.Finished && !data.Cancelled) ||
+      (data.IdOperationType === EOperations.CREDIT && !data.Cancelled)
+    ) {
+      this._sweetAlertSvc
+        .question(`Are you sure you want to Cancel selected ${this.title}?`)
+        .then(res => {
+          if (res === ActionClicked.Yes) {
+            this._operationSvc.subscription.push(
+              this._operationSvc.cancelOperation(data.IdOperation).subscribe({
+                next: () => {
+                  this._msgSvc.add({
+                    severity: 'success',
+                    summary: 'Successfully',
+                    detail: `The ${this.title} was cancelled successfully.`,
+                  });
+                },
+                error: err => {
+                  this._sweetAlertSvc.error(err);
+                },
+              })
+            );
+          }
+        });
     }
   }
-  
+
   private _finishInit(): void {
     if (this.operations.length) {
-      this._sweetAlertSvc.question('Are you sure you want to finish Initialization?').then(res => {
-        if (res === ActionClicked.Yes) {
-          this.finishing = true;
+      this._sweetAlertSvc
+        .question('Are you sure you want to finish Initialization?')
+        .then(res => {
+          if (res === ActionClicked.Yes) {
+            this.finishing = true;
 
-          this._operationSvc.subscription.push(this._operationSvc.finishInitialization().subscribe({
-            next: response => {
-              this.finishing = false;
-              this._socketSvc.emitSocket('status-change', true);
-              this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: 'Initialization finished.' })
-            },
-            error: err => {
-              this.finishing = false;
-              this._sweetAlertSvc.error(err);
-            }
-          }));
-        }
-      });
+            this._operationSvc.subscription.push(
+              this._operationSvc.finishInitialization().subscribe({
+                next: () => {
+                  this.finishing = false;
+                  this._socketSvc.emitSocket('status-change', true);
+                  this._msgSvc.add({
+                    severity: 'success',
+                    summary: 'Successfully',
+                    detail: 'Initialization finished.',
+                  });
+                },
+                error: err => {
+                  this.finishing = false;
+                  this._sweetAlertSvc.error(err);
+                },
+              })
+            );
+          }
+        });
     }
   }
 
   private _finishClosing(): void {
     if (this.operations.length) {
-      this._sweetAlertSvc.question('Are you sure you want to finish Closing?').then(res => {
-        if (res === ActionClicked.Yes) {
-          this.finishing = true;
+      this._sweetAlertSvc
+        .question('Are you sure you want to finish Closing?')
+        .then(res => {
+          if (res === ActionClicked.Yes) {
+            this.finishing = true;
 
-          this._operationSvc.subscription.push(this._operationSvc.finishClosing().subscribe({
-            next: response => {
-              this.finishing = false;
-              this._socketSvc.emitSocket('status-change', true);
-              this._msgSvc.add({ severity: 'success', summary: 'Successfully', detail: 'Closing finished.' })
-            },
-            error: err => {
-              this.finishing = false;
-              this._sweetAlertSvc.error(err);
-            }
-          }));
-        }
-      });
+            this._operationSvc.subscription.push(
+              this._operationSvc.finishClosing().subscribe({
+                next: () => {
+                  this.finishing = false;
+                  this._socketSvc.emitSocket('status-change', true);
+                  this._msgSvc.add({
+                    severity: 'success',
+                    summary: 'Successfully',
+                    detail: 'Closing finished.',
+                  });
+                },
+                error: err => {
+                  this.finishing = false;
+                  this._sweetAlertSvc.error(err);
+                },
+              })
+            );
+          }
+        });
     }
   }
-
 }

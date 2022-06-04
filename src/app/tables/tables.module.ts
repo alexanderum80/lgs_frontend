@@ -12,12 +12,8 @@ import { TablesRoutingModule } from './tables-routing.module';
 import { TablesFormComponent } from './tables-form/tables-form.component';
 import { ListTablesComponent } from './list-tables/list-tables.component';
 
-
 @NgModule({
-  declarations: [
-    TablesFormComponent,
-    ListTablesComponent
-  ],
+  declarations: [TablesFormComponent, ListTablesComponent],
   imports: [
     CommonModule,
     TablesRoutingModule,
@@ -26,10 +22,8 @@ import { ListTablesComponent } from './list-tables/list-tables.component';
     PrimeNgModule,
     SharedModule,
     TablesGameModule,
-    PaymentsModule
+    PaymentsModule,
   ],
-  providers: [
-    TablesService
-  ]
+  providers: [TablesService],
 })
-export class TablesModule { }
+export class TablesModule {}

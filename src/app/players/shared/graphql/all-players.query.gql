@@ -9,11 +9,20 @@ query GetPlayers {
         CellPhone
         DateOfBirth
         IdCountry
+        Country {
+            IdCountry
+            Name
+        }
         Enabled
         Deleted
         StatusInfo {
             IdOperation
             OperationName
+        }
+        IdCategory
+        Category {
+            IdCategory
+            Description
         }
     }
 }

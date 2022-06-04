@@ -1,3 +1,3 @@
-mutation deletePayment($id: Int!) {
-    deletePayment(id: $id)
+mutation deletePayment($IDs: [Int!]!) {
+    deletePayment(IDs: $IDs)
 }

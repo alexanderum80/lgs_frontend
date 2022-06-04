@@ -4,12 +4,7 @@ import { PanelMenuModule } from 'primeng/panelmenu';
 
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule,
-    PanelMenuModule,
-  ], 
-  exports: [
-    PanelMenuModule
-  ]
+  imports: [CommonModule, PanelMenuModule],
+  exports: [PanelMenuModule],
 })
-export class PrimePanelMenuModule { }
+export class PrimePanelMenuModule {}

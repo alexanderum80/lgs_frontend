@@ -1,8 +1,0 @@
-query GetCoin($id: Int!) {
-    getCoin(id: $id) {
-        IdCoin
-        Coin
-        Rate
-        Enabled
-    }
-}

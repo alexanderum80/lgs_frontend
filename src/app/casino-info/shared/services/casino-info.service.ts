@@ -1,7 +1,10 @@
 import { ApolloService } from './../../../shared/services/apollo.service';
 import { toNumber } from 'lodash';
 import { casinoApi } from './../graphql/casinoApi';
-import { CasinoInfoQueryResponse, CasinoInfoMutationResponse } from './../models/casino-info.model';
+import {
+  CasinoInfoQueryResponse,
+  CasinoInfoMutationResponse,
+} from './../models/casino-info.model';
 import { Subscription, Observable } from 'rxjs';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Injectable } from '@angular/core';
@@ -19,33 +22,39 @@ export class CasinoInfoService {
 
   subscription: Subscription[] = [];
 
-  constructor(
-    private _apolloSvc: ApolloService,
-  ) { }
+  constructor(private _apolloSvc: ApolloService) {}
 
   loadCasinoInfo(): Observable<CasinoInfoQueryResponse> {
-    return new Observable<CasinoInfoQueryResponse>(subscriber => {
-      this.subscription.push(this._apolloSvc.query<CasinoInfoQueryResponse>(casinoApi.get).subscribe({
-        next: reponse => {
-          subscriber.next(reponse);
-        },
-        error: err => {
-          subscriber.error(err);
-        }
-      }));
+    return new Observable<CasinoInfoQueryResponse>((subscriber) => {
+      this.subscription.push(
+        this._apolloSvc
+          .query<CasinoInfoQueryResponse>(casinoApi.get)
+          .subscribe({
+            next: (reponse) => {
+              subscriber.next(reponse);
+            },
+            error: (err) => {
+              subscriber.error(err);
+            },
+          })
+      );
     });
   }
 
   loadCasinoState(): Observable<CasinoInfoQueryResponse> {
-    return new Observable<CasinoInfoQueryResponse>(subscriber => {
-      this.subscription.push(this._apolloSvc.query<CasinoInfoQueryResponse>(casinoApi.state).subscribe({
-        next: reponse => {
-          subscriber.next(reponse);
-        },
-        error: err => {
-          subscriber.error(err);
-        }
-      }));
+    return new Observable<CasinoInfoQueryResponse>((subscriber) => {
+      this.subscription.push(
+        this._apolloSvc
+          .query<CasinoInfoQueryResponse>(casinoApi.state)
+          .subscribe({
+            next: (reponse) => {
+              subscriber.next(reponse);
+            },
+            error: (err) => {
+              subscriber.error(err);
+            },
+          })
+      );
     });
   }
 
@@ -59,19 +68,25 @@ export class CasinoInfoService {
       IdCity: this.fg.controls['idCity'].value,
     };
 
-    return new Observable<CasinoInfoMutationResponse>(subscriber => {
-      this.subscription.push(this._apolloSvc.mutation<CasinoInfoMutationResponse>(casinoApi.save, { casinoInfoInput: inputData }).subscribe({
-        next: response => {
-          subscriber.next(response);
-        },
-        error: err => {
-          subscriber.error(err);
-        }
-      }));
+    return new Observable<CasinoInfoMutationResponse>((subscriber) => {
+      this.subscription.push(
+        this._apolloSvc
+          .mutation<CasinoInfoMutationResponse>(casinoApi.save, {
+            casinoInfoInput: inputData,
+          })
+          .subscribe({
+            next: (response) => {
+              subscriber.next(response);
+            },
+            error: (err) => {
+              subscriber.error(err);
+            },
+          })
+      );
     });
   }
 
   dispose() {
-    this.subscription.forEach(subs => subs.unsubscribe());
+    this.subscription.forEach((subs) => subs.unsubscribe());
   }
 }

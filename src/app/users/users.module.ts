@@ -33,8 +33,13 @@ import { LogoutComponent } from './logout/logout.component';
     PrimeCheckboxModule,
     PrimeToastModule,
     PrimeCardModule,
-    PrimeMultiSelectModule
+    PrimeMultiSelectModule,
   ],
-  declarations: [ListUsersComponent, UserFormComponent, ChangePasswordComponent, LogoutComponent],
+  declarations: [
+    ListUsersComponent,
+    UserFormComponent,
+    ChangePasswordComponent,
+    LogoutComponent,
+  ],
 })
-export class UsersModule { }
+export class UsersModule {}

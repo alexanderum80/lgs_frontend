@@ -10,5 +10,6 @@ query GetPlayer($id: Int!) {
         DateOfBirth
         IdCountry
         Enabled
+        IdCategory
     }
 }

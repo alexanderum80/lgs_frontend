@@ -27,12 +27,12 @@ export class FinalPlayerSessionsComponent implements OnInit {
 
   loading = false;
 
-  constructor(    
+  constructor(
     private _reportsSvc: ReportsService,
     private _playerSvc: PlayersService,
     private _sweetAlertSvc: SweetalertService,
     private _sessionsSvc: SessionsService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this._getPlayers();
@@ -43,23 +43,27 @@ export class FinalPlayerSessionsComponent implements OnInit {
   private _subscribeToFgChange(): void {
     this.fg.valueChanges.subscribe(() => {
       this.playersSessions = [];
-    })
+    });
   }
 
   private _getPlayers(): void {
     try {
       this._playerSvc.getAllPlayers().subscribe({
-        next: result => {
-          this.playersValues = sortBy(result.getPlayers.filter(f => f.IdPlayer !== 0), ['IdPlayer'], ['desc']).map(p => {
+        next: (result) => {
+          this.playersValues = sortBy(
+            result.getPlayers.filter((f) => f.IdPlayer !== 0),
+            ['IdPlayer'],
+            ['desc']
+          ).map((p) => {
             return {
               value: p.IdPlayer,
-              label: p.Name + ' ' + p.LastName
-            }
+              label: p.Name + ' ' + p.LastName,
+            };
           });
         },
-        error: err => {
+        error: (err) => {
           this._sweetAlertSvc.error(err);
-        }
+        },
       });
     } catch (err: any) {
       this._sweetAlertSvc.error(err);
@@ -69,17 +73,22 @@ export class FinalPlayerSessionsComponent implements OnInit {
   private _getSessions(): void {
     try {
       this._sessionsSvc.getSessions().subscribe({
-        next: result => {
-          this.sessionsValues = sortBy(result.getSessions, 'IdSession').map((s: { IdSession: number, OpenDate: Date }) => {
-            return {
-              value: s.IdSession,
-              label: new Date(s.OpenDate).toLocaleDateString() + ' ' + new Date(s.OpenDate).toLocaleTimeString()
+        next: (result) => {
+          this.sessionsValues = sortBy(result.getSessions, 'IdSession').map(
+            (s: { IdSession: number; OpenDate: Date }) => {
+              return {
+                value: s.IdSession,
+                label:
+                  new Date(s.OpenDate).toLocaleDateString() +
+                  ' ' +
+                  new Date(s.OpenDate).toLocaleTimeString(),
+              };
             }
-          });
+          );
         },
-        error: err => {
+        error: (err) => {
           this._sweetAlertSvc.error(err);
-        }
+        },
       });
     } catch (err: any) {
       this._sweetAlertSvc.error(err);
@@ -90,11 +99,11 @@ export class FinalPlayerSessionsComponent implements OnInit {
     let total = 0;
 
     if (this.playersSessions) {
-        for (let playerSession of this.playersSessions) {
-            if (playerSession.IdPlayer === idPlayer) {
-                total+= playerSession.Result;
-            }
+      for (let playerSession of this.playersSessions) {
+        if (playerSession.IdPlayer === idPlayer) {
+          total += playerSession.Result;
         }
+      }
     }
 
     return total;
@@ -103,7 +112,7 @@ export class FinalPlayerSessionsComponent implements OnInit {
   calculateReport(): void {
     this._getFinalPlayersSessions();
   }
-  
+
   private _getFinalPlayersSessions(): void {
     try {
       this.loading = true;
@@ -111,20 +120,21 @@ export class FinalPlayerSessionsComponent implements OnInit {
       const finalSession = this.fg.controls['finalSession'].value;
       const idPlayer = this.fg.controls['idPlayer'].value;
 
-      this._reportsSvc.getFinalPlayersSessions(initSession, finalSession, idPlayer).subscribe({
-        next: result => {
-          this.loading = false;
-          this.playersSessions = cloneDeep(result.finalPlayerSessions);
-        },
-        error: err => {
-          this.loading = false;
-          this._sweetAlertSvc.error(err);
-        }
-      });
+      this._reportsSvc
+        .getFinalPlayersSessions(initSession, finalSession, idPlayer)
+        .subscribe({
+          next: (result) => {
+            this.loading = false;
+            this.playersSessions = cloneDeep(result.finalPlayerSessions);
+          },
+          error: (err) => {
+            this.loading = false;
+            this._sweetAlertSvc.error(err);
+          },
+        });
     } catch (err: any) {
       this.loading = false;
       this._sweetAlertSvc.error(err);
     }
   }
-
 }

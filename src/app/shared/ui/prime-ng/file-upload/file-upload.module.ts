@@ -5,21 +5,15 @@ import { FileUploadComponent } from './file-upload.component';
 import { FileUploadModule } from 'primeng/fileupload';
 import { HttpClientModule } from '@angular/common/http';
 
-
 @NgModule({
-  declarations: [
-    FileUploadComponent
-  ],
+  declarations: [FileUploadComponent],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     FileUploadModule,
-    HttpClientModule
+    HttpClientModule,
   ],
-  exports: [
-    FileUploadModule,
-    FileUploadComponent
-  ]
+  exports: [FileUploadModule, FileUploadComponent],
 })
-export class PrimeFileUploadModule { }
+export class PrimeFileUploadModule {}

@@ -5,7 +5,7 @@ import { FormGroup } from '@angular/forms';
   // tslint:disable-next-line: component-selector
   selector: 'png-input-mask',
   templateUrl: './input-mask.component.html',
-  styleUrls: ['./input-mask.component.scss']
+  styleUrls: ['./input-mask.component.scss'],
 })
 export class InputMaskComponent implements OnInit {
   @Input() public fg: FormGroup;
@@ -17,9 +17,7 @@ export class InputMaskComponent implements OnInit {
   @Input() public mask: string;
   @Input() public required = false;
   @Input() public disabled = false;
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

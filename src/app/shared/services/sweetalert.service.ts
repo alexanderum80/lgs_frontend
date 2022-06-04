@@ -3,11 +3,10 @@ import Swal from 'sweetalert2';
 import { ActionClicked, Actions } from '../models';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SweetalertService {
-
-  constructor() { }
+  constructor() {}
 
   success(message: string): void {
     Swal.fire({
@@ -15,7 +14,7 @@ export class SweetalertService {
       title: 'Successfully',
       text: message,
       showConfirmButton: false,
-      timer: 2000
+      timer: 2000,
     });
   }
 
@@ -24,7 +23,7 @@ export class SweetalertService {
       icon: 'error',
       title: 'ERROR',
       text: message,
-      confirmButtonText: 'OK'
+      confirmButtonText: 'OK',
     });
   }
 
@@ -35,8 +34,8 @@ export class SweetalertService {
       text: message,
       confirmButtonText: 'Yes',
       showCancelButton: true,
-      cancelButtonText: 'No'
-    }).then(result => {
+      cancelButtonText: 'No',
+    }).then((result) => {
       if (result.isConfirmed) {
         return ActionClicked.Yes;
       } else {
@@ -62,5 +61,4 @@ export class SweetalertService {
       confirmButtonText: 'OK',
     });
   }
-
 }

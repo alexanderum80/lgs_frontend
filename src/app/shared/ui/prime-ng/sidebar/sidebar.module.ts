@@ -4,12 +4,7 @@ import { SidebarModule } from 'primeng/sidebar';
 
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule,
-    SidebarModule
-  ],
-  exports: [
-    SidebarModule
-  ]
+  imports: [CommonModule, SidebarModule],
+  exports: [SidebarModule],
 })
-export class PrimeSidebarModule { }
+export class PrimeSidebarModule {}
