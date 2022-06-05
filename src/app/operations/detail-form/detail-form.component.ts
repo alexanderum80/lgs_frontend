@@ -28,7 +28,7 @@ export class DetailFormComponent implements OnInit {
 
   constructor(
     private _sweetAlertSvc: SweetalertService,
-    private _operationsSvc: OperationService
+    private _operationsSvc: OperationService,
   ) {}
 
   ngOnInit(): void {
@@ -41,13 +41,13 @@ export class DetailFormComponent implements OnInit {
 
   getInstrumentDescription(idInstrument: number): string {
     const instrument = this.instrumentsValues.find(
-      (p) => p.value === (idInstrument || 0)
+      p => p.value === (idInstrument || 0),
     );
     return instrument ? instrument.label! : '';
   }
 
   getPaymentDescription(idPayment: number): string {
-    const payment = this.payments.find((c) => c.IdPayment === (idPayment || 0));
+    const payment = this.payments.find(c => c.IdPayment === (idPayment || 0));
     return payment ? payment.PaymentName! : '';
   }
 
@@ -56,7 +56,11 @@ export class DetailFormComponent implements OnInit {
 
     if (this.operationDetails) {
       for (let operation of this.operationDetails) {
-        total += operation.Denomination! * operation.Qty * operation.Rate;
+        total +=
+          operation!.Denomination ||
+          0 * operation!.Qty ||
+          0 * operation!.Rate ||
+          0;
       }
     }
 
@@ -74,8 +78,10 @@ export class DetailFormComponent implements OnInit {
       Qty: 0,
     });
 
+    this.onRowEditInit(this.operationDetails[this.operationDetails.length - 1]);
+
     this.table.initRowEdit(
-      this.operationDetails[this.operationDetails.length - 1]
+      this.operationDetails[this.operationDetails.length - 1],
     );
   }
 
@@ -98,7 +104,7 @@ export class DetailFormComponent implements OnInit {
   onRowDelete(index: any): void {
     this._sweetAlertSvc
       .question('Do you wish to delete selected detail?')
-      .then((result) => {
+      .then(result => {
         if (result === ActionClicked.Yes) {
           this.operationDetails.splice(index, 1);
         }
@@ -114,8 +120,8 @@ export class DetailFormComponent implements OnInit {
   private _updateDenominationsValues(idInstrument: number): void {
     this.denominationsValues = [];
     this.denominationsValues = this.payments
-      .filter((f) => f.IdPayInstr === idInstrument)
-      .map((c) => {
+      .filter(f => f.IdPayInstr === idInstrument)
+      .map(c => {
         return {
           value: c.IdPayment,
           label: c.PaymentName,
@@ -124,7 +130,7 @@ export class DetailFormComponent implements OnInit {
   }
 
   onChangeDenomination(event: any, ri: any): void {
-    const payment = this.payments.find((p) => p.IdPayment === event.value);
+    const payment = this.payments.find(p => p.IdPayment === event.value);
     this.operationDetails[ri].Denomination = payment?.Denomination || 1;
     this.operationDetails[ri].Rate = payment?.Rate || 1;
   }

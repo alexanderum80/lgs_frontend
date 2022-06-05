@@ -6,16 +6,14 @@
     tooltip="Add detail"
     [text]="true"
     [rounded]="true"
-    (clicked)="addRow()"
-  ></png-button>
+    (clicked)="addRow()"></png-button>
 </div>
 <p-table
   #dt
   [value]="operationDetails"
   dataKey="IdOperationDetail"
   editMode="row"
-  responsiveLayout="scroll"
->
+  responsiveLayout="scroll">
   <ng-template pTemplate="header">
     <tr>
       <th class="col-6">Payment Instrument</th>
@@ -28,8 +26,7 @@
     pTemplate="body"
     let-operation
     let-editing="editing"
-    let-ri="rowIndex"
-  >
+    let-ri="rowIndex">
     <tr [pEditableRow]="operation">
       <td>
         <p-cellEditor>
@@ -41,8 +38,7 @@
               [style]="{ width: '100%' }"
               placeholder="Select an Instrument"
               [filter]="true"
-              [showClear]="true"
-            ></p-dropdown>
+              [showClear]="true"></p-dropdown>
           </ng-template>
           <ng-template pTemplate="output">{{
             getInstrumentDescription(operation.IdInstrument)
@@ -59,8 +55,7 @@
               [style]="{ width: '100%' }"
               placeholder="Select an Instrument"
               [filter]="true"
-              [showClear]="true"
-            ></p-dropdown>
+              [showClear]="true"></p-dropdown>
           </ng-template>
           <ng-template pTemplate="output">{{
             getPaymentDescription(operation.IdPayment)
@@ -74,8 +69,7 @@
               pInputText="pInputText"
               type="number"
               [(ngModel)]="operation.Qty"
-              style="width: 100%"
-            />
+              style="width: 100%" />
           </ng-template>
           <ng-template pTemplate="output">{{ operation.Qty }}</ng-template>
         </p-cellEditor>
@@ -89,8 +83,7 @@
           type="button"
           pInitEditableRow="pInitEditableRow"
           icon="pi pi-pencil"
-          (click)="onRowEditInit(operation)"
-        ></button>
+          (click)="onRowEditInit(operation)"></button>
         <button
           class="p-button-rounded p-button-text"
           *ngIf="!editing && !isFinished"
@@ -98,8 +91,7 @@
           pRipple="pRipple"
           type="button"
           icon="pi pi-trash"
-          (click)="onRowDelete(ri)"
-        ></button>
+          (click)="onRowDelete(ri)"></button>
         <button
           class="p-button-rounded p-button-text p-button-success p-mr-2"
           *ngIf="editing && !isFinished"
@@ -108,8 +100,7 @@
           type="button"
           pSaveEditableRow="pSaveEditableRow"
           icon="pi pi-check"
-          (click)="onRowEditSave(operation)"
-        ></button>
+          (click)="onRowEditSave(operation)"></button>
         <button
           class="p-button-rounded p-button-text p-button-danger"
           *ngIf="editing && !isFinished"
@@ -118,8 +109,7 @@
           type="button"
           pCancelEditableRow="pCancelEditableRow"
           icon="pi pi-times"
-          (click)="onRowEditCancel(operation, ri)"
-        ></button>
+          (click)="onRowEditCancel(operation, ri)"></button>
       </td>
     </tr>
   </ng-template>
