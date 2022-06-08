@@ -57,10 +57,9 @@ export class DetailFormComponent implements OnInit {
     if (this.operationDetails) {
       for (let operation of this.operationDetails) {
         total +=
-          operation!.Denomination ||
-          0 * operation!.Qty ||
-          0 * operation!.Rate ||
-          0;
+          (operation!.Denomination || 0) *
+          (operation!.Qty || 0) *
+          (operation!.Rate || 0);
       }
     }
 

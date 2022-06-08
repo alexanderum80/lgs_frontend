@@ -357,7 +357,7 @@ export class OperationsFormComponent implements OnInit {
           d => d.IdInstrument === EPaymentInstrument.BONUS,
         ) !== -1;
 
-      if (totalReceived > 10000) {
+      if (totalReceived >= 10000) {
         const maxValueOfOperation = Math.max(
           ...operationD.map(o => o.IdOperationDetail),
           0,
