@@ -217,6 +217,7 @@ export class OperationsFormComponent implements OnInit {
             next: result => {
               this.payments = sortBy(cloneDeep(result.getPayments), [
                 'IdPayInstr',
+                'IdCurrency',
                 'Denomination',
               ]);
               resolve();
@@ -281,6 +282,22 @@ export class OperationsFormComponent implements OnInit {
         this.txtOperation = 'Closing';
         this.canReceive = true;
         this.needTable = true;
+
+        if (this.fg.controls['id'].value === 0) {
+          this.payments
+            .filter(f => f.IdPayment !== EPaymentInstrument.BONUS)
+            .map((c, i) => {
+              this.operationReceived.push({
+                IdOperationDetail: 9000 + this.operationReceived.length,
+                IdOperation: EOperations.CLOSED,
+                IdInstrument: c.IdPayInstr,
+                IdPayment: c.IdPayment,
+                Denomination: c.Denomination,
+                Rate: c.Rate,
+                Qty: 0,
+              });
+            });
+        }
         break;
       default:
         break;

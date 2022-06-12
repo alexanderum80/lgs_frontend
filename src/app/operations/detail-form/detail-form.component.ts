@@ -1,6 +1,9 @@
 import { OperationService } from './../shared/services/operation.service';
 import { FormGroup } from '@angular/forms';
-import { EOperations } from './../shared/models/operation.model';
+import {
+  EOperations,
+  EPaymentInstrument,
+} from './../shared/models/operation.model';
 import { ActionClicked } from '../../shared/models/list-items';
 import { SweetalertService } from '../../shared/services/sweetalert.service';
 import { SelectItem } from 'primeng/api';
@@ -67,12 +70,39 @@ export class DetailFormComponent implements OnInit {
   }
 
   addRow(): void {
+    let _idInstrument = null;
+
+    switch (this._operationsSvc.idOperationType) {
+      case EOperations.DEPOSIT:
+        _idInstrument =
+          this.instrumentsValues.find(i => i.value === EPaymentInstrument.CASH)
+            ?.value ||
+          this.instrumentsValues.find(
+            i => i.value === EPaymentInstrument.PLATES,
+          )?.value;
+        break;
+      case EOperations.EXTRACTION:
+        _idInstrument =
+          this.instrumentsValues.find(i => i.value === EPaymentInstrument.CASH)
+            ?.value ||
+          this.instrumentsValues.find(i => i.value === EPaymentInstrument.CHIPS)
+            ?.value;
+        break;
+      case EOperations.REFUND:
+        _idInstrument = this.instrumentsValues.find(
+          i => i.value === EPaymentInstrument.CASH,
+        )?.value;
+        break;
+      default:
+        break;
+    }
+
     this.operationDetails.push({
       IdOperationDetail: 9000 + this.operationDetails.length,
       IdOperation: 0,
       IdPayment: null,
       Denomination: null,
-      IdInstrument: null,
+      IdInstrument: _idInstrument,
       Rate: 0,
       Qty: 0,
     });
