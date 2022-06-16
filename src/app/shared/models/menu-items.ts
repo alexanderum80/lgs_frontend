@@ -94,6 +94,14 @@ export const MenuItems: MenuItem[] = [
     ],
   },
   {
+    id: 'players',
+    label: 'Players',
+    icon: 'mdi mdi-gamepad-up',
+    routerLink: 'players',
+    disabled: false,
+    title: 'Manage Players.',
+  },
+  {
     id: 'settings',
     label: 'Settings',
     icon: 'mdi mdi-settings-outline',
@@ -173,14 +181,6 @@ export const MenuItems: MenuItem[] = [
         title: 'Manage Payments.',
       },
       { separator: true },
-      {
-        id: 'players',
-        label: 'Players',
-        icon: 'mdi mdi-gamepad-up',
-        routerLink: 'players',
-        disabled: false,
-        title: 'Manage Players.',
-      },
     ],
   },
 ];

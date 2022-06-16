@@ -28,7 +28,7 @@
     </div>
   </form>
   <div class="h-full box shadow-1">
-    <p-tabView>
+    <p-tabView (onChange)="onChangeTab($event)">
       <p-tabPanel *ngIf="canReceive" header="Receipt">
         <app-detail-form
           [operationDetails]="operationReceived"

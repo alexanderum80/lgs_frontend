@@ -21,6 +21,26 @@
       <th class="col-2">Quantity</th>
       <th class="col-1 md:col-2 sm:col-2"></th>
     </tr>
+    <tr>
+      <th>
+        <p-columnFilter
+          type="text"
+          field="InstrumentName"
+          matchMode="contains"></p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter
+          type="text"
+          field="PaymentName"
+          matchMode="contains"></p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter
+          type="text"
+          field="quantity"
+          matchMode="contains"></p-columnFilter>
+      </th>
+    </tr>
   </ng-template>
   <ng-template
     pTemplate="body"
@@ -41,7 +61,7 @@
               [showClear]="true"></p-dropdown>
           </ng-template>
           <ng-template pTemplate="output">{{
-            getInstrumentDescription(operation.IdInstrument)
+            operation.InstrumentName
           }}</ng-template>
         </p-cellEditor>
       </td>
@@ -58,7 +78,7 @@
               [showClear]="true"></p-dropdown>
           </ng-template>
           <ng-template pTemplate="output">{{
-            getPaymentDescription(operation.IdPayment)
+            operation.PaymentName
           }}</ng-template>
         </p-cellEditor>
       </td>

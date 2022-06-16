@@ -38,16 +38,25 @@ export interface IOperationD {
   IdOperationDetail: number;
   IdOperation: number;
   IdPayment: number | null;
+  PaymentName?: string;
   Denomination: number | null;
   IdInstrument: number | null;
+  InstrumentName?: string;
   Rate: number;
   Qty: number;
+}
+
+export interface IMoneyBreakDown {
+  IdPayInstr: number | null;
+  IdPayment: number | null;
+  Quantity: number;
 }
 
 export interface OperationQueryResponse {
   getOperationsToday: IOperationR[];
   getOperation: IOperationR;
   getOperationDetails: IOperationD[];
+  getMoneyBreakdown: IMoneyBreakDown[];
 }
 
 export interface OperationMutationResponse {

@@ -30,7 +30,7 @@ export class OperationService {
   constructor(private _apolloSvc: ApolloService) {}
 
   getTodayOperation(
-    operation: EOperations
+    operation: EOperations,
   ): Observable<OperationQueryResponse> {
     return new Observable<OperationQueryResponse>(subscriber => {
       this.subscription.push(
@@ -45,7 +45,7 @@ export class OperationService {
             error: err => {
               subscriber.error(err.message || err);
             },
-          })
+          }),
       );
     });
   }
@@ -62,7 +62,7 @@ export class OperationService {
             error: err => {
               subscriber.error(err.message || err);
             },
-          })
+          }),
       );
     });
   }
@@ -79,14 +79,33 @@ export class OperationService {
             error: err => {
               subscriber.error(err.message || err);
             },
+          }),
+      );
+    });
+  }
+
+  getMoneyBreakdown(amount: number): Observable<OperationQueryResponse> {
+    return new Observable<OperationQueryResponse>(subscriber => {
+      this.subscription.push(
+        this._apolloSvc
+          .query<OperationQueryResponse>(operationApi.moneyBreakdown, {
+            amount,
           })
+          .subscribe({
+            next: result => {
+              subscriber.next(result);
+            },
+            error: err => {
+              subscriber.error(err.message || err);
+            },
+          }),
       );
     });
   }
 
   saveOperation(
     operationR: IOperationR,
-    operationD: IOperationD[]
+    operationD: IOperationD[],
   ): Observable<OperationMutationResponse> {
     operationD = operationD.filter(op => op.Qty !== 0);
 
@@ -104,7 +123,7 @@ export class OperationService {
           .mutation<OperationMutationResponse>(
             operationMutation,
             { operationInput: payload },
-            ['GetOperationsToday']
+            ['GetOperationsToday'],
           )
           .subscribe({
             next: result => {
@@ -113,7 +132,7 @@ export class OperationService {
             error: err => {
               subscriber.error(err.message || err);
             },
-          })
+          }),
       );
     });
   }
@@ -132,7 +151,7 @@ export class OperationService {
             error: err => {
               subscriber.error(err.message || err);
             },
-          })
+          }),
       );
     });
   }
@@ -144,7 +163,7 @@ export class OperationService {
           .mutation<OperationMutationResponse>(
             operationApi.finish,
             { idOperation },
-            ['GetOperationsToday']
+            ['GetOperationsToday'],
           )
           .subscribe({
             next: result => {
@@ -153,7 +172,7 @@ export class OperationService {
             error: err => {
               subscriber.error(err.message || err);
             },
-          })
+          }),
       );
     });
   }
@@ -165,7 +184,7 @@ export class OperationService {
           .mutation<OperationMutationResponse>(
             operationApi.cancel,
             { idOperation },
-            ['GetOperationsToday']
+            ['GetOperationsToday'],
           )
           .subscribe({
             next: result => {
@@ -174,7 +193,7 @@ export class OperationService {
             error: err => {
               subscriber.error(err.message || err);
             },
-          })
+          }),
       );
     });
   }
@@ -193,7 +212,7 @@ export class OperationService {
             error: err => {
               subscriber.error(err.message || err);
             },
-          })
+          }),
       );
     });
   }
@@ -212,7 +231,7 @@ export class OperationService {
             error: err => {
               subscriber.error(err.message || err);
             },
-          })
+          }),
       );
     });
   }

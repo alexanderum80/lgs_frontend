@@ -36,23 +36,27 @@ export class DetailFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.fg = this._operationsSvc.fg;
+
+    this._subscribeToFgChange();
   }
+
+  private _subscribeToFgChange(): void {}
 
   get isFinished(): boolean {
     return this.fg.controls['finished']!.value || false;
   }
 
-  getInstrumentDescription(idInstrument: number): string {
-    const instrument = this.instrumentsValues.find(
-      p => p.value === (idInstrument || 0),
-    );
-    return instrument ? instrument.label! : '';
-  }
+  // getInstrumentDescription(idInstrument: number): string {
+  //   const instrument = this.instrumentsValues.find(
+  //     p => p.value === (idInstrument || 0),
+  //   );
+  //   return instrument ? instrument.label! : '';
+  // }
 
-  getPaymentDescription(idPayment: number): string {
-    const payment = this.payments.find(c => c.IdPayment === (idPayment || 0));
-    return payment ? payment.PaymentName! : '';
-  }
+  // getPaymentDescription(idPayment: number): string {
+  //   const payment = this.payments.find(c => c.IdPayment === (idPayment || 0));
+  //   return payment ? payment.PaymentName! : '';
+  // }
 
   calculateTotal(): number {
     let total = 0;
@@ -75,23 +79,26 @@ export class DetailFormComponent implements OnInit {
     switch (this._operationsSvc.idOperationType) {
       case EOperations.DEPOSIT:
         _idInstrument =
-          this.instrumentsValues.find(i => i.value === EPaymentInstrument.CASH)
-            ?.value ||
+          this.instrumentsValues.find(
+            i => i.value === EPaymentInstrument.CASH,
+          ) ||
           this.instrumentsValues.find(
             i => i.value === EPaymentInstrument.PLATES,
-          )?.value;
+          );
         break;
       case EOperations.EXTRACTION:
         _idInstrument =
-          this.instrumentsValues.find(i => i.value === EPaymentInstrument.CASH)
-            ?.value ||
-          this.instrumentsValues.find(i => i.value === EPaymentInstrument.CHIPS)
-            ?.value;
+          this.instrumentsValues.find(
+            i => i.value === EPaymentInstrument.CASH,
+          ) ||
+          this.instrumentsValues.find(
+            i => i.value === EPaymentInstrument.CHIPS,
+          );
         break;
       case EOperations.REFUND:
         _idInstrument = this.instrumentsValues.find(
           i => i.value === EPaymentInstrument.CASH,
-        )?.value;
+        );
         break;
       default:
         break;
@@ -102,7 +109,8 @@ export class DetailFormComponent implements OnInit {
       IdOperation: 0,
       IdPayment: null,
       Denomination: null,
-      IdInstrument: _idInstrument,
+      IdInstrument: _idInstrument?.value,
+      InstrumentName: _idInstrument?.label,
       Rate: 0,
       Qty: 0,
     });
@@ -141,7 +149,12 @@ export class DetailFormComponent implements OnInit {
   }
 
   onChangeInstrument(event: any, ri: any): void {
+    const instrument = this.instrumentsValues.find(
+      p => p.value === event.value,
+    );
+
     this.operationDetails[ri].Denomination = null;
+    this.operationDetails[ri].InstrumentName = instrument?.label;
 
     this._updateDenominationsValues(event.value);
   }
@@ -161,6 +174,7 @@ export class DetailFormComponent implements OnInit {
   onChangeDenomination(event: any, ri: any): void {
     const payment = this.payments.find(p => p.IdPayment === event.value);
     this.operationDetails[ri].Denomination = payment?.Denomination || 1;
+    this.operationDetails[ri].PaymentName = payment?.PaymentName;
     this.operationDetails[ri].Rate = payment?.Rate || 1;
   }
 }

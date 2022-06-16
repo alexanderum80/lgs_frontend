@@ -7,7 +7,10 @@ import { SweetalertService } from './../../shared/services/sweetalert.service';
 import { DinamicDialogService } from 'src/app/shared/ui/prime-ng/dinamic-dialog/dinamic-dialog.service';
 import { OperationService } from './../shared/services/operation.service';
 import { SelectItem } from 'primeng/api';
-import { IPayments } from './../../payments/shared/models/payments.model';
+import {
+  IPayments,
+  IPaymentInstruments,
+} from './../../payments/shared/models/payments.model';
 import {
   IOperationD,
   EOperations,
@@ -27,6 +30,7 @@ export class OperationsFormComponent implements OnInit {
   operationReceived: IOperationD[] = [];
   operationDelivered: IOperationD[] = [];
   payments: IPayments[] = [];
+  instruments: IPaymentInstruments[] = [];
 
   playersValues: SelectItem[] = [];
   tablesValues: SelectItem[] = [];
@@ -52,13 +56,106 @@ export class OperationsFormComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.fg = this._operationSvc.fg;
 
-    this._getOperationDetails();
-    this._getPlayers();
-    this._getTables();
     await this._getPaymentInstruments();
     await this._getPayments();
 
+    this._getOperationDetails();
+    this._getPlayers();
+    this._getTables();
+
     this._enableFunctionsByOperation();
+  }
+
+  private async _getPaymentInstruments(): Promise<void> {
+    try {
+      return new Promise(resolve =>
+        this._operationSvc.subscription.push(
+          this._paymentsSvc.getInstruments().subscribe({
+            next: result => {
+              this.instruments = cloneDeep(result.getPaymentInstruments);
+              const _instruments: SelectItem[] =
+                result.getPaymentInstruments.map(
+                  (t: { IdPayInstr: any; Name: any }) => {
+                    return {
+                      value: t.IdPayInstr,
+                      label: t.Name,
+                    };
+                  },
+                );
+              switch (this._operationSvc.idOperationType) {
+                case EOperations.INITIALIZING:
+                case EOperations.CLOSED:
+                  this.instrumentsReceiptValues = _instruments;
+                  break;
+                case EOperations.DEPOSIT:
+                case EOperations.CREDIT:
+                  this.instrumentsReceiptValues = _instruments.filter(
+                    p => p.value === EPaymentInstrument.CASH,
+                  );
+                  this.instrumentsDeliveryValues = _instruments.filter(
+                    p => p.value !== EPaymentInstrument.CASH,
+                  );
+                  break;
+                case EOperations.EXTRACTION:
+                  this.instrumentsReceiptValues = _instruments.filter(
+                    p =>
+                      p.value !== EPaymentInstrument.CASH &&
+                      p.value !== EPaymentInstrument.BONUS,
+                  );
+                  this.instrumentsDeliveryValues = _instruments.filter(
+                    p => p.value === EPaymentInstrument.CASH,
+                  );
+                  break;
+                case EOperations.REFUND:
+                  this.instrumentsReceiptValues = _instruments.filter(
+                    p => p.value === EPaymentInstrument.CASH,
+                  );
+                  this.instrumentsDeliveryValues = _instruments.filter(
+                    p => p.value === EPaymentInstrument.CASH,
+                  );
+                  break;
+                default:
+                  this.instrumentsReceiptValues = _instruments;
+                  this.instrumentsDeliveryValues = _instruments;
+                  break;
+              }
+              resolve();
+            },
+            error: err => {
+              this._sweetAlertSvc.error(err);
+              resolve();
+            },
+          }),
+        ),
+      );
+    } catch (err: any) {
+      this._sweetAlertSvc.error(err.message || err);
+    }
+  }
+
+  private async _getPayments(): Promise<void> {
+    try {
+      return new Promise(resolve =>
+        this._operationSvc.subscription.push(
+          this._paymentsSvc.getAll().subscribe({
+            next: result => {
+              this.payments = sortBy(cloneDeep(result.getPayments), [
+                'IdPayInstr',
+                'IdCurrency',
+                'Denomination',
+              ]);
+              resolve();
+            },
+            error: err => {
+              this._sweetAlertSvc.error(err);
+              resolve();
+            },
+          }),
+        ),
+      );
+    } catch (err: any) {
+      this._sweetAlertSvc.error(err.message || err);
+    }
   }
 
   private _getOperationDetails(): void {
@@ -75,10 +172,27 @@ export class OperationsFormComponent implements OnInit {
                 return rest;
               }),
             );
-            this.operationReceived = op.filter(o => o.Qty > 0);
+            this.operationReceived = op
+              .filter(o => o.Qty > 0)
+              .map(o => {
+                o.PaymentName = this.payments.find(
+                  p => p.IdPayment === o.IdPayment,
+                )?.PaymentName;
+                o.InstrumentName = this.instruments.find(
+                  p => p.IdPayInstr === o.IdInstrument,
+                )?.Name;
+                o.Qty = Math.abs(o.Qty);
+                return o;
+              });
             this.operationDelivered = op
               .filter(o => o.Qty < 0)
               .map(o => {
+                o.PaymentName = this.payments.find(
+                  p => p.IdPayment === o.IdPayment,
+                )?.PaymentName;
+                o.InstrumentName = this.instruments.find(
+                  p => p.IdPayInstr === o.IdInstrument,
+                )?.Name;
                 o.Qty = Math.abs(o.Qty);
                 return o;
               });
@@ -143,104 +257,13 @@ export class OperationsFormComponent implements OnInit {
     }
   }
 
-  private async _getPaymentInstruments(): Promise<void> {
-    try {
-      return new Promise(resolve =>
-        this._operationSvc.subscription.push(
-          this._paymentsSvc.getInstruments().subscribe({
-            next: result => {
-              const instruments: SelectItem[] =
-                result.getPaymentInstruments.map(
-                  (t: { IdPayInstr: any; Name: any }) => {
-                    return {
-                      value: t.IdPayInstr,
-                      label: t.Name,
-                    };
-                  },
-                );
-              switch (this._operationSvc.idOperationType) {
-                case EOperations.INITIALIZING:
-                case EOperations.CLOSED:
-                  this.instrumentsReceiptValues = instruments;
-                  break;
-                case EOperations.DEPOSIT:
-                case EOperations.CREDIT:
-                  this.instrumentsReceiptValues = instruments.filter(
-                    p => p.value === EPaymentInstrument.CASH,
-                  );
-                  this.instrumentsDeliveryValues = instruments.filter(
-                    p => p.value !== EPaymentInstrument.CASH,
-                  );
-                  break;
-                case EOperations.EXTRACTION:
-                  this.instrumentsReceiptValues = instruments.filter(
-                    p =>
-                      p.value !== EPaymentInstrument.CASH &&
-                      p.value !== EPaymentInstrument.BONUS,
-                  );
-                  this.instrumentsDeliveryValues = instruments.filter(
-                    p => p.value === EPaymentInstrument.CASH,
-                  );
-                  break;
-                case EOperations.REFUND:
-                  this.instrumentsReceiptValues = instruments.filter(
-                    p => p.value === EPaymentInstrument.CASH,
-                  );
-                  this.instrumentsDeliveryValues = instruments.filter(
-                    p => p.value === EPaymentInstrument.CASH,
-                  );
-                  break;
-                default:
-                  this.instrumentsReceiptValues = instruments;
-                  this.instrumentsDeliveryValues = instruments;
-                  break;
-              }
-              resolve();
-            },
-            error: err => {
-              this._sweetAlertSvc.error(err);
-              resolve();
-            },
-          }),
-        ),
-      );
-    } catch (err: any) {
-      this._sweetAlertSvc.error(err.message || err);
-    }
-  }
-
-  private async _getPayments(): Promise<void> {
-    try {
-      return new Promise(resolve =>
-        this._operationSvc.subscription.push(
-          this._paymentsSvc.getAll().subscribe({
-            next: result => {
-              this.payments = sortBy(cloneDeep(result.getPayments), [
-                'IdPayInstr',
-                'IdCurrency',
-                'Denomination',
-              ]);
-              resolve();
-            },
-            error: err => {
-              this._sweetAlertSvc.error(err);
-              resolve();
-            },
-          }),
-        ),
-      );
-    } catch (err: any) {
-      this._sweetAlertSvc.error(err.message || err);
-    }
-  }
-
   private _enableFunctionsByOperation(): void {
     switch (this._operationSvc.idOperationType) {
       case EOperations.INITIALIZING:
         this.txtOperation = 'Initialization';
         this.canReceive = true;
 
-        if (this.fg.controls['id'].value === 0) {
+        if (this.isNewOperation) {
           this.payments
             .filter(f => f.IdPayment !== EPaymentInstrument.BONUS)
             .map((c, i) => {
@@ -283,7 +306,7 @@ export class OperationsFormComponent implements OnInit {
         this.canReceive = true;
         this.needTable = true;
 
-        if (this.fg.controls['id'].value === 0) {
+        if (this.isNewOperation) {
           this.payments
             .filter(f => f.IdPayment !== EPaymentInstrument.BONUS)
             .map((c, i) => {
@@ -315,11 +338,22 @@ export class OperationsFormComponent implements OnInit {
     }
   }
 
+  private get isNewOperation(): boolean {
+    return this.fg.controls['id'].value === 0;
+  }
+
+  onChangeTab(event: any): void {
+    if (
+      event.index === 1 &&
+      this.isNewOperation &&
+      !this.operationDelivered.length
+    ) {
+      // this._operationSvc.getMoneyBreakdown().subscribe()
+    }
+  }
+
   private _save(): void {
-    const action =
-      this.fg.controls['id'].value === 0
-        ? ActionClicked.Add
-        : ActionClicked.Edit;
+    const action = this.isNewOperation ? ActionClicked.Add : ActionClicked.Edit;
     let totalReceived = 0;
     let totalDelivered = 0;
 
