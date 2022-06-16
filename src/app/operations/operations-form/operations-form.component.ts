@@ -269,9 +269,15 @@ export class OperationsFormComponent implements OnInit {
             .map((c, i) => {
               this.operationReceived.push({
                 IdOperationDetail: 9000 + this.operationReceived.length,
-                IdOperation: EOperations.INITIALIZING,
+                IdOperation: EOperations.CLOSED,
                 IdInstrument: c.IdPayInstr,
+                InstrumentName: this.instruments.find(
+                  i => i.IdPayInstr === c.IdPayInstr,
+                )?.Name,
                 IdPayment: c.IdPayment,
+                PaymentName: this.payments.find(
+                  p => p.IdPayment === c.IdPayment,
+                )?.PaymentName,
                 Denomination: c.Denomination,
                 Rate: c.Rate,
                 Qty: 0,
@@ -314,7 +320,13 @@ export class OperationsFormComponent implements OnInit {
                 IdOperationDetail: 9000 + this.operationReceived.length,
                 IdOperation: EOperations.CLOSED,
                 IdInstrument: c.IdPayInstr,
+                InstrumentName: this.instruments.find(
+                  i => i.IdPayInstr === c.IdPayInstr,
+                )?.Name,
                 IdPayment: c.IdPayment,
+                PaymentName: this.payments.find(
+                  p => p.IdPayment === c.IdPayment,
+                )?.PaymentName,
                 Denomination: c.Denomination,
                 Rate: c.Rate,
                 Qty: 0,
@@ -348,7 +360,28 @@ export class OperationsFormComponent implements OnInit {
       this.isNewOperation &&
       !this.operationDelivered.length
     ) {
-      // this._operationSvc.getMoneyBreakdown().subscribe()
+      const _totalAmount = this.operationReceived.reduce(
+        (total, r) => total + r.Denomination! * r.Qty * r.Rate,
+        0,
+      );
+      this._operationSvc.getMoneyBreakdown(_totalAmount).subscribe(res => {
+        res.getMoneyBreakdown.map(c => {
+          this.operationDelivered.push({
+            IdOperationDetail: 9000 + this.operationDelivered.length,
+            IdOperation: this._operationSvc.idOperationType,
+            IdInstrument: c.IdPayInstr,
+            InstrumentName: this.instruments.find(
+              i => i.IdPayInstr === c.IdPayInstr,
+            )?.Name,
+            IdPayment: c.IdPayment,
+            PaymentName: this.payments.find(p => p.IdPayment === c.IdPayment)
+              ?.PaymentName,
+            Denomination: c.Denomination,
+            Rate: c.Rate,
+            Qty: c.Quantity,
+          });
+        });
+      });
     }
   }
 

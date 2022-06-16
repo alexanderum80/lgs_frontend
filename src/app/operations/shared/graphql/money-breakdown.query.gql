@@ -1,7 +1,9 @@
-query GetMoneyBreakdown($amount: Float!) {
-  getMoneyBreakdown(amount: $amount) {
+query GetMoneyBreakdown($amount: Float!, $idOperation: Int!) {
+  getMoneyBreakdown(amount: $amount, idOperation: $idOperation) {
     IdPayInstr
     IdPayment
+    Denomination
+    Rate
     Quantity
   }
 }

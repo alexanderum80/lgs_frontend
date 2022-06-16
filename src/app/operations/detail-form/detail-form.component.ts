@@ -36,27 +36,11 @@ export class DetailFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.fg = this._operationsSvc.fg;
-
-    this._subscribeToFgChange();
   }
-
-  private _subscribeToFgChange(): void {}
 
   get isFinished(): boolean {
     return this.fg.controls['finished']!.value || false;
   }
-
-  // getInstrumentDescription(idInstrument: number): string {
-  //   const instrument = this.instrumentsValues.find(
-  //     p => p.value === (idInstrument || 0),
-  //   );
-  //   return instrument ? instrument.label! : '';
-  // }
-
-  // getPaymentDescription(idPayment: number): string {
-  //   const payment = this.payments.find(c => c.IdPayment === (idPayment || 0));
-  //   return payment ? payment.PaymentName! : '';
-  // }
 
   calculateTotal(): number {
     let total = 0;
@@ -74,11 +58,11 @@ export class DetailFormComponent implements OnInit {
   }
 
   addRow(): void {
-    let _idInstrument = null;
+    let _instruments = null;
 
     switch (this._operationsSvc.idOperationType) {
       case EOperations.DEPOSIT:
-        _idInstrument =
+        _instruments =
           this.instrumentsValues.find(
             i => i.value === EPaymentInstrument.CASH,
           ) ||
@@ -87,7 +71,7 @@ export class DetailFormComponent implements OnInit {
           );
         break;
       case EOperations.EXTRACTION:
-        _idInstrument =
+        _instruments =
           this.instrumentsValues.find(
             i => i.value === EPaymentInstrument.CASH,
           ) ||
@@ -96,7 +80,7 @@ export class DetailFormComponent implements OnInit {
           );
         break;
       case EOperations.REFUND:
-        _idInstrument = this.instrumentsValues.find(
+        _instruments = this.instrumentsValues.find(
           i => i.value === EPaymentInstrument.CASH,
         );
         break;
@@ -109,8 +93,8 @@ export class DetailFormComponent implements OnInit {
       IdOperation: 0,
       IdPayment: null,
       Denomination: null,
-      IdInstrument: _idInstrument?.value,
-      InstrumentName: _idInstrument?.label,
+      IdInstrument: _instruments?.value,
+      InstrumentName: _instruments?.label,
       Rate: 0,
       Qty: 0,
     });

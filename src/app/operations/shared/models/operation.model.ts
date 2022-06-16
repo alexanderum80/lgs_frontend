@@ -49,6 +49,8 @@ export interface IOperationD {
 export interface IMoneyBreakDown {
   IdPayInstr: number | null;
   IdPayment: number | null;
+  Denomination: number | null;
+  Rate: number;
   Quantity: number;
 }
 

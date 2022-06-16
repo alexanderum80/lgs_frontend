@@ -90,6 +90,7 @@ export class OperationService {
         this._apolloSvc
           .query<OperationQueryResponse>(operationApi.moneyBreakdown, {
             amount,
+            idOperation: this.idOperationType,
           })
           .subscribe({
             next: result => {
